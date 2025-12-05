@@ -101,6 +101,7 @@ revenueChartOptions: ChartConfiguration<'line'>['options'] = {
       ticks: { stepSize: 5 }
     }
   }
+
 };
 
 
@@ -174,6 +175,7 @@ donutChartOptions = {
     tooltip: { enabled: true }
   }
 };
+
 
 
 

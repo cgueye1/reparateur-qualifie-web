@@ -44,9 +44,6 @@ export class DetailClientComponent {
   }
 
   goBack() { this.location.back(); }
-  toggleStatus(state: boolean) { this.user.active = state; }
-
-
 
   // ============================================================================
   // ⭐⭐⭐  EVALUATIONS
@@ -172,5 +169,80 @@ export class DetailClientComponent {
       default: return '';
     }
   }
+
+
+
+
+
+
+
+  // ===============================
+// 🔵 POPUPS ACTIVATION / DESACTIVATION
+// ===============================
+
+// État des popups
+showActivatePopup: boolean = false;
+showDeactivatePopup: boolean = false;
+
+// Popups success
+showSuccessActivate: boolean = false;
+showSuccessDeactivate: boolean = false;
+
+// utilisateur sélectionné
+selectedUser: any = null;
+
+
+// 👉 Ouvrir popup Activer
+openActivatePopup(user: any) {
+  this.selectedUser = user;
+  this.showActivatePopup = true;
+}
+
+// 👉 Ouvrir popup Désactiver
+openDeactivatePopup(user: any) {
+  this.selectedUser = user;
+  this.showDeactivatePopup = true;
+}
+
+// 👉 Fermer popup Activer
+closeActivate() {
+  this.showActivatePopup = false;
+}
+
+// 👉 Fermer popup Désactiver
+closeDeactivate() {
+  this.showDeactivatePopup = false;
+}
+
+
+// 👉 Confirmer ACTIVATION
+confirmActivate() {
+  if (this.selectedUser) {
+    this.selectedUser.active = true; // met à jour le statut
+  }
+
+  this.showActivatePopup = false;
+  this.showSuccessActivate = true;
+
+  setTimeout(() => {
+    this.showSuccessActivate = false;
+  }, 1800);
+}
+
+
+// 👉 Confirmer DESACTIVATION
+confirmDeactivate() {
+  if (this.selectedUser) {
+    this.selectedUser.active = false;
+  }
+
+  this.showDeactivatePopup = false;
+  this.showSuccessDeactivate = true;
+
+  setTimeout(() => {
+    this.showSuccessDeactivate = false;
+  }, 1800);
+}
+
 
 }
