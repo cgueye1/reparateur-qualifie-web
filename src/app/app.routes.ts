@@ -39,6 +39,16 @@ export const routes: Routes = [
         data: { title: 'Vérifications' },
       },
 
+
+       {
+        path: 'detail-verification',
+        loadComponent: () =>
+          import(
+            './pages/verification/detail-verification/detail-verification.component'
+          ).then((m) => m.DetailVerificationComponent),
+        data: { title: ' Détails Vérifications' },
+      },
+
       // Modération des avis
 
       {
@@ -112,4 +122,22 @@ export const routes: Routes = [
       },
     ]
   },
+
+
+
+
+   {
+  path: 'auth',
+  children: [
+    {
+      path: 'login',
+      loadComponent: () =>
+        import('./auth/login/login/login.component')
+          .then((m) => m.LoginComponent),
+    },
+
+    
+  ],
+}
+
 ];

@@ -128,221 +128,184 @@
   </div>
 
 <!-- ========================= -->
-  <!--   BARRE RECHERCHE/FILTRE  -->
-  <!-- ========================= -->
-  <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
+<!--   BARRE RECHERCHE/FILTRE  -->
+<!-- ========================= -->
+<div class="bg-white rounded-xl shadow-sm p-5 mt-5 mb-6">
 
-<div class="w-full mb-4 flex flex-col lg:flex-row items-center justify-between gap-2">
+  <div class="w-full mb-5 flex flex-col lg:flex-row items-center justify-between gap-3">
 
-  <!-- Champ de recherche -->
-  <div class="flex items-center w-full lg:w-1/3 border border-gray-300 rounded-lg px-3 py-2 bg-white">
-    <span class="mr-2 text-gray-500 text-sm">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M13.1539 12.2073L10.6806 9.75393C11.6407 8.55687 12.1056 7.03747 11.9798 5.50813C11.854 3.9788 11.147 2.55579 10.0043 1.5317C8.86151 0.507604 7.3698 -0.0397263 5.83588 0.00224731C4.30196 0.0442209 2.84241 0.672308 1.75736 1.75736C0.672308 2.84241 0.0442209 4.30196 0.00224731 5.83588C-0.0397263 7.3698 0.507604 8.86151 1.5317 10.0043C2.55579 11.147 3.9788 11.854 5.50813 11.9798C7.03747 12.1056 8.55687 11.6407 9.75393 10.6806L12.2073 13.1339C12.2692 13.1964 12.343 13.246 12.4242 13.2799C12.5055 13.3137 12.5926 13.3311 12.6806 13.3311C12.7686 13.3311 12.8557 13.3137 12.937 13.2799C13.0182 13.246 13.092 13.1964 13.1539 13.1339C13.2741 13.0096 13.3413 12.8435 13.3413 12.6706C13.3413 12.4977 13.2741 12.3316 13.1539 12.2073ZM6.01393 10.6806C5.09095 10.6806 4.1887 10.4069 3.42127 9.89412C2.65384 9.38134 2.0557 8.65251 1.7025 7.79979C1.34929 6.94707 1.25687 6.00876 1.43694 5.10351C1.617 4.19827 2.06146 3.36675 2.7141 2.7141C3.36675 2.06146 4.19827 1.617 5.10351 1.43694C6.00876 1.25687 6.94707 1.34929 7.79979 1.7025C8.65251 2.0557 9.38134 2.65384 9.89412 3.42127C10.4069 4.1887 10.6806 5.09095 10.6806 6.01393C10.6806 7.25161 10.1889 8.43859 9.31376 9.31376C8.43859 10.1889 7.25161 10.6806 6.01393 10.6806Z" fill="#777777"/>
-</svg>
+    <!-- Champ de recherche -->
+    <div class="flex items-center w-full lg:w-auto border border-gray-300 rounded-lg px-3 py-2 bg-white">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-2">
+        <path d="M13.1539 12.2073L10.6806 9.75393C11.6407 8.55687 12.1056 7.03747 11.9798 5.50813C11.854 3.9788 11.147 2.55579 10.0043 1.5317C8.86151 0.507604 7.3698 -0.0397263 5.83588 0.00224731C4.30196 0.0442209 2.84241 0.672308 1.75736 1.75736C0.672308 2.84241 0.0442209 4.30196 0.00224731 5.83588C-0.0397263 7.3698 0.507604 8.86151 1.5317 10.0043C2.55579 11.147 3.9788 11.854 5.50813 11.9798C7.03747 12.1056 8.55687 11.6407 9.75393 10.6806L12.2073 13.1339C12.2692 13.1964 12.343 13.246 12.4242 13.2799C12.5055 13.3137 12.5926 13.3311 12.6806 13.3311C12.7686 13.3311 12.8557 13.3137 12.937 13.2799C13.0182 13.246 13.092 13.1964 13.1539 13.1339C13.2741 13.0096 13.3413 12.8435 13.3413 12.6706C13.3413 12.4977 13.2741 12.3316 13.1539 12.2073ZM6.01393 10.6806C5.09095 10.6806 4.1887 10.4069 3.42127 9.89412C2.65384 9.38134 2.0557 8.65251 1.7025 7.79979C1.34929 6.94707 1.25687 6.00876 1.43694 5.10351C1.617 4.19827 2.06146 3.36675 2.7141 2.7141C3.36675 2.06146 4.19827 1.617 5.10351 1.43694C6.00876 1.25687 6.94707 1.34929 7.79979 1.7025C8.65251 2.0557 9.38134 2.65384 9.89412 3.42127C10.4069 4.1887 10.6806 5.09095 10.6806 6.01393C10.6806 7.25161 10.1889 8.43859 9.31376 9.31376C8.43859 10.1889 7.25161 10.6806 6.01393 10.6806Z" fill="#777777"/>
+      </svg>
+      <input
+        type="text"
+        placeholder="Rechercher un utilisateur"
+        class="w-full outline-none text-sm"
+      />
+    </div>
 
+    <!-- Filtres -->
+    <div class="flex items-center gap-3">
 
-    </span> <!-- Icône à remplacer -->
-    <input
-
-      type="text"
-      placeholder="Rechercher un utilisateur"
-      class="w-full outline-none text-sm h-6"
-
-    />
-  </div>
-
-  <!-- Filtres -->
-  <div class="flex items-center gap-3">
-
-    <!-- Filtre Statut -->
-    <button class="border border-gray-300 rounded-lg px-4 py-2 bg-white text-sm flex items-center gap-2 font-semibold  text-[#333333]">
-      <span>
+      <!-- Filtre Statut -->
+      <button class="border border-gray-300 rounded-lg px-4 py-2 bg-white text-sm flex items-center gap-2 font-medium text-[#333333]">
         <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M0.625 0.625H13.125M2.70833 4.79167H11.0417M5.20833 8.95833H8.54167" stroke="#777777" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
-
-      </span> <!-- Icône placeholder -->
-      Tous les statuts
-    </button>
-
-    <!-- Filtre Type -->
-    <button class="border border-gray-300 rounded-lg px-4 py-2 bg-white text-sm font-semibold flex items-center gap-2  text-[#333333]">
-      <span>
-        <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M0.625 0.625H13.125M2.70833 4.79167H11.0417M5.20833 8.95833H8.54167" stroke="#777777" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
-
-      </span> <!-- Icône placeholder -->
-      Tous les types
-    </button>
-
-  </div>
-
-</div>
-
-
-
-<!-- 🔽 TABLEAU -->
-<div  class="bg-white rounded-2xl shadow-sm overflow-hidden mb-6">
-
-  <table class="w-full">
-    <thead class="bg-gray-50">
-      <tr class="text-left text-sm text-gray-600 border-b">
-        <th class="py-4 px-6">Nom</th>
-        <th class="py-4 px-6">Type</th>
-        <th class="py-4 px-6">Téléphone</th>
-        <th class="py-4 px-6">Dernière connexion</th>
-        <th class="py-4 px-6">Statut</th>
-        <th class="py-4 px-6">Actions</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr *ngFor="let user of filteredUsers" class="border-b hover:bg-gray-50">
-
-        <!-- Nom + avatar -->
-        <td class="py-4 px-6 flex items-center gap-3 text-[#4B4848]">
-
-          <!-- cest ce blog qui empeche le sidebare de fonctionner normalement -->
-          <!--
-
-            <div class="w-10 h-10 rounded-full overflow-hidden bg-gray-200">
-            <img *ngIf="user.photo" [src]="user.photo" class="w-full h-full object-cover" />
-            <div *ngIf="!user.photo"
-                 class="w-full h-full flex items-center justify-center bg-gray-300 font-bold text-sm text-gray-700">
-              {{ user.initials }}
-            </div>
-          </div>
-
-          -->
-          <div>
-            <p class="font-medium text-sm text-[#4B4848]">{{ user.nom }}</p>
-            <p class="text-xs  text-[#4B4848]">{{ user.metier }}</p>
-          </div>
-        </td>
-
-        <!-- Type -->
-        <td class="py-4 px-6 text-sm text-[#4B4848]">{{ user.type }}</td>
-
-        <!-- Téléphone -->
-        <td class="py-4 px-6 text-sm text-[#4B4848]">{{ user.telephone }}</td>
-
-        <!-- Dernière connexion -->
-        <td class="py-4 px-6 text-sm text-[#4B4848]">{{ user.lastLogin }}</td>
-
-        <!-- Statut -->
-        <td class="py-4 px-6">
-          <span
-            class="px-3 py-1 rounded-full text-xs font-medium flex items-center gap-2 w-fit"
-            [ngClass]="user.active ? 'bg-green-100 text-[#008D36]' : 'bg-red-100 text-[#FF2828]'">
-
-            <span class="w-2 h-2 rounded-full"
-                  [ngClass]="user.active ? 'bg-[#008D36]' : 'bg-[#FF2828]'"></span>
-
-            {{ user.active ? 'Active' : 'Désactivé' }}
-          </span>
-        </td>
-
-        <!-- Actions -->
-        <td class="py-4 px-6 flex items-center gap-4 text-[#4B4848]">
-
-          <!-- Icône voir -->
-          <button class="text-[#4B4848]" routerLink="/details">
-            <div class="icon">
-              <svg width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M20 6.875C20 6.875 16.25 0 10 0C3.75 0 0 6.875 0 6.875C0 6.875 3.75 13.75 10 13.75C16.25 13.75 20 6.875 20 6.875ZM1.46625 6.875C2.06973 5.95573 2.76496 5.1001 3.54125 4.32125C5.15 2.71 7.35 1.25 10 1.25C12.65 1.25 14.8488 2.71 16.46 4.32125C17.2363 5.1001 17.9315 5.95573 18.535 6.875C18.4633 6.98333 18.3821 7.10333 18.2913 7.235C17.8725 7.835 17.2537 8.635 16.46 9.42875C14.8488 11.04 12.6488 12.5 10 12.5C7.35125 12.5 5.15125 11.04 3.54 9.42875C2.76371 8.6499 2.06973 7.79427 1.46625 6.875Z" fill="#6B7280"/>
-<path d="M10 3.75C9.1712 3.75 8.37634 4.07924 7.79029 4.66529C7.20424 5.25134 6.875 6.0462 6.875 6.875C6.875 7.7038 7.20424 8.49866 7.79029 9.08471C8.37634 9.67076 9.1712 10 10 10C10.8288 10 11.6237 9.67076 12.2097 9.08471C12.7958 8.49866 13.125 7.7038 13.125 6.875C13.125 6.0462 12.7958 5.25134 12.2097 4.66529C11.6237 4.07924 10.8288 3.75 10 3.75ZM5.625 6.875C5.625 5.71468 6.08594 4.60188 6.90641 3.78141C7.72688 2.96094 8.83968 2.5 10 2.5C11.1603 2.5 12.2731 2.96094 13.0936 3.78141C13.9141 4.60188 14.375 5.71468 14.375 6.875C14.375 8.03532 13.9141 9.14812 13.0936 9.96859C12.2731 10.7891 11.1603 11.25 10 11.25C8.83968 11.25 7.72688 10.7891 6.90641 9.96859C6.08594 9.14812 5.625 8.03532 5.625 6.875Z" fill="#6B7280"/>
-</svg>
-
-            </div>
-          </button>
-
-      <!-- Toggle Lock Button -->
-<button
-  (click)="toggleStatus(user)"
-  class="transition-colors"
-  [ngClass]="user.active ? 'text-green-600' : 'text-red-500'">
-
-  <div class="icon">
-
-    <!-- 🔓 Icône si ACTIVE -->
-    <ng-container *ngIf="user.active">
-   <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M15 0C16.3261 0 17.5979 0.526784 18.5355 1.46447C19.4732 2.40215 20 3.67392 20 5V8.125H18.75V5C18.75 4.00544 18.3549 3.05161 17.6517 2.34835C16.9484 1.64509 15.9946 1.25 15 1.25C14.0054 1.25 13.0516 1.64509 12.3483 2.34835C11.6451 3.05161 11.25 4.00544 11.25 5V7.5H11.875C12.2854 7.5 12.6917 7.58083 13.0709 7.73788C13.45 7.89492 13.7945 8.12511 14.0847 8.41529C14.3749 8.70547 14.6051 9.04997 14.7621 9.42911C14.9192 9.80826 15 10.2146 15 10.625V16.875C15 17.2854 14.9192 17.6917 14.7621 18.0709C14.6051 18.45 14.3749 18.7945 14.0847 19.0847C13.7945 19.3749 13.45 19.6051 13.0709 19.7621C12.6917 19.9192 12.2854 20 11.875 20H3.125C2.2962 20 1.50134 19.6708 0.915291 19.0847C0.32924 18.4987 0 17.7038 0 16.875L0 10.625C0 9.7962 0.32924 9.00134 0.915291 8.41529C1.50134 7.82924 2.2962 7.5 3.125 7.5H10V5C10 3.67392 10.5268 2.40215 11.4645 1.46447C12.4021 0.526784 13.6739 0 15 0ZM3.125 8.75C2.62772 8.75 2.15081 8.94754 1.79917 9.29917C1.44754 9.65081 1.25 10.1277 1.25 10.625V16.875C1.25 17.3723 1.44754 17.8492 1.79917 18.2008C2.15081 18.5525 2.62772 18.75 3.125 18.75H11.875C12.3723 18.75 12.8492 18.5525 13.2008 18.2008C13.5525 17.8492 13.75 17.3723 13.75 16.875V10.625C13.75 10.1277 13.5525 9.65081 13.2008 9.29917C12.8492 8.94754 12.3723 8.75 11.875 8.75H3.125Z" fill="#008D36"/>
-</svg>
-
-    </ng-container>
-
-    <!-- 🔒 Icône si DESACTIVE -->
-    <ng-container *ngIf="!user.active">
-     <svg width="15" height="20" viewBox="0 0 15 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M7.5 0C8.82608 0 10.0979 0.526784 11.0355 1.46447C11.9732 2.40215 12.5 3.67392 12.5 5V7.5625C13.2059 7.70658 13.8402 8.09011 14.2958 8.64819C14.7514 9.20626 15.0001 9.90459 15 10.625V16.875C15 17.7038 14.6708 18.4987 14.0847 19.0847C13.4987 19.6708 12.7038 20 11.875 20H3.125C2.2962 20 1.50134 19.6708 0.915291 19.0847C0.32924 18.4987 6.51427e-08 17.7038 6.51427e-08 16.875V10.625C-0.000146969 9.90459 0.248615 9.20626 0.704184 8.64819C1.15975 8.09011 1.79415 7.70658 2.5 7.5625V5C2.5 3.67392 3.02678 2.40215 3.96447 1.46447C4.90215 0.526784 6.17392 0 7.5 0ZM3.125 8.75C2.62772 8.75 2.15081 8.94754 1.79917 9.29917C1.44754 9.65081 1.25 10.1277 1.25 10.625V16.875C1.25 17.3723 1.44754 17.8492 1.79917 18.2008C2.15081 18.5525 2.62772 18.75 3.125 18.75H11.875C12.3723 18.75 12.8492 18.5525 13.2008 18.2008C13.5525 17.8492 13.75 17.3723 13.75 16.875V10.625C13.75 10.1277 13.5525 9.65081 13.2008 9.29917C12.8492 8.94754 12.3723 8.75 11.875 8.75H3.125ZM7.5 1.25C6.50544 1.25 5.55161 1.64509 4.84835 2.34835C4.14509 3.05161 3.75 4.00544 3.75 5V7.5H11.25V5C11.25 4.00544 10.8549 3.05161 10.1517 2.34835C9.44839 1.64509 8.49456 1.25 7.5 1.25Z" fill="#E94E1B"/>
-</svg>
-
-    </ng-container>
-
-  </div>
-
-</button>
-
-
-        </td>
-
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-<!-- PAGINATION -->
-
-<div class="bg-white rounded-2xl shadow-sm p-4 flex justify-between items-center w-full">
-
-  <!-- Éléments par page -->
-  <div class="flex items-center gap-2 text-sm text-gray-600">
-    <span>Éléments par page :</span>
-
-    <select
-      class="border border-gray-300 rounded-md px-2 py-1 text-sm h-8 focus:outline-none">
-      <option>10</option>
-      <option>25</option>
-      <option>50</option>
-    </select>
-  </div>
-
-  <!-- Pagination -->
-  <div class="flex items-center gap-4 text-sm text-gray-700">
-
-    <!-- Informations -->
-    <span>1 – 10 sur 40</span>
-
-    <!-- Flèches -->
-    <div class="flex items-center gap-2">
-
-      <!-- Flèche gauche -->
-      <button class="text-gray-400 hover:text-gray-600 p-1">
-        <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
-          <path d="M12 15L7 10L12 5"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"/>
+          <path d="M0.625 0.625H13.125M2.70833 4.79167H11.0417M5.20833 8.95833H8.54167" stroke="#777777" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
+        Tous les statuts
       </button>
 
-      <!-- Flèche droite -->
-      <button class="text-gray-400 hover:text-gray-600 p-1">
-        <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
-          <path d="M8 5L13 10L8 15"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"/>
+      <!-- Filtre Type -->
+      <button class="border border-gray-300 rounded-lg px-4 py-2 bg-white text-sm font-medium flex items-center gap-2 text-[#333333]">
+        <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0.625 0.625H13.125M2.70833 4.79167H11.0417M5.20833 8.95833H8.54167" stroke="#777777" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
+        Tous les types
       </button>
 
     </div>
 
   </div>
-</div>
+
+  <!-- ========================= -->
+  <!-- 🧾 TABLEAU DES UTILISATEURS -->
+  <!-- ========================= -->
+  <div class="bg-white rounded-xl overflow-x-auto border border-gray-200">
+
+    <table class="w-full min-w-max">
+      <thead class="bg-gray-50">
+        <tr class="text-left text-xs font-medium text-gray-600 border-b border-gray-200">
+          <th class="py-3 px-3 font-medium" style="min-width: 200px;">Nom</th>
+          <th class="py-3 px-3 font-medium" style="min-width: 120px;">Type</th>
+          <th class="py-3 px-3 font-medium" style="min-width: 120px;">Téléphone</th>
+          <th class="py-3 px-3 font-medium" style="min-width: 150px;">Dernière connexion</th>
+          <th class="py-3 px-3 font-medium" style="min-width: 100px;">Statut</th>
+          <th class="py-3 px-3 font-medium" style="min-width: 100px;">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody class="bg-white divide-y divide-gray-100">
+
+        <tr *ngFor="let user of filteredUsers" class="hover:bg-gray-50 transition-colors">
+
+          <!-- NOM avec avatar -->
+          <td class="py-3 px-3">
+            <div class="flex items-center gap-2">
+              <!-- Avatar commenté pour éviter les problèmes avec le sidebar
+              <div class="w-10 h-10 rounded-full overflow-hidden bg-gray-200 flex-shrink-0">
+                <img *ngIf="user.photo" [src]="user.photo" class="w-full h-full object-cover" />
+                <div *ngIf="!user.photo"
+                     class="w-full h-full flex items-center justify-center bg-gray-300 font-bold text-sm text-gray-700">
+                  {{ user.initials }}
+                </div>
+              </div>
+              -->
+              <div class="min-w-0">
+                <p class="font-medium text-xs text-[#111111] truncate">{{ user.nom }}</p>
+                <p class="text-[10px] text-gray-500 truncate">{{ user.metier }}</p>
+              </div>
+            </div>
+          </td>
+
+          <td class="py-3 px-3 text-xs text-[#111111]">{{ user.type }}</td>
+          <td class="py-3 px-3 text-xs text-[#111111]">{{ user.telephone }}</td>
+          <td class="py-3 px-3 text-xs text-gray-500 whitespace-nowrap">{{ user.lastLogin }}</td>
+
+          <!-- STATUT -->
+          <td class="py-3 px-3">
+            <span class="px-2 py-1 rounded-full text-[10px] font-medium inline-flex items-center gap-1 whitespace-nowrap"
+                  [ngClass]="user.active ? 'bg-green-50 text-[#008D36]' : 'bg-red-50 text-[#FF2828]'">
+              <span class="w-1.5 h-1.5 rounded-full"
+                    [ngClass]="user.active ? 'bg-[#008D36]' : 'bg-[#FF2828]'"></span>
+              {{ user.active ? 'Active' : 'Désactivé' }}
+            </span>
+          </td>
+
+          <!-- ACTIONS -->
+          <td class="py-3 px-3">
+            <div class="flex items-center gap-6">
+
+              <!-- Voir -->
+              <button routerLink="/details" class="text-gray-600 hover:opacity-70 transition-opacity" title="Voir">
+                <svg width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M20 6.875C20 6.875 16.25 0 10 0C3.75 0 0 6.875 0 6.875C0 6.875 3.75 13.75 10 13.75C16.25 13.75 20 6.875 20 6.875ZM1.46625 6.875C2.06973 5.95573 2.76496 5.1001 3.54125 4.32125C5.15 2.71 7.35 1.25 10 1.25C12.65 1.25 14.8488 2.71 16.46 4.32125C17.2363 5.1001 17.9315 5.95573 18.535 6.875C18.4633 6.98333 18.3821 7.10333 18.2913 7.235C17.8725 7.835 17.2537 8.635 16.46 9.42875C14.8488 11.04 12.6488 12.5 10 12.5C7.35125 12.5 5.15125 11.04 3.54 9.42875C2.76371 8.6499 2.06973 7.79427 1.46625 6.875Z" fill="#6B7280"/>
+                  <path d="M10 3.75C9.1712 3.75 8.37634 4.07924 7.79029 4.66529C7.20424 5.25134 6.875 6.0462 6.875 6.875C6.875 7.7038 7.20424 8.49866 7.79029 9.08471C8.37634 9.67076 9.1712 10 10 10C10.8288 10 11.6237 9.67076 12.2097 9.08471C12.7958 8.49866 13.125 7.7038 13.125 6.875C13.125 6.0462 12.7958 5.25134 12.2097 4.66529C11.6237 4.07924 10.8288 3.75 10 3.75ZM5.625 6.875C5.625 5.71468 6.08594 4.60188 6.90641 3.78141C7.72688 2.96094 8.83968 2.5 10 2.5C11.1603 2.5 12.2731 2.96094 13.0936 3.78141C13.9141 4.60188 14.375 5.71468 14.375 6.875C14.375 8.03532 13.9141 9.14812 13.0936 9.96859C12.2731 10.7891 11.1603 11.25 10 11.25C8.83968 11.25 7.72688 10.7891 6.90641 9.96859C6.08594 9.14812 5.625 8.03532 5.625 6.875Z" fill="#6B7280"/>
+                </svg>
+              </button>
+
+              <!-- Activer (cadenas ouvert vert) -->
+              <button
+                *ngIf="!user.active"
+                (click)="toggleStatus(user)"
+                class="text-[#008D36] hover:opacity-70 transition-opacity"
+                title="Activer">
+                <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M15 0C16.3261 0 17.5979 0.526784 18.5355 1.46447C19.4732 2.40215 20 3.67392 20 5V8.125H18.75V5C18.75 4.00544 18.3549 3.05161 17.6517 2.34835C16.9484 1.64509 15.9946 1.25 15 1.25C14.0054 1.25 13.0516 1.64509 12.3483 2.34835C11.6451 3.05161 11.25 4.00544 11.25 5V7.5H11.875C12.2854 7.5 12.6917 7.58083 13.0709 7.73788C13.45 7.89492 13.7945 8.12511 14.0847 8.41529C14.3749 8.70547 14.6051 9.04997 14.7621 9.42911C14.9192 9.80826 15 10.2146 15 10.625V16.875C15 17.2854 14.9192 17.6917 14.7621 18.0709C14.6051 18.45 14.3749 18.7945 14.0847 19.0847C13.7945 19.3749 13.45 19.6051 13.0709 19.7621C12.6917 19.9192 12.2854 20 11.875 20H3.125C2.2962 20 1.50134 19.6708 0.915291 19.0847C0.32924 18.4987 0 17.7038 0 16.875L0 10.625C0 9.7962 0.32924 9.00134 0.915291 8.41529C1.50134 7.82924 2.2962 7.5 3.125 7.5H10V5C10 3.67392 10.5268 2.40215 11.4645 1.46447C12.4021 0.526784 13.6739 0 15 0ZM3.125 8.75C2.62772 8.75 2.15081 8.94754 1.79917 9.29917C1.44754 9.65081 1.25 10.1277 1.25 10.625V16.875C1.25 17.3723 1.44754 17.8492 1.79917 18.2008C2.15081 18.5525 2.62772 18.75 3.125 18.75H11.875C12.3723 18.75 12.8492 18.5525 13.2008 18.2008C13.5525 17.8492 13.75 17.3723 13.75 16.875V10.625C13.75 10.1277 13.5525 9.65081 13.2008 9.29917C12.8492 8.94754 12.3723 8.75 11.875 8.75H3.125Z" fill="#008D36"/>
+                </svg>
+              </button>
+
+              <!-- Désactiver (cadenas fermé rouge) -->
+              <button
+                *ngIf="user.active"
+                (click)="toggleStatus(user)"
+                class="text-[#E94E1B] hover:opacity-70 transition-opacity"
+                title="Désactiver">
+                <svg width="14" height="16" viewBox="0 0 15 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M7.5 0C8.82608 0 10.0979 0.526784 11.0355 1.46447C11.9732 2.40215 12.5 3.67392 12.5 5V7.5625C13.2059 7.70658 13.8402 8.09011 14.2958 8.64819C14.7514 9.20626 15.0001 9.90459 15 10.625V16.875C15 17.7038 14.6708 18.4987 14.0847 19.0847C13.4987 19.6708 12.7038 20 11.875 20H3.125C2.2962 20 1.50134 19.6708 0.915291 19.0847C0.32924 18.4987 6.51427e-08 17.7038 6.51427e-08 16.875V10.625C-0.000146969 9.90459 0.248615 9.20626 0.704184 8.64819C1.15975 8.09011 1.79415 7.70658 2.5 7.5625V5C2.5 3.67392 3.02678 2.40215 3.96447 1.46447C4.90215 0.526784 6.17392 0 7.5 0ZM3.125 8.75C2.62772 8.75 2.15081 8.94754 1.79917 9.29917C1.44754 9.65081 1.25 10.1277 1.25 10.625V16.875C1.25 17.3723 1.44754 17.8492 1.79917 18.2008C2.15081 18.5525 2.62772 18.75 3.125 18.75H11.875C12.3723 18.75 12.8492 18.5525 13.2008 18.2008C13.5525 17.8492 13.75 17.3723 13.75 16.875V10.625C13.75 10.1277 13.5525 9.65081 13.2008 9.29917C12.8492 8.94754 12.3723 8.75 11.875 8.75H3.125ZM7.5 1.25C6.50544 1.25 5.55161 1.64509 4.84835 2.34835C4.14509 3.05161 3.75 4.00544 3.75 5V7.5H11.25V5C11.25 4.00544 10.8549 3.05161 10.1517 2.34835C9.44839 1.64509 8.49456 1.25 7.5 1.25Z" fill="#E94E1B"/>
+                </svg>
+              </button>
+
+            </div>
+          </td>
+
+        </tr>
+
+      </tbody>
+    </table>
+
+  </div>
+
+  <!-- ========================= -->
+  <!-- 🔢 PAGINATION -->
+  <!-- ========================= -->
+  <div class="bg-white rounded-xl p-4 flex justify-between items-center mt-4">
+
+    <!-- Éléments par page -->
+    <div class="flex items-center gap-2 text-sm text-gray-600">
+      <span>éléments par page:</span>
+      <select class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none">
+        <option>10</option>
+        <option>25</option>
+        <option>50</option>
+      </select>
+    </div>
+
+    <!-- Info pagination + flèches -->
+    <div class="flex items-center gap-4 text-sm text-gray-700">
+      <span>1 – 10 sur 40</span>
+
+      <div class="flex items-center gap-2">
+        <!-- Flèche gauche -->
+        <button class="text-gray-400 hover:text-gray-600 p-1 disabled:opacity-30">
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+            <path d="M12 15L7 10L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+
+        <!-- Flèche droite -->
+        <button class="text-gray-400 hover:text-gray-600 p-1 disabled:opacity-30">
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+            <path d="M8 5L13 10L8 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
 </div>
 
 </div>
