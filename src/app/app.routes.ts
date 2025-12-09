@@ -111,6 +111,16 @@ export const routes: Routes = [
       },
 
 
+      {
+        path: 'details-abonnements',
+        loadComponent: () =>
+          import(
+            './pages/plan-abonnement/detail/detail/detail.component'
+          ).then((m) => m.DetailComponent),
+        data: { title: 'Détails abonnement' },
+      },
+
+
        // Mon compte
       {
         path: 'mon-compte',
@@ -136,7 +146,7 @@ export const routes: Routes = [
           .then((m) => m.LoginComponent),
     },
 
-    
+
   ],
 }
 
