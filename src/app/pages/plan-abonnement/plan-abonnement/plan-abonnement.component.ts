@@ -167,4 +167,69 @@ export class PlanAbonnementComponent {
       this.showSuccessDelete = false;
     }, 1800);
   }
+
+  // ===============================
+// 🟧 POPUP CRÉATION DE PLAN
+// ===============================
+
+// Ouverture & fermeture du popup
+showCreatePopup: boolean = false;
+showSuccessCreate: boolean = false;
+
+// Données du formulaire
+newPlan = {
+  nom: "",
+  coutTotal: "",
+  type: "",
+  remise: "",
+  description: "",
+  fonctionnalites: "",
+  active: true
+};
+
+// 👉 Ouvrir popup création
+openCreatePopup() {
+  this.showCreatePopup = true;
+}
+
+// 👉 Fermer popup création
+closeCreatePopup() {
+  this.showCreatePopup = false;
+}
+
+// 👉 Enregistrer le nouveau plan
+saveNewPlan() {
+  const plan = {
+    nom: this.newPlan.nom,
+    description: this.newPlan.description,
+    coutTotal: this.newPlan.coutTotal,
+    type: this.newPlan.type,
+    remise: this.newPlan.remise + "%",
+    active: this.newPlan.active
+  };
+
+  this.plans.push(plan); // ajoute dans la liste
+
+  // Fermer popup création
+  this.showCreatePopup = false;
+
+  // Afficher succès
+  this.showSuccessCreate = true;
+
+  setTimeout(() => {
+    this.showSuccessCreate = false;
+  }, 1800);
+
+  // Reset du formulaire
+  this.newPlan = {
+    nom: "",
+    coutTotal: "",
+    type: "",
+    remise: "",
+    description: "",
+    fonctionnalites: "",
+    active: true
+  };
+}
+
 }

@@ -50,14 +50,14 @@
       *ngIf="menuOpen"
       class="absolute right-0 top-16 bg-white shadow-xl rounded-xl py-3 w-44 z-50"
     >
-      <button class="flex items-center gap-3 px-4 py-2 hover:bg-gray-100 cursor-pointer" routerLink="/mon-compte">
+      <button routerLink="/mon-compte" class="flex items-center gap-3 px-4 py-2 hover:bg-gray-100 cursor-pointer">
         <svg width="24" height="24" fill="#9CA3AF">
           <path d="M12 4C13.0609 4 14.0783 4.42143 14.8284 5.17157C15.5786 5.92172 16 6.93913 16 8C16 9.06087 15.5786 10.0783 14.8284 10.8284C14.0783 11.5786 13.0609 12 12 12C10.9391 12 9.92172 11.5786 9.17157 10.8284C8.42143 10.0783 8 9.06087 8 8C8 6.93913 8.42143 5.92172 9.17157 5.17157C9.92172 4.42143 10.9391 4 12 4ZM12 14C16.42 14 20 15.79 20 18V20H4V18C4 15.79 7.58 14 12 14Z" />
         </svg>
         Mon compte
       </button>
 
-      <button  (click)="openLogoutPopup()" class="flex items-center gap-3 px-4 py-2 text-red-600 hover:bg-gray-100 cursor-pointer">
+      <button  routerLink="/auth/login" class="flex items-center gap-3 px-4 py-2 text-red-600 hover:bg-gray-100 cursor-pointer">
         <svg width="24" height="24" fill="#FF0909">
           <path d="M5 21C4.45 21 3.97933 20.8043 3.588 20.413C3.19667 20.0217 3.00067 19.5507 3 19V5C3 4.45 3.196 3.97933 3.588 3.588C3.98 3.19667 4.45067 3.00067 5 3H12V5H5V19H12V21H5ZM16 17L14.625 15.55L17.175 13H9V11H17.175L14.625 8.45L16 7L21 12L16 17Z" />
         </svg>

@@ -11,7 +11,7 @@
   <!-- Droite : bouton -->
   <div class="flex items-center gap-4">
 <!-- Bouton cree -->
-    <button >
+    <button (click)="openCreatePopup()">
    <svg width="166" height="44" viewBox="0 0 166 44" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect width="166" height="44" rx="8" fill="#E95F32"/>
 <g clip-path="url(#clip0_246_4425)">
@@ -217,7 +217,7 @@
               <div class="flex items-center gap-6">
 
                 <!-- Voir -->
-                <button routerLink="/details" class="text-gray-600 hover:opacity-70 transition-opacity" title="Voir">
+                <button routerLink="/details-abonnements" class="text-gray-600 hover:opacity-70 transition-opacity" title="Voir">
                   <svg width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M20 6.875C20 6.875 16.25 0 10 0C3.75 0 0 6.875 0 6.875C0 6.875 3.75 13.75 10 13.75C16.25 13.75 20 6.875 20 6.875ZM1.46625 6.875C2.06973 5.95573 2.76496 5.1001 3.54125 4.32125C5.15 2.71 7.35 1.25 10 1.25C12.65 1.25 14.8488 2.71 16.46 4.32125C17.2363 5.1001 17.9315 5.95573 18.535 6.875C18.4633 6.98333 18.3821 7.10333 18.2913 7.235C17.8725 7.835 17.2537 8.635 16.46 9.42875C14.8488 11.04 12.6488 12.5 10 12.5C7.35125 12.5 5.15125 11.04 3.54 9.42875C2.76371 8.6499 2.06973 7.79427 1.46625 6.875Z" fill="#6B7280"/>
                     <path d="M10 3.75C9.1712 3.75 8.37634 4.07924 7.79029 4.66529C7.20424 5.25134 6.875 6.0462 6.875 6.875C6.875 7.7038 7.20424 8.49866 7.79029 9.08471C8.37634 9.67076 9.1712 10 10 10C10.8288 10 11.6237 9.67076 12.2097 9.08471C12.7958 8.49866 13.125 7.7038 13.125 6.875C13.125 6.0462 12.7958 5.25134 12.2097 4.66529C11.6237 4.07924 10.8288 3.75 10 3.75ZM5.625 6.875C5.625 5.71468 6.08594 4.60188 6.90641 3.78141C7.72688 2.96094 8.83968 2.5 10 2.5C11.1603 2.5 12.2731 2.96094 13.0936 3.78141C13.9141 4.60188 14.375 5.71468 14.375 6.875C14.375 8.03532 13.9141 9.14812 13.0936 9.96859C12.2731 10.7891 11.1603 11.25 10 11.25C8.83968 11.25 7.72688 10.7891 6.90641 9.96859C6.08594 9.14812 5.625 8.03532 5.625 6.875Z" fill="#6B7280"/>
@@ -497,6 +497,150 @@
 
     <p class="text-lg text-gray-700">
       Le plan <b>"{{ selectedPlan?.nom }}"</b> a été supprimé.
+    </p>
+
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- POPUP CRÉATION -->
+<div
+  *ngIf="showCreatePopup"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+>
+  <div class="bg-white rounded-2xl w-[720px] p-5 shadow-xl">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-xl font-semibold flex-1 text-center">Créer un nouveau plan</h2>
+
+      <!-- close -->
+      <button (click)="closeCreatePopup()" class="text-gray-400 hover:text-gray-600">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Formulaire -->
+    <div class="grid grid-cols-2 gap-6">
+
+      <!-- Nom -->
+      <div>
+        <label class="text-sm font-medium text-gray-700 mb-2 block">Nom du plan</label>
+        <input [(ngModel)]="newPlan.nom"
+               class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+               placeholder="Ex: ARTISAN_PLAN">
+      </div>
+
+      <!-- Coût total -->
+      <div>
+        <label class="text-sm font-medium text-gray-700 mb-2 block">Coût total (F CFA)</label>
+        <input [(ngModel)]="newPlan.coutTotal"
+               type="number"
+               class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+               placeholder="Ex: 14 900">
+      </div>
+
+      <!-- Type -->
+      <div>
+        <label class="text-sm font-medium text-gray-700 mb-2 block">Type d'abonnement</label>
+        <select [(ngModel)]="newPlan.type"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm text-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent appearance-none bg-white cursor-pointer">
+          <option value="">Sélectionner( Mensuel ou Annuel)</option>
+          <option value="Mensuel">Mensuel</option>
+          <option value="Annuel">Annuel</option>
+        </select>
+      </div>
+
+      <!-- Remise -->
+      <div>
+        <label class="text-sm font-medium text-gray-700 mb-2 block">Remise annuelle (%)</label>
+        <input [(ngModel)]="newPlan.remise"
+               type="number"
+               class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+               placeholder="Ex: 10%">
+      </div>
+
+    </div>
+
+    <!-- Description -->
+    <div class="mt-6">
+      <label class="text-sm font-medium text-gray-700 mb-2 block">Description</label>
+      <input [(ngModel)]="newPlan.description"
+             class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+             placeholder="Ex: Plan pour artisans">
+    </div>
+
+    <!-- Fonctionnalités -->
+    <div class="mt-6">
+      <label class="text-sm font-medium text-gray-700 mb-2 block">Fonctionnalités</label>
+      <div class="border border-gray-300 rounded-lg p-3 min-h-[120px] focus-within:ring-2 focus-within:ring-orange-500 focus-within:border-transparent">
+        <textarea [(ngModel)]="newPlan.fonctionnalites"
+                  class="w-full h-full outline-none text-sm resize-none"
+                  placeholder="Saisir"></textarea>
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div class="mt-6 flex items-center gap-3">
+      <label class="text-sm font-medium text-gray-700">Statut plan</label>
+
+      <label class="relative inline-flex items-center cursor-pointer">
+        <input type="checkbox" [(ngModel)]="newPlan.active" class="sr-only peer">
+        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-orange-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"></div>
+        <span class="ml-3 text-sm font-medium text-gray-700">{{ newPlan.active ? 'Actif' : 'Inactif' }}</span>
+      </label>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex justify-start mt-8 gap-4">
+      <button (click)="saveNewPlan()"
+              class="px-8 py-2.5 rounded-lg bg-[#E95F32] text-white font-medium hover:bg-[#d15528] transition-colors">
+        Enregistrer
+      </button>
+
+      <button (click)="closeCreatePopup()"
+              class="px-8 py-2.5 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors">
+        Annuler
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<div
+  *ngIf="showSuccessCreate"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+>
+  <div class="bg-white rounded-xl p-10 text-center w-[400px] shadow-xl">
+
+    <svg width="70" height="70" viewBox="0 0 100 100" class="mx-auto mb-4">
+      <circle cx="50" cy="50" r="40" stroke="#7ED957" stroke-width="6" fill="none"/>
+      <path d="M30 50 L45 65 L70 35" stroke="#7ED957" stroke-width="6" fill="none"/>
+    </svg>
+
+    <p class="text-gray-700 text-lg font-medium">
+      Plan d’abonnement créé avec succès.
     </p>
 
   </div>

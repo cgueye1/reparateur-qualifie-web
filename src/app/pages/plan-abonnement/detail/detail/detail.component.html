@@ -33,7 +33,7 @@
     <!-- =============================== -->
     <div class="flex items-center gap-4 mt-4 md:mt-0">
       <!-- Bouton modifiee -->
-      <button>
+      <button (click)="openEditPopup()">
 
         <svg width="120" height="44" viewBox="0 0 120 44" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect x="0.5" y="0.5" width="119" height="43" rx="7.5" fill="#212121"/>
@@ -537,6 +537,156 @@
 
     <p class="text-lg text-gray-700">
       Le plan <b>"{{ selectedPlan?.nom }}"</b> a été supprimé.
+    </p>
+
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<!-- POPUP MODIFICATION -->
+<div
+  *ngIf="showEditPopup"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+>
+  <div class="bg-white rounded-2xl w-[720px] p-5 shadow-xl">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-xl font-semibold flex-1 text-center">Modifier le plan</h2>
+
+      <!-- close -->
+      <button (click)="closeEditPopup()" class="text-gray-400 hover:text-gray-600">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Formulaire -->
+    <div class="grid grid-cols-2 gap-6">
+
+      <!-- Nom -->
+      <div>
+        <label class="text-sm font-medium text-gray-700 mb-2 block">Nom du plan</label>
+        <input [(ngModel)]="editPlan.nom"
+               class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+               placeholder="Nom du plan">
+      </div>
+
+      <!-- Coût total -->
+      <div>
+        <label class="text-sm font-medium text-gray-700 mb-2 block">Coût total (F CFA)</label>
+        <input [(ngModel)]="editPlan.coutTotal"
+               type="text"
+               class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+               placeholder="14900">
+      </div>
+
+      <!-- Type -->
+      <div>
+        <label class="text-sm font-medium text-gray-700 mb-2 block">Type d'abonnement</label>
+        <select [(ngModel)]="editPlan.type"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm text-gray-500 focus:ring-2 focus:ring-orange-500 bg-white cursor-pointer">
+          <option value="Mensuel">Mensuel</option>
+          <option value="Annuel">Annuel</option>
+        </select>
+      </div>
+
+      <!-- Remise -->
+      <div>
+        <label class="text-sm font-medium text-gray-700 mb-2 block">Remise annuelle (%)</label>
+        <input [(ngModel)]="editPlan.remise"
+               type="number"
+               class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+               placeholder="0">
+      </div>
+
+    </div>
+
+    <!-- Description -->
+    <div class="mt-6">
+      <label class="text-sm font-medium text-gray-700 mb-2 block">Description</label>
+      <input [(ngModel)]="editPlan.description"
+             class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+             placeholder="Description du plan">
+    </div>
+
+    <!-- Fonctionnalités -->
+    <div class="mt-6">
+      <label class="text-sm font-medium text-gray-700 mb-2 block">Fonctionnalités</label>
+      <div class="border border-gray-300 rounded-lg p-3 min-h-[120px] focus-within:ring-2 focus-within:ring-orange-500">
+        <textarea [(ngModel)]="editPlan.fonctionnalites"
+                  class="w-full h-full outline-none text-sm resize-none"
+                  placeholder="Chaque fonctionnalité sur une nouvelle ligne"></textarea>
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div class="mt-6 flex items-center gap-3">
+      <label class="text-sm font-medium text-gray-700">Statut plan</label>
+
+      <label class="relative inline-flex items-center cursor-pointer">
+        <input type="checkbox" [(ngModel)]="editPlan.active" class="sr-only peer">
+        <div class="w-11 h-6 bg-gray-200 peer-focus:ring-2 peer-focus:ring-orange-300 rounded-full
+                    peer-checked:bg-orange-500
+                    after:content-[''] after:absolute after:top-[2px] after:left-[2px]
+                    after:w-5 after:h-5 after:bg-white after:rounded-full after:transition-all
+                    peer-checked:after:translate-x-full"></div>
+
+        <span class="ml-3 text-sm font-medium text-gray-700">
+          {{ editPlan.active ? 'Actif' : 'Inactif' }}
+        </span>
+      </label>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex justify-start mt-8 gap-4">
+      <button (click)="saveEditPlan()"
+              class="px-8 py-2.5 rounded-lg bg-[#E95F32] text-white font-medium hover:bg-[#d15528] transition-colors">
+        Enregistrer
+      </button>
+
+      <button (click)="closeEditPopup()"
+              class="px-8 py-2.5 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors">
+        Annuler
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+<div
+  *ngIf="showSuccessEdit"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+>
+  <div class="bg-white rounded-xl p-10 text-center w-[400px] shadow-xl">
+
+    <svg width="70" height="70" viewBox="0 0 100 100" class="mx-auto mb-4">
+      <circle cx="50" cy="50" r="40" stroke="#7ED957" stroke-width="6" fill="none"/>
+      <path d="M30 50 L45 65 L70 35" stroke="#7ED957" stroke-width="6" fill="none"/>
+    </svg>
+
+    <p class="text-gray-700 text-lg font-medium">
+      Modifications enregistrées avec succès.
     </p>
 
   </div>

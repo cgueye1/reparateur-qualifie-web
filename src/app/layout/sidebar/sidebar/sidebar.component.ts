@@ -33,6 +33,10 @@ confirmLogout() {
   window.location.href = '/auth/login';
 }
 
+showParametres = false;
 
+toggleParametres() {
+  this.showParametres = !this.showParametres;
+}
 
 }

@@ -1,6 +1,6 @@
 
 import { Component } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { ServiceTopbarSidebarService } from '../../../core/service/service-topbar-sidebar.service';
 import { filter } from 'rxjs';
 import { NgIf } from '@angular/common';
@@ -8,7 +8,7 @@ import { NgIf } from '@angular/common';
 @Component({
   selector: 'app-topbar',
   standalone: true,
-  imports: [NgIf],
+  imports: [NgIf,RouterModule],
   templateUrl: './topbar.component.html',
   styleUrl: './topbar.component.css'
 })

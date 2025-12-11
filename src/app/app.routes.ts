@@ -130,6 +130,19 @@ export const routes: Routes = [
           ).then((m) => m.MonCompteComponent),
         data: { title: 'Mon compte' },
       },
+
+
+       // Gestion Metier
+      {
+        path: 'gestion-metiers',
+        loadComponent: () =>
+          import(
+            './pages/gestion-metiers/gestion-metiers/gestion-metiers.component'
+          ).then((m) => m.GestionMetiersComponent),
+        data: { title: 'Mon compte' },
+      },
+
+      
     ]
   },
 
