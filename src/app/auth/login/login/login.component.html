@@ -56,8 +56,9 @@
       <!-- Nom d'utilisateur -->
       <label class="text-[#CCCCCC] text-xs">Nom d’utilisateur</label>
       <input
+      name="email"
       [(ngModel)]="email"
-        type="text"
+        type="email"
         placeholder="Email ou téléphone"
         class="w-full mt-2 mb-5 px-4 py-3 rounded-lg bg-[#242B39] text-[#CCCCCC] placeholder-[#9C9AA5] placeholder:text-xs focus:outline-none"
       />
@@ -67,6 +68,7 @@
       <div class="relative mt-2 mb-3">
 
   <input
+     name="password"
     [(ngModel)]="password"
     [type]="showPassword ? 'text' : 'password'"
     placeholder="********"
@@ -101,9 +103,12 @@
 
         <label class="flex items-center gap-2 cursor-pointer select-none text-[#CCCCCC] ">
   <input
-    type="checkbox"
-    class="w-4 h-4 accent-[#E95F32] cursor-pointer"
-  >
+   name="rememberMe"
+  type="checkbox"
+  class="w-4 h-4 accent-[#E95F32] cursor-pointer"
+  [(ngModel)]="rememberMe"
+/>
+
   <span class="text-sm ">Se souvenir de moi</span>
 </label>
 

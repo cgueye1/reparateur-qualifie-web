@@ -22,7 +22,8 @@
     [class.md:ml-72]="sidebarOpen"
     [class.ml-0]="!sidebarOpen"
   >
-    <app-topbar></app-topbar>
+    <app-topbar (logoutEvent)="logout()"></app-topbar>
+
 
     <div class="flex-1 overflow-auto bg-[#F5F5F5] p-5">
       <router-outlet></router-outlet>

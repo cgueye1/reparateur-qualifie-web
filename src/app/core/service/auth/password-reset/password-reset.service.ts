@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PasswordReset } from '../../../../models/auth/password-reset/password-reset';
+import { environment } from '../../../../../environments/environments';
 
 
 @Injectable({
@@ -9,13 +10,12 @@ import { PasswordReset } from '../../../../models/auth/password-reset/password-r
 })
 export class PasswordResetService {
 
-  private baseUrl = "https://innov.sn/reparateurs";
-  private endpoint = this.baseUrl + "/api/auth/password/reset";
+  private baseUrl = environment.apiUrl;
+  private endpoint = `${this.baseUrl}/api/auth/password/reset`;
 
   constructor(private http: HttpClient) {}
 
   resetPassword(data: PasswordReset): Observable<any> {
     return this.http.post(this.endpoint, data);
   }
-
 }

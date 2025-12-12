@@ -1,5 +1,5 @@
 
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { ServiceTopbarSidebarService } from '../../../core/service/service-topbar-sidebar.service';
 import { filter } from 'rxjs';
@@ -60,5 +60,12 @@ export class TopbarComponent {
   confirmLogout(): void {
     this.showLogoutPopup = false;
     window.location.href = '/auth/login';
+  }
+
+
+   @Output() logoutEvent = new EventEmitter<void>(); // ✅ Événement envoyé au parent
+
+  onLogout() {
+    this.logoutEvent.emit(); // 🔥 Envoie la demande de déconnexion au MainLayout
   }
 }
