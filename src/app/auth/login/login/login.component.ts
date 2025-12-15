@@ -1,7 +1,7 @@
 import { NgIf } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { LoginService } from '../../../core/service/auth/login/login.service';
 import { LoginResponse } from '../../../models/auth/login-response/login-response';
 import { SwettAlerteService } from '../../../core/service/alerte/swett-alerte.service';
@@ -9,7 +9,7 @@ import { SwettAlerteService } from '../../../core/service/alerte/swett-alerte.se
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [NgIf, FormsModule],
+  imports: [NgIf, FormsModule,RouterModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })

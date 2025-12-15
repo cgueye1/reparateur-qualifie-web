@@ -1,66 +1,97 @@
 import { Injectable } from '@angular/core';
-import Swal from 'sweetalert2';
+import Swal, { SweetAlertOptions } from 'sweetalert2';
+
+export type AlertTheme = 'dark' | 'light';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SwettAlerteService {
 
-  success(message: string) {
-    Swal.fire({
+  /* ===========================
+     ✅ SUCCÈS
+     =========================== */
+  success(message: string, theme: AlertTheme = 'dark') {
+    Swal.fire(this.buildConfig({
       icon: 'success',
-      text: message,
-      timer: 1600,
-      showConfirmButton: false,
-      background: '#000',
-      color: '#FFFFFFCC',
-      iconColor: '#E95F32',
-      customClass: {
-        popup: 'rounded-xl border border-[#FFFFFF33] small-icon',
-        htmlContainer: 'text-xs'
-      }
-    });
+      message,
+      theme,
+      autoClose: true
+    }));
   }
 
-  error(message: string) {
-    Swal.fire({
+  /* ===========================
+     ❌ ERREUR
+     =========================== */
+  error(message: string, theme: AlertTheme = 'dark') {
+    Swal.fire(this.buildConfig({
       icon: 'error',
-      title: 'Erreur',
-      text: message,
-      background: '#000',
-      color: '#FFFFFFCC',
-      iconColor: '#E95F32',
-      confirmButtonColor: '#E95F32',
-      confirmButtonText: 'OK',
-      customClass: {
-        popup: 'rounded-xl border border-[#FFFFFF33] small-icon',
-        title: 'text-sm font-medium',
-        htmlContainer: 'text-xs'
-      }
-    });
+      message,
+      theme
+    }));
   }
 
-  unauthorized() {
-    this.error('Vous devez être connecté');
+  /* ===========================
+     🔒 NON AUTHENTIFIÉ
+     =========================== */
+  unauthorized(theme: AlertTheme = 'dark') {
+    this.error('Vous devez être connecté', theme);
   }
 
-  confirm(message: string, confirmText = 'Confirmer'): Promise<boolean> {
+  /* ===========================
+     ⚠️ CONFIRMATION
+     =========================== */
+  confirm(
+    message: string,
+    confirmText = 'Confirmer',
+    theme: AlertTheme = 'dark'
+  ): Promise<boolean> {
+
     return Swal.fire({
+      ...this.baseStyle(theme),
       icon: 'warning',
       text: message,
       showCancelButton: true,
-      background: '#000',
-      color: '#FFFFFFCC',
-      iconColor: '#E95F32',
-      confirmButtonColor: '#E95F32',
-      cancelButtonColor: '#FFFFFF33',
       confirmButtonText: confirmText,
       cancelButtonText: 'Annuler',
+      confirmButtonColor: '#E95F32',
+      cancelButtonColor: theme === 'dark' ? '#FFFFFF33' : '#E5E7EB'
+    }).then(res => res.isConfirmed);
+  }
+
+  /* =================================================
+     🔧 MÉTHODES INTERNES
+     ================================================= */
+
+  private buildConfig(options: {
+    icon: 'success' | 'error';
+    message: string;
+    theme: AlertTheme;
+    autoClose?: boolean;
+  }): SweetAlertOptions {
+
+    return {
+      ...this.baseStyle(options.theme),
+      icon: options.icon,
+      text: options.message,
+      timer: options.autoClose ? 1600 : undefined,
+      showConfirmButton: !options.autoClose,
+      confirmButtonColor: '#E95F32'
+    };
+  }
+
+  private baseStyle(theme: AlertTheme): SweetAlertOptions {
+    return {
+      background: theme === 'dark' ? '#000' : '#fff',
+      color: theme === 'dark' ? '#FFFFFFCC' : '#111',
+      iconColor: '#E95F32',
       customClass: {
-        popup: 'rounded-xl border border-[#FFFFFF33] small-icon',
+        popup: `alert-card ${theme === 'dark'
+          ? 'border-[#FFFFFF33]'
+          : 'border-gray-200'}`,
+        title: 'text-sm font-medium',
         htmlContainer: 'text-xs'
       }
-    }).then(result => result.isConfirmed);
+    };
   }
 }
-

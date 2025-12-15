@@ -15,7 +15,12 @@ export class PasswordResetService {
 
   constructor(private http: HttpClient) {}
 
-  resetPassword(data: PasswordReset): Observable<any> {
-    return this.http.post(this.endpoint, data);
-  }
+  resetPassword(data: PasswordReset): Observable<string> {
+  return this.http.post(
+    this.endpoint,
+    data,
+    { responseType: 'text' } // 👈 TRÈS IMPORTANT
+  );
+}
+
 }

@@ -14,15 +14,48 @@ html, body {
    =============================== */
 
 .small-icon .swal2-icon {
-  transform: scale(0.6);          /* icône plus petite */
-  margin: 0.3rem auto;
+  transform: scale(0.55);       /* encore un peu plus petit */
+  margin: 0.2rem auto 0;
 }
 
 .small-icon .swal2-icon-content {
-  font-size: 0.6rem;              /* symbole ✔ ✖ plus fin */
+  font-size: 0.55rem;
 }
 
-.small-icon .swal2-popup {
-  padding: 1rem;                  /* popup plus compacte */
+/* ===============================
+   Carte SweetAlert compacte
+   =============================== */
+
+.alert-card {
+  width: 260px !important;      /* légèrement moins large */
+  padding: 0.9rem 1rem !important; /* ⬅️ réduit la hauteur */
+  border-radius: 14px !important;
+  border-width: 1px !important;
+  box-sizing: border-box;
 }
+
+/* Icône très discrète */
+.alert-card .swal2-icon {
+  margin: 0.25rem auto 0 !important;
+  transform: scale(0.55);
+}
+
+/* Texte compact */
+.alert-card .swal2-html-container {
+  margin-top: 0.25rem !important;
+  line-height: 1.3;
+  font-size: 0.75rem;
+}
+
+/* Boutons encore plus serrés */
+.alert-card .swal2-actions {
+  margin-top: 0.5rem !important;
+}
+
+.alert-card .swal2-confirm,
+.alert-card .swal2-cancel {
+  padding: 0.35rem 0.9rem !important;
+  font-size: 0.75rem !important;
+}
+
 

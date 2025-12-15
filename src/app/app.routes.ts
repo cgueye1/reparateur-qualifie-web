@@ -132,8 +132,8 @@ export const routes: Routes = [
     ],
   },
 
-  // 🚪 Route publique
-  {
+  // 🚪 Routes publiques
+{
   path: 'auth',
   children: [
     {
@@ -141,13 +141,18 @@ export const routes: Routes = [
       loadComponent: () =>
         import('./auth/login/login/login.component')
           .then((m) => m.LoginComponent),
-
     },
     {
       path: 'change-password',
       loadComponent: () =>
         import('./auth/password-change/password-change.component')
           .then((m) => m.PasswordChangeComponent),
+    },
+    {
+      path: 'password-reset',
+      loadComponent: () =>
+        import('./auth/password-reset/password-reset/password-reset.component')
+          .then((m) => m.PasswordResetComponent),
     }
   ]
 }

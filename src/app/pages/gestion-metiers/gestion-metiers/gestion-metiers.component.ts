@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormsModule } from "@angular/forms";
 import { CommonModule, NgFor, NgIf } from "@angular/common";
+import { GestionMetierService } from '../../../core/service/gestion-metier/gestion-metier.service';
+import { Metiers } from '../../../models/gestion-metier/gestion-metier';
 
 @Component({
   selector: 'app-gestion-metiers',
@@ -12,42 +14,103 @@ import { CommonModule, NgFor, NgIf } from "@angular/common";
 export class GestionMetiersComponent {
 
 
+  // ================================
+// PAGINATION
+// ================================
+page = 0;
+size = 10;
+
+totalPages = 0;
+totalElements = 0;
+
+
+nextPage() {
+  if (this.page + 1 < this.totalPages) {
+    this.page++;
+    this.loadMetiers();
+  }
+}
+
+prevPage() {
+  if (this.page > 0) {
+    this.page--;
+    this.loadMetiers();
+  }
+}
+
+goToPage(p: number) {
+  this.page = p;
+  this.loadMetiers();
+}
+
+get pages(): number[] {
+  return Array.from({ length: this.totalPages }, (_, i) => i);
+}
+
+onSizeChange() {
+  this.page = 0; // on revient à la première page
+  this.loadMetiers();
+}
+
+get startIndex(): number {
+  return this.page * this.size + 1;
+}
+
+get endIndex(): number {
+  return Math.min((this.page + 1) * this.size, this.totalElements);
+}
+
+
+
+
   /* ============================================================
    * 📌 1 — LISTE DES MÉTIERS
    * ============================================================*/
 
-  metiers = [
-    {
-      nom: "Plomberie",
-      description: "Installation, maintenance et réparation des systèmes de canalisation d'eau.",
-      icon: "https://img.icons8.com/ios-glyphs/30/plumbing.png",
-      image: "",
-      date: "01/12/2025"
-    },
-    {
-      nom: "Électricité",
-      description: "Installation, sécurisation, et dépannage des réseaux électriques.",
-      icon: "https://img.icons8.com/ios-glyphs/30/electrical.png",
-      image: "electricien.jpg",
-      date: "29/11/2025"
-    },
-    {
-      nom: "Peinture",
-      description: "Préparation des surfaces, application des finitions.",
-      icon: "https://img.icons8.com/ios-glyphs/30/paint-roller.png",
-      image: "peintre.jpg",
-      date: "29/11/2025"
-    }
-  ];
+  /* ==========================
+   * 📌 LISTE DES MÉTIERS (API)
+   * ========================== */
+  metiers: Metiers[] = [];
+  searchTerm = '';
 
-  searchTerm = "";
+  // pagination simple
+
+
+  loading = false;
+
+  constructor(private metierService: GestionMetierService) {}
+
+  ngOnInit(): void {
+    this.loadMetiers();
+  }
+
+  loadMetiers() {
+  this.loading = true;
+
+  this.metierService.getTrades(this.page, this.size).subscribe({
+    next: (res) => {
+      this.metiers = res.content;
+
+      // ✅ AJOUTE CES DEUX LIGNES
+      this.totalPages = res.totalPages;
+      this.totalElements = res.totalElements;
+
+      this.loading = false;
+      console.log('Métiers chargés ✅', res);
+    },
+    error: (err) => {
+      console.error('Erreur chargement métiers ❌', err);
+      this.loading = false;
+    }
+  });
+}
+
 
   get filteredMetiers() {
     return this.metiers.filter(m =>
-      m.nom.toLowerCase().includes(this.searchTerm.toLowerCase())
+      m.name.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
   }
-
 
 
 
@@ -124,10 +187,7 @@ export class GestionMetiersComponent {
 
   saveNewMetier() {
 
-    this.metiers.push({
-      ...this.newMetier,
-      date: new Date().toLocaleDateString("fr-FR"),
-    });
+
 
     this.showCreatePopup = false;
     this.showSuccessCreate = true;
