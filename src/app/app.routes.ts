@@ -110,20 +110,46 @@ export const routes: Routes = [
             .then((m) => m.GestionMetiersComponent),
         data: { title: 'Gestion des métiers' },
       },
+
+      // Modération des avis
+      {
+        path: 'moderation-avis',
+        loadComponent: () =>
+          import('./pages/moderation-avis/moderation-avis/moderation-avis.component')
+            .then((m) => m.ModerationAvisComponent),
+        data: { title: 'Modération des avis' },
+      },
+
+
+      // Publicités
+      {
+        path: 'publicites',
+        loadComponent: () =>
+          import('./pages/publicite/publicite/publicite.component')
+            .then((m) => m.PubliciteComponent),
+        data: { title: 'Publicités' },
+      },
     ],
   },
 
   // 🚪 Route publique
   {
-    path: 'auth',
-    children: [
-      {
-        path: 'login',
-        loadComponent: () =>
-          import('./auth/login/login/login.component')
-            .then((m) => m.LoginComponent),
-        data: { title: 'Connexion' }
-      }
-    ]
-  }
+  path: 'auth',
+  children: [
+    {
+      path: 'login',
+      loadComponent: () =>
+        import('./auth/login/login/login.component')
+          .then((m) => m.LoginComponent),
+
+    },
+    {
+      path: 'change-password',
+      loadComponent: () =>
+        import('./auth/password-change/password-change.component')
+          .then((m) => m.PasswordChangeComponent),
+    }
+  ]
+}
+
 ];

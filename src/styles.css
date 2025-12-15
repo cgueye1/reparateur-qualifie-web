@@ -6,3 +6,23 @@ html, body {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+
+/* ===============================
+   SweetAlert – icônes ultra discrètes
+   =============================== */
+
+.small-icon .swal2-icon {
+  transform: scale(0.6);          /* icône plus petite */
+  margin: 0.3rem auto;
+}
+
+.small-icon .swal2-icon-content {
+  font-size: 0.6rem;              /* symbole ✔ ✖ plus fin */
+}
+
+.small-icon .swal2-popup {
+  padding: 1rem;                  /* popup plus compacte */
+}
+

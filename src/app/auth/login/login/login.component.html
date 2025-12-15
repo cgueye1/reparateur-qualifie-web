@@ -10,7 +10,7 @@
   <!-- CARD -->
   <div class="bg-[#111111] border border-[#2A2A2A] rounded-2xl p-10 w-full max-w-md text-center shadow-xl">
 
-    <!-- LOGO (tu remplaceras l’image ici) -->
+    <!-- LOGO  -->
     <div class="flex justify-center mb-6">
       <div class="  rounded flex items-center justify-center text-white text-sm">
         <svg width="228" height="50" viewBox="0 0 228 50" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -51,83 +51,116 @@
     <p class="text-[#FFFFFF99] mt-1 mb-8">Accédez à votre espace personnel</p>
 
     <!-- FORMULAIRE -->
-    <form class="text-left">
+   <form #loginForm="ngForm" class="text-left" novalidate>
 
-      <!-- Nom d'utilisateur -->
-      <label class="text-[#CCCCCC] text-xs">Nom d’utilisateur</label>
-      <input
-      name="email"
-      [(ngModel)]="email"
-        type="email"
-        placeholder="Email ou téléphone"
-        class="w-full mt-2 mb-5 px-4 py-3 rounded-lg bg-[#242B39] text-[#CCCCCC] placeholder-[#9C9AA5] placeholder:text-xs focus:outline-none"
-      />
-
-      <!-- Mot de passe -->
-      <label class="text-[#CCCCCC] text-xs">Mot de passe</label>
-      <div class="relative mt-2 mb-3">
-
+  <!-- EMAIL -->
+  <label class="text-[#CCCCCC] text-xs">Nom d’utilisateur</label>
   <input
-     name="password"
-    [(ngModel)]="password"
-    [type]="showPassword ? 'text' : 'password'"
-    placeholder="********"
-    class="w-full px-4 py-3 rounded-lg bg-[#242B39] text-white placeholder-[#FFFFFF33] placeholder:text-xs focus:outline-none"
+    name="email"
+    [(ngModel)]="email"
+    type="email"
+    required
+    email
+    #emailCtrl="ngModel"
+    placeholder="Email ou téléphone"
+    class="w-full mt-2 mb-4 px-4 py-3 rounded-lg bg-[#242B39]
+           text-[#CCCCCC] placeholder-[#9C9AA5]
+           placeholder:text-xs focus:outline-none"
   />
 
-  <!-- BOUTON AFFICHER / CACHER -->
-  <span
-    (click)="togglePassword()"
-    class="absolute right-3 top-3 cursor-pointer text-white/60 select-none"
-  >
+  <p *ngIf="emailCtrl.invalid && emailCtrl.touched"
+     class="text-[11px] text-[#E95F32] mt-1 mb-4">
+    Email invalide
+  </p>
 
-    <!-- Icône : œil barré -->
-    <svg *ngIf="!showPassword" width="20" height="20" viewBox="0 0 20 20" fill="none">
-      <path d="M8.56004 8.56189C8.18502 8.93704 7.97439 9.4458 7.97449 9.97624C7.97458 10.5067 8.18539 11.0154 8.56054 11.3904C8.93569 11.7654 9.44445 11.976 9.97489 11.9759C10.5053 11.9758 11.014 11.765 11.389 11.3899M14.656 14.648C13.2532 15.5257 11.6296 15.9859 9.97498 15.975C6.37498 15.975 3.37498 13.975 0.974976 9.97501C2.24698 7.85501 3.68698 6.29701 5.29498 5.30101M8.15498 4.15501C8.75401 4.03374 9.36379 3.97343 9.97498 3.97501C13.575 3.97501 16.575 5.97501 18.975 9.97501C18.309 11.085 17.596 12.042 16.837 12.845M0.974976 0.974976L18.975 18.975"
-      stroke="#ACB5BB" stroke-width="1.95" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
+  <!-- MOT DE PASSE -->
+  <label class="text-[#CCCCCC] text-xs ">Mot de passe</label>
+  <div class="relative mt-2 mb-2">
 
-    <!-- Icône : œil normal -->
-    <svg *ngIf="showPassword" width="20" height="20" viewBox="0 0 20 20" fill="none">
-      <path d="M1 10C3.5 5 7 3 10 3C13 3 16.5 5 19 10C16.5 15 13 17 10 17C7 17 3.5 15 1 10Z" stroke="#ACB5BB" stroke-width="1.8"/>
-      <circle cx="10" cy="10" r="3" stroke="#ACB5BB" stroke-width="1.8"/>
-    </svg>
+    <input
+      name="password"
+      [(ngModel)]="password"
+      [type]="showPassword ? 'text' : 'password'"
+      required
+      minlength="4"
+      #passwordCtrl="ngModel"
+      placeholder="********"
+      class="w-full px-4 py-3 rounded-lg bg-[#242B39]
+             text-white placeholder-[#FFFFFF33]
+             placeholder:text-xs focus:outline-none"
+    />
 
-  </span>
+    <!-- TOGGLE PASSWORD -->
+    <span
+      (click)="togglePassword()"
+      class="absolute right-3 top-3 cursor-pointer text-white/60 select-none"
+    >
+      <!-- œil barré -->
+          <svg
+            *ngIf="!showPassword"
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+          >
+            <path
+              d="M8.56004 8.56189C8.18502 8.93704 7.97439 9.4458 7.97449 9.97624C7.97458 10.5067 8.18539 11.0154 8.56054 11.3904C8.93569 11.7654 9.44445 11.976 9.97489 11.9759C10.5053 11.9758 11.014 11.765 11.389 11.3899M14.656 14.648C13.2532 15.5257 11.6296 15.9859 9.97498 15.975C6.37498 15.975 3.37498 13.975 0.974976 9.97501C2.24698 7.85501 3.68698 6.29701 5.29498 5.30101M8.15498 4.15501C8.75401 4.03374 9.36379 3.97343 9.97498 3.97501C13.575 3.97501 16.575 5.97501 18.975 9.97501C18.309 11.085 17.596 12.042 16.837 12.845M0.974976 0.974976L18.975 18.975"
+              stroke="#ACB5BB"
+              stroke-width="1.95"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+
+      <svg *ngIf="showPassword" width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M1 10C3.5 5 7 3 10 3C13 3 16.5 5 19 10"
+              stroke="#ACB5BB" stroke-width="1.8"/>
+        <circle cx="10" cy="10" r="3" stroke="#ACB5BB" stroke-width="1.8"/>
+      </svg>
+    </span>
+  </div>
+
+  <p *ngIf="passwordCtrl.invalid && passwordCtrl.touched"
+     class="text-[11px] text-[#E95F32] mb-6">
+    Minimum 4 caractères
+  </p>
+
+  <!-- OPTIONS -->
+<div class="flex justify-between items-center text-xs mb-8 mt-6">
+
+  <label class="flex items-center gap-2 cursor-pointer text-[#CCCCCC]">
+    <input
+      name="rememberMe"
+      type="checkbox"
+      [(ngModel)]="rememberMe"
+      class="w-4 h-4 accent-[#E95F32]"
+    />
+    <span>Se souvenir de moi</span>
+  </label>
+
+  <a class="text-[#E95F32] hover:underline cursor-pointer">
+    Mot de passe oublié ?
+  </a>
 
 </div>
 
 
-      <!-- OPTIONS -->
-      <div class="flex justify-between items-center text-xs mt-4 mb-8">
+  <!-- BOUTON -->
+  <button
+    type="button"
+    (click)="onLogin()"
+    [disabled]="loginForm.invalid"
+    class="w-full bg-[#E95F32]
+           disabled:opacity-40
+           disabled:cursor-not-allowed
+           hover:bg-[#d74f28]
+           transition text-white font-medium py-3 rounded-lg"
+  >
+    Se connecter
+  </button>
 
-        <label class="flex items-center gap-2 cursor-pointer select-none text-[#CCCCCC] ">
-  <input
-   name="rememberMe"
-  type="checkbox"
-  class="w-4 h-4 accent-[#E95F32] cursor-pointer"
-  [(ngModel)]="rememberMe"
-/>
+</form>
 
-  <span class="text-sm ">Se souvenir de moi</span>
-</label>
-
-
-        <a class="text-[#E95F32] hover:underline cursor-pointer">
-          Mot de passe oublié ?
-        </a>
-
-      </div>
-
-      <!-- BOUTON -->
-      <button
-       (click)="onLogin()"
-        class="w-full bg-[#E95F32] hover:bg-[#d74f28] transition text-white font-medium py-3 rounded-lg"
-      >
-        Se connecter
-      </button>
-
-    </form>
 
 
 

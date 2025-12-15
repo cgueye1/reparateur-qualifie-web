@@ -15,7 +15,7 @@ export class PasswordChangeService {
 
   constructor(private http: HttpClient) {}
 
-  changePassword(id: number, data: PasswordChange): Observable<any> {
-    return this.http.put(`${this.endpoint}/${id}`, data);
+  changePassword(id: number, data: PasswordChange): Observable<PasswordChange> {
+    return this.http.put<PasswordChange>(`${this.endpoint}/${id}`, data);
   }
 }

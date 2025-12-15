@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoginService } from '../../../core/service/auth/login/login.service';
 import { LoginResponse } from '../../../models/auth/login-response/login-response';
+import { SwettAlerteService } from '../../../core/service/alerte/swett-alerte.service';
 
 @Component({
   selector: 'app-login',
@@ -22,7 +23,11 @@ export class LoginComponent {
   email = "";
   password = "";
 
-  constructor(private loginService: LoginService) {}
+  constructor(
+    private loginService: LoginService,
+    private alert: SwettAlerteService,
+
+  ) {}
 
 
   togglePassword() {
@@ -32,41 +37,43 @@ export class LoginComponent {
 
   onLogin() {
 
-    const data = {
-      email: this.email,
-      password: this.password
-    };
+  const data = {
+    email: this.email,
+    password: this.password
+  };
 
-    this.loginService.login(data).subscribe({
-      next: (res: LoginResponse) => {
+  this.loginService.login(data).subscribe({
 
-        const authData = {
-          accessToken: res.token,
-          refreshToken: res.refreshToken
-        };
+    next: (res: LoginResponse) => {
 
-        // ✅ On stocke toujours dans localStorage
-        localStorage.setItem("rq_auth", JSON.stringify(authData));
+      const authData = {
+        accessToken: res.token,
+        refreshToken: res.refreshToken
+      };
 
-        // ❗ Si l'utilisateur ne veut pas rester connecté :
-        // on supprime les tokens quand il quitte le navigateur
-        if (!this.rememberMe) {
-          window.addEventListener("beforeunload", () => {
-            localStorage.removeItem("rq_auth");
-          });
-        }
+      // ✅ Stockage du token
+      localStorage.setItem('rq_auth', JSON.stringify(authData));
 
-        console.log("SUCCESS :", res);
-        alert("Connexion réussie");
-
-        // 🚀 Redirection
-        this.router.navigate(['/tableau-de-bord']);
-      },
-
-      error: (err) => {
-        console.log("ERROR :", err);
-        alert("Identifiants incorrects");
+      // ❗ Si "se souvenir de moi" n’est PAS coché
+      if (!this.rememberMe) {
+        window.addEventListener('beforeunload', () => {
+          localStorage.removeItem('rq_auth');
+        });
       }
-    });
-  }
+
+      // ✅ SweetAlert succès (discret)
+      this.alert.success('Connexion réussie');
+
+      // 🚀 Redirection après succès
+      this.router.navigate(['/tableau-de-bord']);
+    },
+
+    error: () => {
+      // ❌ SweetAlert erreur
+      this.alert.error('Email ou mot de passe incorrect');
+    }
+
+  });
+}
+
 }

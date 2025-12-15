@@ -1,42 +1,52 @@
-
 import { NgIf } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [NgIf,RouterModule],
+  imports: [NgIf, RouterModule],
   templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.css'
+  styleUrl: './sidebar.component.css',
 })
 export class SidebarComponent {
 
+  // 🔔 événement envoyé au parent
+  @Output() logoutEvent = new EventEmitter<void>();
+
+  // popup logout
   showLogoutPopup = false;
 
-// ouvrir la popup
-openLogoutPopup() {
-  this.showLogoutPopup = true;
-}
+  // paramètres
+  showParametres = false;
 
-// fermer la popup
-closeLogoutPopup() {
-  this.showLogoutPopup = false;
-}
+  // ==========================
+  // LOGOUT
+  // ==========================
 
-// confirmer la déconnexion
-confirmLogout() {
-  this.showLogoutPopup = false;
+  // ouvrir la popup
+  openLogoutPopup() {
+    this.showLogoutPopup = true;
+  }
 
-  // 👉 ici plus tard tu pourras appeler ton service logout
-  // pour l’instant on simule le retour vers login
-  window.location.href = '/auth/login';
-}
+  // fermer la popup
+  closeLogoutPopup() {
+    this.showLogoutPopup = false;
+  }
 
-showParametres = false;
+  // confirmer la déconnexion
+  confirmLogout() {
+    this.showLogoutPopup = false;
 
-toggleParametres() {
-  this.showParametres = !this.showParametres;
-}
+    // 🔥 envoie l’event au parent
+    this.logoutEvent.emit();
+  }
 
+  // ==========================
+  // PARAMÈTRES
+  // ==========================
+
+  toggleParametres() {
+    this.showParametres = !this.showParametres;
+  }
 }
