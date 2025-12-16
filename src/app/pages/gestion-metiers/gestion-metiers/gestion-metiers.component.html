@@ -1,219 +1,485 @@
 <div class="w-full">
-
   <!-- TITRE + BOUTON -->
-<div class="flex justify-between items-center mb-6">
+  <div class="flex justify-between items-center mb-6">
+    <div class="space-y-1">
+      <h1 class="text-2xl font-bold text-[#343A40]">Gestion des métiers</h1>
+      <p class="text-sm text-gray-500 mt-1">
+        Créer, modifier ou supprimer les métiers proposés aux utilisateurs
+      </p>
+    </div>
 
-  <div class="space-y-1">
-    <h1 class="text-2xl font-bold text-[#343A40]">Gestion des métiers</h1>
-    <p class="text-sm text-gray-500 mt-1">
-      Créer, modifier ou supprimer les métiers proposés aux utilisateurs
-    </p>
+    <button
+      (click)="openCreatePopup()"
+      class="flex items-center gap-2 px-5 py-2.5 bg-[#E95F32] text-white rounded-lg hover:bg-[#d15528] transition"
+    >
+      <!-- NOUVEL ICONE EXACT -->
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 16 16"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8 15C6.14348 15 4.36301 14.2625 3.05025 12.9497C1.7375 11.637 1 9.85652 1 8C1 6.14348 1.7375 4.36301 3.05025 3.05025C4.36301 1.7375 6.14348 1 8 1C9.85652 1 11.637 1.7375 12.9497 3.05025C14.2625 4.36301 15 6.14348 15 8C15 9.85652 14.2625 11.637 12.9497 12.9497C11.637 14.2625 9.85652 15 8 15ZM8 16C10.1217 16 12.1566 15.1571 13.6569 13.6569C15.1571 12.1566 16 10.1217 16 8C16 5.87827 15.1571 3.84344 13.6569 2.34315C12.1566 0.842855 10.1217 0 8 0C5.87827 0 3.84344 0.842855 2.34315 2.34315C0.842855 3.84344 0 5.87827 0 8C0 10.1217 0.842855 12.1566 2.34315 13.6569C3.84344 15.1571 5.87827 16 8 16Z"
+          fill="white"
+        />
+        <path
+          d="M8 4C8.13261 4 8.25979 4.05268 8.35355 4.14645C8.44732 4.24021 8.5 4.36739 8.5 4.5V7.5H11.5C11.6326 7.5 11.7598 7.55268 11.8536 7.64645C11.9473 7.74021 12 7.86739 12 8C12 8.13261 11.9473 8.25979 11.8536 8.35355C11.7598 8.44732 11.6326 8.5 11.5 8.5H8.5V11.5C8.5 11.6326 8.44732 11.7598 8.35355 11.8536C8.25979 11.9473 8.13261 12 8 12C7.86739 12 7.74021 11.9473 7.64645 11.8536C7.55268 11.7598 7.5 11.6326 7.5 11.5V8.5H4.5C4.36739 8.5 4.24021 8.44732 4.14645 8.35355C4.05268 8.25979 4 8.13261 4 8C4 7.86739 4.05268 7.74021 4.14645 7.64645C4.24021 7.55268 4.36739 7.5 4.5 7.5H7.5V4.5C7.5 4.36739 7.55268 4.24021 7.64645 4.14645C7.74021 4.05268 7.86739 4 8 4Z"
+          fill="white"
+        />
+      </svg>
+
+      Créer un métier
+    </button>
   </div>
 
-  <button
-    (click)="openCreatePopup()"
-    class="flex items-center gap-2 px-5 py-2.5 bg-[#E95F32] text-white rounded-lg hover:bg-[#d15528] transition"
-  >
+  <!-- BARRE RECHERCHE + TABLEAU DES MÉTIERS -->
+  <div class="bg-white rounded-xl shadow-sm p-5 mt-5 mb-6">
+    <div
+      class="w-full mb-5 flex flex-col lg:flex-row items-center justify-between gap-3"
+    >
+      <!-- Champ de recherche -->
+      <div
+        class="flex items-center w-full lg:w-auto border border-gray-300 rounded-lg px-3 py-2 bg-white gap-2"
+      >
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 14 14"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M13.1539 12.2073L10.6806 9.75393C11.6407 8.55687 12.1056 7.03747 11.9798 5.50813C11.854 3.9788 11.147 2.55579 10.0043 1.5317C8.86151 0.507604 7.3698 -0.0397263 5.83588 0.00224731C4.30196 0.0442209 2.84241 0.672308 1.75736 1.75736C0.672308 2.84241 0.0442209 4.30196 0.00224731 5.83588C-0.0397263 7.3698 0.507604 8.86151 1.5317 10.0043C2.55579 11.147 3.9788 11.854 5.50813 11.9798C7.03747 12.1056 8.55687 11.6407 9.75393 10.6806L12.2073 13.1339C12.2692 13.1964 12.343 13.246 12.4242 13.2799C12.5055 13.3137 12.5926 13.3311 12.6806 13.3311C12.7686 13.3311 12.8557 13.3137 12.937 13.2799C13.0182 13.246 13.092 13.1964 13.1539 13.1339C13.2741 13.0096 13.3413 12.8435 13.3413 12.6706C13.3413 12.4977 13.2741 12.3316 13.1539 12.2073ZM6.01393 10.6806C5.09095 10.6806 4.1887 10.4069 3.42127 9.89412C2.65384 9.38134 2.0557 8.65251 1.7025 7.79979C1.34929 6.94707 1.25687 6.00876 1.43694 5.10351C1.617 4.19827 2.06146 3.36675 2.7141 2.7141C3.36675 2.06146 4.19827 1.617 5.10351 1.43694C6.00876 1.25687 6.94707 1.34929 7.79979 1.7025C8.65251 2.0557 9.38134 2.65384 9.89412 3.42127C10.4069 4.1887 10.6806 5.09095 10.6806 6.01393C10.6806 7.25161 10.1889 8.43859 9.31376 9.31376C8.43859 10.1889 7.25161 10.6806 6.01393 10.6806Z"
+            fill="#777777"
+          />
+        </svg>
 
-    <!-- NOUVEL ICONE EXACT -->
-    <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M8 15C6.14348 15 4.36301 14.2625 3.05025 12.9497C1.7375 11.637 1 9.85652 1 8C1 6.14348 1.7375 4.36301 3.05025 3.05025C4.36301 1.7375 6.14348 1 8 1C9.85652 1 11.637 1.7375 12.9497 3.05025C14.2625 4.36301 15 6.14348 15 8C15 9.85652 14.2625 11.637 12.9497 12.9497C11.637 14.2625 9.85652 15 8 15ZM8 16C10.1217 16 12.1566 15.1571 13.6569 13.6569C15.1571 12.1566 16 10.1217 16 8C16 5.87827 15.1571 3.84344 13.6569 2.34315C12.1566 0.842855 10.1217 0 8 0C5.87827 0 3.84344 0.842855 2.34315 2.34315C0.842855 3.84344 0 5.87827 0 8C0 10.1217 0.842855 12.1566 2.34315 13.6569C3.84344 15.1571 5.87827 16 8 16Z" fill="white"/>
-      <path d="M8 4C8.13261 4 8.25979 4.05268 8.35355 4.14645C8.44732 4.24021 8.5 4.36739 8.5 4.5V7.5H11.5C11.6326 7.5 11.7598 7.55268 11.8536 7.64645C11.9473 7.74021 12 7.86739 12 8C12 8.13261 11.9473 8.25979 11.8536 8.35355C11.7598 8.44732 11.6326 8.5 11.5 8.5H8.5V11.5C8.5 11.6326 8.44732 11.7598 8.35355 11.8536C8.25979 11.9473 8.13261 12 8 12C7.86739 12 7.74021 11.9473 7.64645 11.8536C7.55268 11.7598 7.5 11.6326 7.5 11.5V8.5H4.5C4.36739 8.5 4.24021 8.44732 4.14645 8.35355C4.05268 8.25979 4 8.13261 4 8C4 7.86739 4.05268 7.74021 4.14645 7.64645C4.24021 7.55268 4.36739 7.5 4.5 7.5H7.5V4.5C7.5 4.36739 7.55268 4.24021 7.64645 4.14645C7.74021 4.05268 7.86739 4 8 4Z" fill="white"/>
-    </svg>
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          placeholder="Rechercher un métier..."
+          class="w-full outline-none text-sm"
+        />
+      </div>
+    </div>
 
-    Créer un métier
-  </button>
+    <!-- TABLEAU DES MÉTIERS -->
+    <div class="bg-white rounded-xl overflow-x-auto border border-gray-200">
+      <table class="w-full border border-gray-200 rounded-xl overflow-hidden">
+        <!-- HEADER -->
+        <thead class="bg-gray-50">
+          <tr class="text-left text-xs font-semibold text-gray-600 border-b">
+            <th class="py-4 px-5">Métier</th>
+            <th class="py-4 px-5 text-center">Image</th>
+            <th class="py-4 px-5">Date création</th>
+            <th class="py-4 px-5 text-center">Actions</th>
+          </tr>
+        </thead>
 
-</div>
+        <!-- BODY -->
+        <tbody class="bg-white divide-y">
+          <tr
+            *ngFor="let metier of filteredMetiers"
+            class="hover:bg-gray-50 transition"
+          >
+            <!-- MÉTIER + DESCRIPTION -->
+            <td class="py-4 px-5">
+              <div class="flex items-start gap-3">
+                <!-- ICÔNE (optionnelle plus tard) -->
+                <div
+                  class="w-9 h-9 flex items-center justify-center rounded-lg bg-gray-100 text-gray-700"
+                >
+                  ⚙️
+                </div>
 
+                <!-- TEXTE -->
+                <div class="min-w-0">
+                  <p class="text-sm font-semibold text-gray-900">
+                    {{ metier.name }}
+                  </p>
+                  <p class="text-xs text-gray-500 mt-0.5 line-clamp-2">
+                    {{ metier.description || "-" }}
+                  </p>
+                </div>
+              </div>
+            </td>
 
+            <!-- IMAGE -->
+            <td class="py-4 px-5 text-center">
+              <img
+                *ngIf="metier.img"
+                 [src]="getImageUrl(metier.img)"
+                class="w-14 h-14 object-cover rounded-lg mx-auto"
+              />
+              <span *ngIf="!metier.img" class="text-gray-400 text-xs">—</span>
+            </td>
 
-<!-- BARRE RECHERCHE + TABLEAU DES MÉTIERS (sans filtres) -->
-<div class="bg-white rounded-xl shadow-sm p-5 mt-5 mb-6">
+            <!-- DATE (COMMENTÉE LOGIQUEMENT) -->
+            <td class="py-4 px-5 text-sm text-gray-600">
+              <!-- {{ metier.createdAt | date:'dd/MM/yyyy' }} -->
+              —
+            </td>
 
-  <div class="w-full mb-5 flex flex-col lg:flex-row items-center justify-between gap-3">
-
-    <!-- Champ de recherche -->
-    <div class="flex items-center w-full lg:w-auto border border-gray-300 rounded-lg px-3 py-2 bg-white">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M13.1539 12.2073L10.6806 9.75393C11.6407 8.55687 12.1056 7.03747 11.9798 5.50813C11.854 3.9788 11.147 2.55579 10.0043 1.5317C8.86151 0.507604 7.3698 -0.0397263 5.83588 0.00224731C4.30196 0.0442209 2.84241 0.672308 1.75736 1.75736C0.672308 2.84241 0.0442209 4.30196 0.00224731 5.83588C-0.0397263 7.3698 0.507604 8.86151 1.5317 10.0043C2.55579 11.147 3.9788 11.854 5.50813 11.9798C7.03747 12.1056 8.55687 11.6407 9.75393 10.6806L12.2073 13.1339C12.2692 13.1964 12.343 13.246 12.4242 13.2799C12.5055 13.3137 12.5926 13.3311 12.6806 13.3311C12.7686 13.3311 12.8557 13.3137 12.937 13.2799C13.0182 13.246 13.092 13.1964 13.1539 13.1339C13.2741 13.0096 13.3413 12.8435 13.3413 12.6706C13.3413 12.4977 13.2741 12.3316 13.1539 12.2073ZM6.01393 10.6806C5.09095 10.6806 4.1887 10.4069 3.42127 9.89412C2.65384 9.38134 2.0557 8.65251 1.7025 7.79979C1.34929 6.94707 1.25687 6.00876 1.43694 5.10351C1.617 4.19827 2.06146 3.36675 2.7141 2.7141C3.36675 2.06146 4.19827 1.617 5.10351 1.43694C6.00876 1.25687 6.94707 1.34929 7.79979 1.7025C8.65251 2.0557 9.38134 2.65384 9.89412 3.42127C10.4069 4.1887 10.6806 5.09095 10.6806 6.01393C10.6806 7.25161 10.1889 8.43859 9.31376 9.31376C8.43859 10.1889 7.25161 10.6806 6.01393 10.6806Z" fill="#777777"/>
+            <!-- ACTIONS -->
+            <td class="py-4 px-5">
+              <div class="flex justify-center gap-4">
+                <!-- ÉDITER -->
+                <button
+                  (click)="openEditPopup(metier)"
+                  class="text-gray-600 hover:text-gray-900"
+                  title="Modifier"
+                >
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M15.1823 0.183617C15.2403 0.125413 15.3093 0.0792346 15.3852 0.0477266C15.4611 0.0162185 15.5425 0 15.6248 0C15.707 0 15.7884 0.0162185 15.8643 0.0477266C15.9402 0.0792346 16.0092 0.125413 16.0673 0.183617L19.8173 3.93362C19.8755 3.99167 19.9216 4.06064 19.9531 4.13657C19.9847 4.21251 20.0009 4.29391 20.0009 4.37612C20.0009 4.45833 19.9847 4.53973 19.9531 4.61566C19.9216 4.69159 19.8755 4.76056 19.8173 4.81862L7.31726 17.3186C7.25728 17.3782 7.18583 17.425 7.10726 17.4561L0.857258 19.9561C0.743678 20.0016 0.619252 20.0127 0.499407 19.9881C0.379562 19.9635 0.269567 19.9043 0.183058 19.8178C0.0965504 19.7313 0.0373335 19.6213 0.0127492 19.5015C-0.0118351 19.3816 -0.000705742 19.2572 0.0447576 19.1436L2.54476 12.8936C2.57592 12.815 2.62269 12.7436 2.68226 12.6836L15.1823 0.183617ZM14.0085 3.12612L16.8748 5.99237L18.491 4.37612L15.6248 1.50987L14.0085 3.12612ZM15.991 6.87612L13.1248 4.00987L4.99976 12.1349V12.5011H5.62476C5.79052 12.5011 5.94949 12.567 6.0667 12.6842C6.18391 12.8014 6.24976 12.9604 6.24976 13.1261V13.7511H6.87476C7.04052 13.7511 7.19949 13.817 7.3167 13.9342C7.43391 14.0514 7.49976 14.2104 7.49976 14.3761V15.0011H7.86601L15.991 6.87612ZM3.78976 13.3449L3.65726 13.4774L1.74726 18.2536L6.52351 16.3436L6.65601 16.2111C6.53678 16.1666 6.434 16.0867 6.3614 15.9821C6.2888 15.8776 6.24985 15.7534 6.24976 15.6261V15.0011H5.62476C5.459 15.0011 5.30003 14.9353 5.18282 14.8181C5.06561 14.7008 4.99976 14.5419 4.99976 14.3761V13.7511H4.37476C4.24748 13.751 4.12327 13.7121 4.01873 13.6395C3.91419 13.5669 3.8343 13.4641 3.78976 13.3449Z" fill="#4B4848"/>
 </svg>
 
+                </button>
 
-      <input
-        type="text"
-        [(ngModel)]="searchTerm"
-        placeholder="Rechercher un métier..."
-        class="w-full outline-none text-sm"
-      />
+                <!-- SUPPRIMER -->
+                <button
+                  (click)="openDeletePopup(metier)"
+                  class="text-[#E94E1B] hover:opacity-80"
+                  title="Supprimer"
+                >
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M8.125 1.25H11.875C12.0408 1.25 12.1997 1.31585 12.3169 1.43306C12.4342 1.55027 12.5 1.70924 12.5 1.875V3.125H7.5V1.875C7.5 1.70924 7.56585 1.55027 7.68306 1.43306C7.80027 1.31585 7.95924 1.25 8.125 1.25ZM13.75 3.125V1.875C13.75 1.37772 13.5525 0.900805 13.2008 0.549175C12.8492 0.197544 12.3723 0 11.875 0L8.125 0C7.62772 0 7.15081 0.197544 6.79917 0.549175C6.44754 0.900805 6.25 1.37772 6.25 1.875V3.125H1.875C1.70924 3.125 1.55027 3.19085 1.43306 3.30806C1.31585 3.42527 1.25 3.58424 1.25 3.75C1.25 3.91576 1.31585 4.07473 1.43306 4.19194C1.55027 4.30915 1.70924 4.375 1.875 4.375H2.5475L3.61375 17.7C3.66403 18.3265 3.94844 18.9111 4.41034 19.3373C4.87224 19.7635 5.47774 20.0001 6.10625 20H13.8937C14.5223 20.0001 15.1278 19.7635 15.5897 19.3373C16.0516 18.9111 16.336 18.3265 16.3863 17.7L17.4525 4.375H18.125C18.2908 4.375 18.4497 4.30915 18.5669 4.19194C18.6842 4.07473 18.75 3.91576 18.75 3.75C18.75 3.58424 18.6842 3.42527 18.5669 3.30806C18.4497 3.19085 18.2908 3.125 18.125 3.125H13.75ZM16.1975 4.375L15.14 17.6C15.1149 17.9132 14.9727 18.2055 14.7417 18.4186C14.5108 18.6318 14.208 18.7501 13.8937 18.75H6.10625C5.792 18.7501 5.48925 18.6318 5.2583 18.4186C5.02735 18.2055 4.88514 17.9132 4.86 17.6L3.8025 4.375H16.1975ZM6.83875 5.625C7.00417 5.61544 7.16661 5.67195 7.29037 5.78212C7.41413 5.89229 7.48908 6.04709 7.49875 6.2125L8.12375 16.8375C8.13032 17.001 8.07252 17.1605 7.96277 17.2818C7.85302 17.4032 7.70007 17.4766 7.53676 17.4865C7.37345 17.4963 7.2128 17.4417 7.0893 17.3344C6.96581 17.227 6.88932 17.0756 6.87625 16.9125L6.25 6.2875C6.24493 6.20539 6.25611 6.12309 6.28291 6.04531C6.30972 5.96754 6.35161 5.89581 6.40619 5.83426C6.46077 5.77271 6.52697 5.72255 6.60098 5.68664C6.675 5.65072 6.75537 5.62978 6.8375 5.625H6.83875ZM13.1613 5.625C13.2434 5.62978 13.3238 5.65072 13.3978 5.68664C13.4718 5.72255 13.538 5.77271 13.5926 5.83426C13.6471 5.89581 13.689 5.96754 13.7158 6.04531C13.7426 6.12309 13.7538 6.20539 13.7487 6.2875L13.1237 16.9125C13.1204 16.9956 13.1005 17.0771 13.0653 17.1524C13.0301 17.2277 12.9802 17.2952 12.9185 17.3509C12.8569 17.4067 12.7847 17.4496 12.7063 17.4771C12.6279 17.5047 12.5447 17.5163 12.4617 17.5113C12.3788 17.5063 12.2976 17.4848 12.2231 17.4481C12.1485 17.4113 12.082 17.3601 12.0275 17.2974C11.973 17.2346 11.9315 17.1616 11.9055 17.0827C11.8796 17.0037 11.8696 16.9204 11.8763 16.8375L12.5013 6.2125C12.5109 6.04709 12.5859 5.89229 12.7096 5.78212C12.8334 5.67195 12.9958 5.61544 13.1613 5.625ZM10 5.625C10.1658 5.625 10.3247 5.69085 10.4419 5.80806C10.5592 5.92527 10.625 6.08424 10.625 6.25V16.875C10.625 17.0408 10.5592 17.1997 10.4419 17.3169C10.3247 17.4342 10.1658 17.5 10 17.5C9.83424 17.5 9.67527 17.4342 9.55806 17.3169C9.44085 17.1997 9.375 17.0408 9.375 16.875V6.25C9.375 6.08424 9.44085 5.92527 9.55806 5.80806C9.67527 5.69085 9.83424 5.625 10 5.625Z" fill="#E94E1B"/>
+</svg>
+
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
-
-
-  </div>
-
-  <!-- TABLEAU DES MÉTIERS -->
-  <div class="bg-white rounded-xl overflow-x-auto border border-gray-200">
-
-  <table class="w-full border border-gray-200 rounded-xl overflow-hidden">
-
-  <!-- HEADER -->
-  <thead class="bg-gray-50">
-    <tr class="text-left text-xs font-semibold text-gray-600 border-b">
-      <th class="py-4 px-5">Métier</th>
-      <th class="py-4 px-5 text-center">Image</th>
-      <th class="py-4 px-5">Date création</th>
-      <th class="py-4 px-5 text-center">Actions</th>
-    </tr>
-  </thead>
-
-  <!-- BODY -->
-  <tbody class="bg-white divide-y">
-
-    <tr
-      *ngFor="let metier of filteredMetiers"
-      class="hover:bg-gray-50 transition"
-    >
-
-      <!-- MÉTIER + DESCRIPTION -->
-      <td class="py-4 px-5">
-        <div class="flex items-start gap-3">
-
-          <!-- ICÔNE (optionnelle plus tard) -->
-          <div class="w-9 h-9 flex items-center justify-center rounded-lg bg-gray-100 text-gray-700">
-            ⚙️
-          </div>
-
-          <!-- TEXTE -->
-          <div class="min-w-0">
-            <p class="text-sm font-semibold text-gray-900">
-              {{ metier.name }}
-            </p>
-            <p class="text-xs text-gray-500 mt-0.5 line-clamp-2">
-              {{ metier.description || '-' }}
-            </p>
-          </div>
-
-        </div>
-      </td>
-
-      <!-- IMAGE -->
-      <td class="py-4 px-5 text-center">
-        <img
-          *ngIf="metier.img"
-          [src]="'https://innov.sn/reparateurs/uploads/' + metier.img"
-          class="w-14 h-14 object-cover rounded-lg mx-auto"
-        />
-        <span *ngIf="!metier.img" class="text-gray-400 text-xs">—</span>
-      </td>
-
-      <!-- DATE (COMMENTÉE LOGIQUEMENT) -->
-      <td class="py-4 px-5 text-sm text-gray-600">
-        <!-- {{ metier.createdAt | date:'dd/MM/yyyy' }} -->
-        —
-      </td>
-
-      <!-- ACTIONS -->
-      <td class="py-4 px-5">
-        <div class="flex justify-center gap-4">
-
-          <!-- ÉDITER -->
-          <button
-            (click)="openEditPopup(metier)"
-            class="text-gray-600 hover:text-gray-900"
-            title="Modifier"
-          >
-            ✏️
-          </button>
-
-          <!-- SUPPRIMER -->
-          <button
-            (click)="openDeletePopup(metier)"
-            class="text-[#E94E1B] hover:opacity-80"
-            title="Supprimer"
-          >
-            🗑️
-          </button>
-
-        </div>
-      </td>
-
-    </tr>
-
-  </tbody>
-</table>
-
-
-
-
-  </div>
-
-  <!-- PAGINATION -->
+    <!-- PAGINATION -->
     <div class="bg-white rounded-xl p-4 flex justify-between items-center mt-4">
+      <!-- Éléments par page -->
+      <div class="flex items-center gap-2 text-sm text-gray-600">
+        <span>éléments par page :</span>
+        <select
+          class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none"
+          [(ngModel)]="size"
+          (change)="onSizeChange()"
+        >
+          <option [value]="10">10</option>
+          <option [value]="25">25</option>
+          <option [value]="50">50</option>
+        </select>
+      </div>
 
-  <!-- Éléments par page -->
-  <div class="flex items-center gap-2 text-sm text-gray-600">
-    <span>éléments par page :</span>
-    <select
-      class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none"
-      [(ngModel)]="size"
-      (change)="onSizeChange()"
-    >
-      <option [value]="10">10</option>
-      <option [value]="25">25</option>
-      <option [value]="50">50</option>
-    </select>
-  </div>
+      <!-- Info pagination + flèches -->
+      <div class="flex items-center gap-4 text-sm text-gray-700">
+        <!-- Texte dynamique -->
+        <span> {{ startIndex }} – {{ endIndex }} sur {{ totalElements }} </span>
 
-  <!-- Info pagination + flèches -->
-  <div class="flex items-center gap-4 text-sm text-gray-700">
-
-    <!-- Texte dynamique -->
-    <span>
-      {{ startIndex }} – {{ endIndex }} sur {{ totalElements }}
-    </span>
-
-    <div class="flex items-center gap-2">
-
-      <!-- Flèche gauche -->
-      <button
-        (click)="prevPage()"
-        [disabled]="page === 0"
-        class="text-gray-400 hover:text-gray-600 p-1 disabled:opacity-30"
-      >
-        <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
-          <path d="M12 15L7 10L12 5"
+        <div class="flex items-center gap-2">
+          <!-- Flèche gauche -->
+          <button
+            (click)="prevPage()"
+            [disabled]="page === 0"
+            class="text-gray-400 hover:text-gray-600 p-1 disabled:opacity-30"
+          >
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+              <path
+                d="M12 15L7 10L12 5"
                 stroke="currentColor"
                 stroke-width="2"
-                stroke-linecap="round"/>
-        </svg>
-      </button>
+                stroke-linecap="round"
+              />
+            </svg>
+          </button>
 
-      <!-- Flèche droite -->
-      <button
-        (click)="nextPage()"
-        [disabled]="page + 1 >= totalPages"
-        class="text-gray-400 hover:text-gray-600 p-1 disabled:opacity-30"
-      >
-        <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
-          <path d="M8 5L13 10L8 15"
+          <!-- Flèche droite -->
+          <button
+            (click)="nextPage()"
+            [disabled]="page + 1 >= totalPages"
+            class="text-gray-400 hover:text-gray-600 p-1 disabled:opacity-30"
+          >
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+              <path
+                d="M8 5L13 10L8 15"
                 stroke="currentColor"
                 stroke-width="2"
-                stroke-linecap="round"/>
-        </svg>
-      </button>
-
+                stroke-linecap="round"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
-</div>
-
 
 </div>
 
 
 
-</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -226,94 +492,151 @@
 
 
 <!-- POPUP CRÉATION MÉTIER -->
+<div
+  *ngIf="showCreatePopup"
+  class="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4"
+>
+  <!-- CARTE -->
+  <div class="bg-white rounded-2xl w-full max-w-[420px] shadow-xl relative">
+    <!-- HEADER -->
+    <div class="flex items-center justify-between px-6 py-4 border-b">
+      <h2 class="text-lg font-bold text-gray-800">Créer un métier</h2>
 
-<div *ngIf="showCreatePopup"
-     class="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
+      <button
+        (click)="closeCreatePopup()"
+        class="text-gray-400 hover:text-gray-600 text-xl"
+      >
+        ✕
+      </button>
+    </div>
 
-  <div class="bg-white rounded-2xl w-[380px] p-4 relative shadow-xl">
-
-    <!-- Bouton fermer -->
-    <button (click)="closeCreatePopup()"
-            class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-xl">
-      ✕
-    </button>
-
-    <!-- TITRE -->
-    <h2 class="text-lg font-bold mb-4">Créer un métier</h2>
-
-    <div class="space-y-4">
-
-      <!-- Nom du métier -->
+    <!-- CONTENU -->
+    <form #f="ngForm" class="px-6 py-5 space-y-5">
+      <!-- NOM -->
       <div>
-        <label class="text-sm font-medium text-gray-700">Nom du métier *</label>
-        <input type="text"
-               [(ngModel)]="newMetier.nom"
-               placeholder="Ex: Plombier"
-               class="w-full mt-1 border rounded-md px-3 h-11 text-sm outline-none focus:border-[#E95F32]" />
+        <label class="text-sm font-medium text-gray-700">
+          Nom du métier <span class="text-red-500">*</span>
+        </label>
+
+        <input
+          type="text"
+          [(ngModel)]="newMetier.nom"
+          name="name"
+          required
+          pattern="^[A-Za-zÀ-ÿ\s]{2,}$"
+          #nameModel="ngModel"
+          placeholder="Ex: Plombier"
+          class="w-full mt-1 h-11 px-3 border rounded-md text-sm outline-none focus:border-[#E95F32]"
+        />
+
+        <p
+          *ngIf="nameModel.invalid && nameModel.touched"
+          class="text-xs text-red-500 mt-1"
+        >
+          Le nom doit contenir au moins 2 lettres et uniquement des lettres.
+        </p>
       </div>
 
-      <!-- Icône -->
+      <!-- DESCRIPTION -->
+      <!-- DESCRIPTION -->
       <div>
-        <label class="text-sm font-medium text-gray-700">Icône *</label>
-        <input type="text"
-               [(ngModel)]="newMetier.icon"
-               placeholder="Ex: wrench, flash..."
-               class="w-full mt-1 border rounded-md px-3 h-11 text-sm outline-none focus:border-[#E95F32]" />
+        <label class="text-sm font-medium text-gray-700">
+          Description
+          <span class="text-gray-400 text-xs">(min 5 caractères)</span>
+        </label>
 
-        <!-- Prévisualisation icône -->
-        <div *ngIf="newMetier.icon" class="mt-2 w-10 h-10 rounded-md border flex items-center justify-center">
-          <img [src]="newMetier.icon" class="w-6 h-6" />
-        </div>
+        <textarea
+          [(ngModel)]="newMetier.description"
+          name="description"
+          required
+          minlength="5"
+          maxlength="500"
+          #descModel="ngModel"
+          placeholder="Saisir une description"
+          class="w-full mt-1 min-h-[90px] px-3 py-2 border rounded-md text-sm outline-none resize-none focus:border-[#E95F32]"
+        >
+        </textarea>
+
+        <!-- ❌ trop court -->
+        <p
+          *ngIf="descModel.touched && descModel.errors?.['minlength']"
+          class="text-xs text-red-500 mt-1"
+        >
+          La description doit contenir au moins 5 caractères.
+        </p>
+
+        <!-- ❌ obligatoire -->
+        <p
+          *ngIf="descModel.touched && descModel.errors?.['required']"
+          class="text-xs text-red-500 mt-1"
+        >
+          La description est obligatoire.
+        </p>
+
+        <!-- ⚠️ limite atteinte -->
+        <p
+          *ngIf="descModel.touched && descModel.value?.length === 500"
+          class="text-xs text-gray-400 mt-1"
+        >
+          Limite de 500 caractères atteinte.
+        </p>
       </div>
 
-      <!-- Description -->
-      <div>
-        <label class="text-sm font-medium text-gray-700">Description</label>
-        <textarea [(ngModel)]="newMetier.description"
-                  placeholder="Saisir une description"
-                  class="w-full mt-1 border rounded-md px-3 py-2 text-sm outline-none resize-none h-20 focus:border-[#E95F32]"></textarea>
-      </div>
-
-      <!-- Photo -->
+      <!-- PHOTO -->
       <div>
         <label class="text-sm font-medium text-gray-700">Photo</label>
 
-        <label class="border border-dashed border-[#E95F32] rounded-md px-3 h-12 flex items-center gap-3 cursor-pointer mt-1">
-
+        <label
+          class="mt-1 flex items-center gap-3 px-4 h-12 border border-dashed border-[#E95F32] rounded-md cursor-pointer hover:bg-[#E95F32]/5"
+        >
           <svg width="16" height="16" fill="#E95F32" viewBox="0 0 16 16">
-            <path d="M7 12V3.85L4.4 6.45L3 5L8 0L13 5L11.6 6.45L9 3.85V12H7Z"/>
-            <path d="M2 16C1.45 16 0.979 15.804 0.588 15.413C0.197 15.022 0.001 14.551 0 14V11H2V14H14V11H16V14C16 14.55 15.804 15.021 15.413 15.413C15.022 15.805 14.551 16.001 14 16H2Z"/>
+            <path d="M7 12V3.85L4.4 6.45L3 5L8 0L13 5L11.6 6.45L9 3.85V12H7Z" />
+            <path
+              d="M2 16C1.45 16 0.979 15.804 0.588 15.413C0.197 15.022 0.001 14.551 0 14V11H2V14H14V11H16V14C16 14.55 15.804 15.021 15.413 15.413C15.022 15.805 14.551 16.001 14 16H2Z"
+            />
           </svg>
 
-          <span class="text-[#E95F32] font-medium text-sm">Choisir un fichier</span>
+          <span class="text-sm font-medium text-[#E95F32]">
+            Choisir un fichier
+          </span>
 
-          <input type="file" class="hidden" (change)="onFileSelected($event)">
+          <input
+            type="file"
+            accept="image/png,image/jpeg,image/jpg"
+            class="hidden"
+            (change)="onFileSelected($event)"
+          />
 
-          <span class="text-xs text-gray-500 truncate">{{ selectedFileName || "Aucun fichier choisi" }}</span>
+          <span class="ml-auto text-xs text-gray-500 truncate max-w-[140px]">
+            {{ selectedFileName || "Aucun fichier choisi" }}
+          </span>
         </label>
       </div>
 
-      <!-- BOUTONS -->
-      <div class="flex items-center gap-3 pt-2">
-        <button class="bg-[#E95F32] text-white rounded-md text-sm font-medium h-11 flex-1"
-                (click)="saveNewMetier()">
+      <!-- ACTIONS -->
+      <div class="flex gap-3 pt-4">
+        <button
+          class="flex-1 h-11 bg-[#E95F32] text-white rounded-md text-sm font-medium disabled:opacity-50"
+          [disabled]="f.invalid"
+          (click)="saveNewMetier()"
+        >
           Enregistrer
         </button>
 
-        <button class="bg-gray-100 text-gray-600 rounded-md text-sm font-medium h-11 flex-1"
-                (click)="closeCreatePopup()">
+        <button
+          type="button"
+          class="flex-1 h-11 bg-gray-100 text-gray-700 rounded-md text-sm font-medium hover:bg-gray-200"
+          (click)="closeCreatePopup()"
+        >
           Annuler
         </button>
       </div>
-
-    </div>
-
+    </form>
   </div>
-
 </div>
 
+<!-- MESSAGE SUCCÈS
 
-<!-- MESSAGE SUCCÈS -->
 <div *ngIf="showSuccessCreate"
      class="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
   <div class="bg-white rounded-xl p-10 text-center w-[400px] shadow-xl">
@@ -330,129 +653,155 @@
   </div>
 </div>
 
+-->
 
+<!-- POPUP : MODIFIER UN MÉTIER -->
+<div
+  *ngIf="showEditPopup"
+  class="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4"
+>
+  <div class="bg-white rounded-2xl w-full max-w-[420px] shadow-xl relative">
+    <!-- HEADER -->
+    <div class="flex items-center justify-between px-6 py-4 border-b">
+      <h2 class="text-lg font-bold text-gray-800">Modifier le métier</h2>
 
+      <button
+        (click)="closeEditPopup()"
+        class="text-gray-400 hover:text-gray-600 text-xl"
+      >
+        ✕
+      </button>
+    </div>
 
-
-
-<!-- POPUP : MODIFIER UN MÉTIER  -->
-<div *ngIf="showEditPopup"
-     class="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
-
-  <div class="bg-white rounded-2xl w-[380px] p-4 relative shadow-xl overflow-hidden">
-
-    <!-- Bouton fermer (petit) -->
-    <button (click)="closeEditPopup()"
-            class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-lg">
-      ✕
-    </button>
-
-    <h2 class="text-lg font-bold mb-3">Modifier le métier</h2>
-
-    <div class="space-y-4">
-
-      <!-- NOM -->
+    <!-- FORMULAIRE -->
+    <form #fEdit="ngForm" class="px-6 py-5 space-y-5">
+      <!-- NOM (BACKEND : name) -->
       <div>
         <label class="text-sm font-medium text-gray-700">
           Nom du métier <span class="text-red-500">*</span>
         </label>
-        <input type="text" [(ngModel)]="editMetier.nom"
-               class="w-full mt-1 border rounded-md px-3 h-11 text-sm outline-none focus:border-[#E95F32]" />
+
+        <input
+          type="text"
+          [(ngModel)]="editMetier.name"
+          name="name"
+          required
+          pattern="^[A-Za-zÀ-ÿ\s]{2,}$"
+          #nameEdit="ngModel"
+          placeholder="Ex: Plombier"
+          class="w-full mt-1 h-11 px-3 border rounded-md text-sm outline-none focus:border-[#E95F32]"
+        />
+
+        <p
+          *ngIf="nameEdit.touched && nameEdit.invalid"
+          class="text-xs text-red-500 mt-1"
+        >
+          Le nom doit contenir au moins 2 lettres et uniquement des lettres.
+        </p>
       </div>
 
-      <!-- ICÔNE -->
+      <!-- ICÔNE ❌ (NON BACKEND) -->
+      <!--
+      <div>
+        <label class="text-sm font-medium text-gray-700">Icône</label>
+        <input [(ngModel)]="editMetier.icon">
+      </div>
+      -->
+
+      <!-- DESCRIPTION (BACKEND : description) -->
       <div>
         <label class="text-sm font-medium text-gray-700">
-          Icône <span class="text-red-500">*</span>
+          Description <span class="text-red-500">*</span>
         </label>
 
-        <input type="text" [(ngModel)]="editMetier.icon"
-               placeholder="Ex: https://... ou nom d'icône"
-               class="w-full mt-1 border rounded-md px-3 h-11 text-sm outline-none focus:border-[#E95F32]" />
+        <textarea
+          [(ngModel)]="editMetier.description"
+          name="description"
+          required
+          minlength="5"
+          maxlength="500"
+          #descEdit="ngModel"
+          placeholder="Saisir une description"
+          class="w-full mt-1 min-h-[90px] px-3 py-2 border rounded-md text-sm outline-none resize-none focus:border-[#E95F32]"
+        >
+        </textarea>
 
-        <!-- preview icône + badge supprimer -->
-        <div *ngIf="editMetier.icon" class="mt-2 relative inline-block">
-          <div class="w-10 h-10 bg-white border rounded-md flex items-center justify-center">
-            <!-- si l'icône est une URL, on affiche l'image; sinon on peut afficher un svg fallback -->
-            <img *ngIf="isUrl(editMetier.icon)" [src]="editMetier.icon" class="w-6 h-6" />
-            <span *ngIf="!isUrl(editMetier.icon)" class="text-sm">{{ editMetier.icon }}</span>
-          </div>
+        <p
+          *ngIf="descEdit.touched && descEdit.errors?.['required']"
+          class="text-xs text-red-500 mt-1"
+        >
+          La description est obligatoire.
+        </p>
 
-          <!-- badge rouge 'x' -->
-          <button (click)="removeIcon()" title="Supprimer l'icône"
-                  class="absolute -top-2 -right-2 bg-white border border-gray-200 text-red-500 rounded-full w-6 h-6 flex items-center justify-center text-xs shadow-sm">
-            ✕
-          </button>
-        </div>
+        <p
+          *ngIf="descEdit.touched && descEdit.errors?.['minlength']"
+          class="text-xs text-red-500 mt-1"
+        >
+          La description doit contenir au moins 5 caractères.
+        </p>
+
+        <p
+          *ngIf="descEdit.value?.length === 500"
+          class="text-xs text-gray-400 mt-1"
+        >
+          Limite de 500 caractères atteinte.
+        </p>
       </div>
 
-      <!-- DESCRIPTION -->
-      <div>
-        <label class="text-sm font-medium text-gray-700">Description</label>
-        <textarea [(ngModel)]="editMetier.description"
-                  class="w-full mt-1 border rounded-md px-3 py-2 text-sm outline-none resize-none h-20 focus:border-[#E95F32]"></textarea>
-      </div>
-
-      <!-- PHOTO -->
+      <!-- PHOTO (BACKEND : img) -->
       <div>
         <label class="text-sm font-medium text-gray-700">Photo</label>
 
-        <!-- zone upload (dashed) -->
-        <label class="border border-dashed border-[#E95F32] rounded-md px-3 h-12 flex items-center gap-3 cursor-pointer mt-1">
-          <svg width="16" height="16" viewBox="0 0 16 16" class="flex-shrink-0" fill="#E95F32">
-            <path d="M7 12V3.85L4.4 6.45L3 5L8 0L13 5L11.6 6.45L9 3.85V12H7Z"/>
-            <path d="M2 16C1.45 16 0.979 15.804 0.588 15.413C0.197 15.022 0.001 14.551 0 14V11H2V14H14V11H16V14C16 14.55 15.804 15.021 15.413 15.413C15.022 15.805 14.551 16.001 14 16H2Z"/>
+        <label
+          class="mt-1 flex items-center gap-3 px-4 h-12 border border-dashed border-[#E95F32] rounded-md cursor-pointer hover:bg-[#E95F32]/5"
+        >
+          <svg width="16" height="16" fill="#E95F32" viewBox="0 0 16 16">
+            <path d="M7 12V3.85L4.4 6.45L3 5L8 0L13 5L11.6 6.45L9 3.85V12H7Z" />
+            <path
+              d="M2 16C1.45 16 0.979 15.804 0.588 15.413C0.197 15.022 0.001 14.551 0 14V11H2V14H14V11H16V14C16 14.55 15.804 15.021 15.413 15.413C15.022 15.805 14.551 16.001 14 16H2Z"
+            />
           </svg>
 
-          <span class="text-[#E95F32] font-medium text-sm">Choisir des fichiers</span>
+          <span class="text-sm font-medium text-[#E95F32]">
+            Choisir un fichier
+          </span>
 
-          <input type="file" class="hidden" (change)="onEditFileSelected($event)">
+          <input
+            type="file"
+            accept="image/png,image/jpeg,image/jpg"
+            class="hidden"
+            (change)="onEditFileSelected($event)"
+          />
 
-          <span class="text-xs text-gray-500 truncate">{{ editSelectedFileName || "Aucun fichier choisi" }}</span>
+          <span class="ml-auto text-xs text-gray-500 truncate max-w-[140px]">
+            {{ editSelectedFileName || "Aucun fichier choisi" }}
+          </span>
         </label>
-
-        <!-- Vignette image + nom & taille comme sur ton image -->
-        <div *ngIf="(editMetier.image || editSelectedFileName)" class="mt-3 flex items-start gap-3">
-          <div class="w-20 h-14 rounded-md overflow-hidden border">
-            <img *ngIf="editMetier.image" [src]="editMetier.image" class="w-full h-full object-cover" />
-            <div *ngIf="!editMetier.image" class="w-full h-full bg-gray-100"></div>
-          </div>
-
-          <div class="flex-1">
-            <div class="flex items-start justify-between">
-              <div class="text-sm font-medium text-gray-800">{{ editSelectedFileName || filenameFromUrl(editMetier.image) }}</div>
-              <div class="text-xs text-gray-400">{{ editSelectedFileSize || fileSizeFromUrl(editMetier.image) }}</div>
-            </div>
-
-            <!-- petit bouton rouge pour supprimer l'image -->
-            <button (click)="removeImage()"
-                    class="mt-2 text-red-500 text-sm flex items-center gap-1">
-              <span class="bg-white border rounded-full w-5 h-5 flex items-center justify-center text-xs">✕</span>
-              Supprimer
-            </button>
-          </div>
-        </div>
       </div>
 
-      <!-- BOUTONS -->
-      <div class="flex items-center gap-3 pt-2">
-        <button class="bg-[#E95F32] text-white rounded-md text-sm font-medium h-11 flex-1"
-                (click)="saveEditMetier()">
+      <!-- ACTIONS -->
+      <div class="flex gap-3 pt-4">
+        <button
+          class="flex-1 h-11 bg-[#E95F32] text-white rounded-md text-sm font-medium disabled:opacity-50"
+          [disabled]="fEdit.invalid"
+          (click)="saveEditMetier()"
+        >
           Mettre à jour
         </button>
 
-        <button class="bg-gray-100 text-gray-600 rounded-md text-sm font-medium h-11 flex-1"
-                (click)="closeEditPopup()">
+        <button
+          type="button"
+          class="flex-1 h-11 bg-gray-100 text-gray-700 rounded-md text-sm font-medium hover:bg-gray-200"
+          (click)="closeEditPopup()"
+        >
           Annuler
         </button>
       </div>
-
-    </div>
+    </form>
   </div>
 </div>
 
-
-<!-- MESSAGE SUCCÈS -->
+<!-- MESSAGE SUCCÈS
 <div *ngIf="showSuccessEdit"
      class="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
   <div class="bg-white rounded-xl p-10 text-center w-[400px] shadow-xl">
@@ -468,11 +817,7 @@
 
   </div>
 </div>
-
-
-
-
-
+-->
 
 <!-- POPUP SUPPRIMER -->
 <div
@@ -480,19 +825,34 @@
   class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
 >
   <div class="bg-white rounded-2xl px-10 py-12 w-[460px] text-center shadow-xl">
-
     <div class="w-16 h-16 mx-auto mb-6 flex items-center justify-center">
-      <svg width="95" height="95" viewBox="0 0 95 95" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M51.2407 58.166L43.8188 58.166L43.8188 28.4785L51.2407 28.4785L51.2407 58.166Z" fill="#EFBD8E"/>
-        <path d="M47.5 65.291C45.3685 65.291 43.6406 67.0189 43.6406 69.1504C43.6406 71.2819 45.3685 73.0098 47.5 73.0098C49.6315 73.0098 51.3594 71.2819 51.3594 69.1504C51.3594 67.0189 49.6315 65.291 47.5 65.291Z" fill="#EFBD8E"/>
-        <path d="M47.5 94.9776C59.6972 95.3703 71.5436 90.595 80.446 81.6968C89.3483 72.7986 94.5815 60.5025 95 47.5C94.5815 34.4975 89.3483 22.2014 80.446 13.3032C71.5436 4.40504 59.6972 -0.370316 47.5 0.0224457C35.3028 -0.370316 23.4564 4.40504 14.554 13.3032C5.65166 22.2014 0.418472 34.4975 0 47.5C0.418472 60.5025 5.65166 72.7986 14.554 81.6968C23.4564 90.595 35.3028 95.3703 47.5 94.9776ZM47.5 7.93537C57.7293 7.54133 67.6886 11.4827 75.1994 18.8972C82.7101 26.3117 87.1609 36.5959 87.5781 47.5C87.1609 58.4041 82.7101 68.6883 75.1994 76.1028C67.6886 83.5174 57.7293 87.4587 47.5 87.0646C37.2707 87.4587 27.3114 83.5174 19.8006 76.1028C12.2899 68.6883 7.83908 58.4041 7.42188 47.5C7.83908 36.5959 12.2899 26.3117 19.8006 18.8972C27.3114 11.4827 37.2707 7.54133 47.5 7.93537Z" fill="#EFBD8E"/>
+      <svg
+        width="95"
+        height="95"
+        viewBox="0 0 95 95"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M51.2407 58.166L43.8188 58.166L43.8188 28.4785L51.2407 28.4785L51.2407 58.166Z"
+          fill="#EFBD8E"
+        />
+        <path
+          d="M47.5 65.291C45.3685 65.291 43.6406 67.0189 43.6406 69.1504C43.6406 71.2819 45.3685 73.0098 47.5 73.0098C49.6315 73.0098 51.3594 71.2819 51.3594 69.1504C51.3594 67.0189 49.6315 65.291 47.5 65.291Z"
+          fill="#EFBD8E"
+        />
+        <path
+          d="M47.5 94.9776C59.6972 95.3703 71.5436 90.595 80.446 81.6968C89.3483 72.7986 94.5815 60.5025 95 47.5C94.5815 34.4975 89.3483 22.2014 80.446 13.3032C71.5436 4.40504 59.6972 -0.370316 47.5 0.0224457C35.3028 -0.370316 23.4564 4.40504 14.554 13.3032C5.65166 22.2014 0.418472 34.4975 0 47.5C0.418472 60.5025 5.65166 72.7986 14.554 81.6968C23.4564 90.595 35.3028 95.3703 47.5 94.9776ZM47.5 7.93537C57.7293 7.54133 67.6886 11.4827 75.1994 18.8972C82.7101 26.3117 87.1609 36.5959 87.5781 47.5C87.1609 58.4041 82.7101 68.6883 75.1994 76.1028C67.6886 83.5174 57.7293 87.4587 47.5 87.0646C37.2707 87.4587 27.3114 83.5174 19.8006 76.1028C12.2899 68.6883 7.83908 58.4041 7.42188 47.5C7.83908 36.5959 12.2899 26.3117 19.8006 18.8972C27.3114 11.4827 37.2707 7.54133 47.5 7.93537Z"
+          fill="#EFBD8E"
+        />
       </svg>
     </div>
 
     <h2 class="text-xl font-bold mb-2">Confirmation</h2>
 
     <p class="text-sm text-gray-600 mb-8">
-      Êtes-vous sûr de vouloir <b>supprimer</b> le plan <b>"{{ selectedMetier?.nom }}"</b> ?<br>
+      Êtes-vous sûr de vouloir <b>supprimer</b> le plan
+      <b>"{{ selectedMetier?.nom }}"</b> ?<br />
       Cette action est irréversible et supprimera toutes les données associées.
     </p>
 
@@ -511,12 +871,11 @@
         Annuler
       </button>
     </div>
-
   </div>
 </div>
 
+<!-- SUCCESS SUPPRIMER
 
-<!-- SUCCESS SUPPRIMER -->
 <div
   *ngIf="showSuccessDelete"
   class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
@@ -535,3 +894,5 @@
 
   </div>
 </div>
+
+-->

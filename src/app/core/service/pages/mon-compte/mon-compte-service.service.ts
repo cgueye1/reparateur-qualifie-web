@@ -2,15 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { environment } from '../../../../environments/environments';
-import { UpdateUserPayload, UserConnected } from '../../../models/user/userConnected';
-
+import { environment } from '../../../../../environments/environments';
+import {
+  UpdateUserPayload,
+  UserConnected,
+} from '../../../../models/user/userConnected';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MonCompteService {
-
   private baseUrl = environment.apiUrl;
 
   // 🔹 Endpoint pour l’utilisateur connecté
@@ -37,10 +38,6 @@ export class MonCompteService {
     id: number,
     data: UpdateUserPayload
   ): Observable<UserConnected> {
-
-    return this.http.put<UserConnected>(
-      `${this.updateEndpoint}/${id}`,
-      data
-    );
+    return this.http.put<UserConnected>(`${this.updateEndpoint}/${id}`, data);
   }
 }
