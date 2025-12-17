@@ -23,7 +23,7 @@
       <!-- Nom + ID -->
       <div>
         <h1 class="text-2xl font-semibold text-[#111]">Détails du plan</h1>
-        <p class="text-sm text-[#343A40]">ID : {{ plan.id }}</p>
+        <p class="text-sm text-[#343A40]">ID : {{ plan?.id }}</p>
       </div>
 
     </div>
@@ -46,15 +46,19 @@
 
       <!-- Bouton  -->
      <!-- Bouton ACTIVER (si plan inactif) -->
-<button
+
+
+  <!--<button
+
   *ngIf="!plan.actif"
   (click)="openActivationPopup()"
   class="px-6 py-2 rounded-lg font-medium border transition bg-[#008D36] text-white border-[#008D36] hover:bg-[#007a2f]"
 >
   Activer
-</button>
+</button> -->
 
-<!-- Bouton DÉSACTIVER (si plan actif) -->
+
+<!-- Bouton DÉSACTIVER (si plan actif)
 <button
   *ngIf="plan.actif"
   (click)="openDeactivate()"
@@ -62,6 +66,8 @@
 >
   Désactiver
 </button>
+-->
+
 
     </div>
   </div>
@@ -94,66 +100,87 @@
   <div class="lg:col-span-4 col-span-1">
     <div class="bg-white p-4 rounded-2xl shadow-sm border h-full flex flex-col justify-between">
 
+  <div>
+    <!-- NOM -->
+    <h2 class="text-xl font-bold mb-1">
+      {{ plan?.name }}
+    </h2>
+
+    <!-- DESCRIPTION -->
+    <p class="text-gray-600 text-sm mb-3">
+      {{ plan?.description || 'Aucune description fournie pour ce plan.' }}
+    </p>
+
+    <!-- STATUT (NON FOURNI PAR L’API) -->
+    <span
+      class="px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-600"
+    >
+      Statut non disponible
+    </span>
+
+    <hr class="my-4">
+
+    <!-- DÉTAILS DU PLAN -->
+    <h3 class="font-semibold mb-2 text-gray-700">
+      Détails du plan
+    </h3>
+
+    <div class="grid grid-cols-2 text-sm text-gray-600 gap-y-2">
+
+      <!-- COÛT TOTAL (NON FOURNI PAR L’API) -->
       <div>
-        <h2 class="text-xl font-bold mb-1">{{ plan.nom }}</h2>
-
-        <p class="text-gray-600 text-sm mb-3">
-          {{ plan.description }}
-        </p>
-
-        <span
-          [class.bg-green-100]="plan.actif"
-          [class.text-green-700]="plan.actif"
-          [class.bg-red-100]="!plan.actif"
-          [class.text-red-700]="!plan.actif"
-          class="px-3 py-1 rounded-full text-sm font-medium"
-        >
-          {{ plan.actif ? 'Actif' : 'Désactivé' }}
-        </span>
-
-        <hr class="my-4">
-
-        <!-- Détails du plan -->
-        <h3 class="font-semibold mb-2 text-gray-700">Détails du plan</h3>
-
-        <div class="grid grid-cols-2 text-sm text-gray-600 gap-y-1">
-          <div>
-            <p class="text-gray-400">Coût total</p>
-            <p class="font-medium">{{ plan.coutTotal }}</p>
-          </div>
-
-          <div>
-            <p class="text-gray-400">Type abonnement</p>
-            <p class="font-medium">{{ plan.type }}</p>
-          </div>
-
-          <div>
-            <p class="text-gray-400">Remise annuelle</p>
-            <p class="font-medium">{{ plan.remise }}</p>
-          </div>
-        </div>
-
-        <hr class="my-4">
-
-        <!-- Fonctionnalités -->
-        <h3 class="font-semibold mb-2">Fonctionnalités</h3>
-
-        <ul class="space-y-1">
-          <li *ngFor="let item of plan.fonctionnalites" class="flex items-start gap-2">
-            <span class="text-[#E95F32] text-lg">✓</span>
-            <p class="text-sm text-gray-700 leading-tight">{{ item }}</p>
-          </li>
-        </ul>
+        <p class="text-gray-400">Coût total</p>
+        <p class="font-medium">Calculé automatiquement selon la durée</p>
       </div>
 
-      <!-- Bouton Supprimer -->
-      <button
-        (click)="openDelete()"
-        class="w-full mt-6 border border-[#E95F32] text-[#E95F32] rounded-xl py-2 hover:bg-red-50 transition"
-      >
-        Supprimer
-      </button>
+      <!-- TYPE D’ABONNEMENT (NON FOURNI PAR L’API) -->
+      <div>
+        <p class="text-gray-400">Type d’abonnement</p>
+        <p class="font-medium">Mensuel / Annuel</p>
+      </div>
+
+      <!-- PRIX MENSUEL (API) -->
+      <div>
+        <p class="text-gray-400">Prix mensuel</p>
+        <p class="font-medium">
+          {{ plan?.monthlyPrice }} FCFA
+        </p>
+      </div>
+
+      <!-- REMISE ANNUELLE (API) -->
+      <div>
+        <p class="text-gray-400">Remise annuelle</p>
+        <p class="font-medium">
+          {{ plan?.yearlyDiscount }} %
+        </p>
+      </div>
+
     </div>
+
+    <hr class="my-4">
+
+    <!-- FONCTIONNALITÉS (NON FOURNIES PAR L’API) -->
+    <h3 class="font-semibold mb-2">
+      Fonctionnalités
+    </h3>
+
+    <p class="text-sm text-gray-600">
+      Les fonctionnalités associées à ce plan ne sont pas encore disponibles.
+    </p>
+  </div>
+
+  <!-- SUPPRESSION -->
+  <button
+     *ngIf="plan"
+  (click)="openDeletePopup(plan)"
+    class="w-full mt-6 border border-[#E95F32] text-[#E95F32]
+           rounded-xl py-2 hover:bg-red-50 transition"
+  >
+    Supprimer
+  </button>
+
+</div>
+
   </div>
 
   <!-- ====================================== -->
@@ -352,7 +379,7 @@
 <!-- ========================================= -->
 
 
-<!-- POPUP ACTIVER -->
+<!-- POPUP ACTIVER
 <div
   *ngIf="showActivatePopup"
   class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
@@ -370,7 +397,7 @@
     <h2 class="text-xl font-bold mb-2">Confirmation</h2>
 
     <p class="text-sm text-gray-600 mb-8">
-      Êtes-vous sûr de vouloir <b>activer</b> le plan <b>"{{ selectedPlan?.nom }}"</b> ?<br>
+      Êtes-vous sûr de vouloir <b>activer</b> le plan <b>"{{ selectedPlan?.name }}"</b> ?<br>
       Cette action est irréversible et il sera visible pour les utilisateurs.
     </p>
 
@@ -393,8 +420,11 @@
   </div>
 </div>
 
+-->
 
-<!-- POPUP DÉSACTIVER -->
+
+
+<!-- POPUP DÉSACTIVER
 <div
   *ngIf="showDeactivatePopup"
   class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
@@ -434,6 +464,8 @@
 
   </div>
 </div>
+-->
+
 
 
 <!-- POPUP SUPPRIMER -->
@@ -454,7 +486,7 @@
     <h2 class="text-xl font-bold mb-2">Confirmation</h2>
 
     <p class="text-sm text-gray-600 mb-8">
-      Êtes-vous sûr de vouloir <b>supprimer</b> le plan <b>"{{ selectedPlan?.nom }}"</b> ?<br>
+      Êtes-vous sûr de vouloir <b>supprimer</b> le plan <b>"{{ selectedPlan?.name }}"</b> ?<br>
       Cette action est irréversible et supprimera toutes les données associées.
     </p>
 
@@ -478,7 +510,7 @@
 </div>
 
 
-<!-- SUCCESS ACTIVER -->
+<!-- SUCCESS ACTIVER
 <div
   *ngIf="showSuccessActivate"
   class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
@@ -497,10 +529,12 @@
 
   </div>
 </div>
+-->
 
 
 
-<!-- SUCCESS DÉSACTIVER -->
+
+<!-- SUCCESS DÉSACTIVER
 <div
   *ngIf="showSuccessDeactivate"
   class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
@@ -519,10 +553,12 @@
 
   </div>
 </div>
+-->
 
 
 
-<!-- SUCCESS SUPPRIMER -->
+
+<!-- SUCCESS SUPPRIMER
 <div
   *ngIf="showSuccessDelete"
   class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
@@ -543,125 +579,7 @@
 </div>
 
 
-
-
-
-
-
-
-
-
-<!-- POPUP MODIFICATION -->
-<div
-  *ngIf="showEditPopup"
-  class="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
->
-  <div class="bg-white rounded-2xl w-[720px] p-5 shadow-xl">
-
-    <!-- Header -->
-    <div class="flex justify-between items-center mb-6">
-      <h2 class="text-xl font-semibold flex-1 text-center">Modifier le plan</h2>
-
-      <!-- close -->
-      <button (click)="closeEditPopup()" class="text-gray-400 hover:text-gray-600">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-      </button>
-    </div>
-
-    <!-- Formulaire -->
-    <div class="grid grid-cols-2 gap-6">
-
-      <!-- Nom -->
-      <div>
-        <label class="text-sm font-medium text-gray-700 mb-2 block">Nom du plan</label>
-        <input [(ngModel)]="editPlan.nom"
-               class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-               placeholder="Nom du plan">
-      </div>
-
-      <!-- Coût total -->
-      <div>
-        <label class="text-sm font-medium text-gray-700 mb-2 block">Coût total (F CFA)</label>
-        <input [(ngModel)]="editPlan.coutTotal"
-               type="text"
-               class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-               placeholder="14900">
-      </div>
-
-      <!-- Type -->
-      <div>
-        <label class="text-sm font-medium text-gray-700 mb-2 block">Type d'abonnement</label>
-        <select [(ngModel)]="editPlan.type"
-                class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm text-gray-500 focus:ring-2 focus:ring-orange-500 bg-white cursor-pointer">
-          <option value="Mensuel">Mensuel</option>
-          <option value="Annuel">Annuel</option>
-        </select>
-      </div>
-
-      <!-- Remise -->
-      <div>
-        <label class="text-sm font-medium text-gray-700 mb-2 block">Remise annuelle (%)</label>
-        <input [(ngModel)]="editPlan.remise"
-               type="number"
-               class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-               placeholder="0">
-      </div>
-
-    </div>
-
-    <!-- Description -->
-    <div class="mt-6">
-      <label class="text-sm font-medium text-gray-700 mb-2 block">Description</label>
-      <input [(ngModel)]="editPlan.description"
-             class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-             placeholder="Description du plan">
-    </div>
-
-    <!-- Fonctionnalités -->
-    <div class="mt-6">
-      <label class="text-sm font-medium text-gray-700 mb-2 block">Fonctionnalités</label>
-      <div class="border border-gray-300 rounded-lg p-3 min-h-[120px] focus-within:ring-2 focus-within:ring-orange-500">
-        <textarea [(ngModel)]="editPlan.fonctionnalites"
-                  class="w-full h-full outline-none text-sm resize-none"
-                  placeholder="Chaque fonctionnalité sur une nouvelle ligne"></textarea>
-      </div>
-    </div>
-
-    <!-- Status -->
-    <div class="mt-6 flex items-center gap-3">
-      <label class="text-sm font-medium text-gray-700">Statut plan</label>
-
-      <label class="relative inline-flex items-center cursor-pointer">
-        <input type="checkbox" [(ngModel)]="editPlan.active" class="sr-only peer">
-        <div class="w-11 h-6 bg-gray-200 peer-focus:ring-2 peer-focus:ring-orange-300 rounded-full
-                    peer-checked:bg-orange-500
-                    after:content-[''] after:absolute after:top-[2px] after:left-[2px]
-                    after:w-5 after:h-5 after:bg-white after:rounded-full after:transition-all
-                    peer-checked:after:translate-x-full"></div>
-
-        <span class="ml-3 text-sm font-medium text-gray-700">
-          {{ editPlan.active ? 'Actif' : 'Inactif' }}
-        </span>
-      </label>
-    </div>
-
-    <!-- Buttons -->
-    <div class="flex justify-start mt-8 gap-4">
-      <button (click)="saveEditPlan()"
-              class="px-8 py-2.5 rounded-lg bg-[#E95F32] text-white font-medium hover:bg-[#d15528] transition-colors">
-        Enregistrer
-      </button>
-
-      <button (click)="closeEditPopup()"
-              class="px-8 py-2.5 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors">
-        Annuler
-      </button>
-    </div>
-
-  </div>
-</div>
+-->
 
 
 
@@ -674,6 +592,15 @@
 
 
 
+
+
+
+
+
+
+
+
+<!-- SUCCESS EDITER
 <div
   *ngIf="showSuccessEdit"
   class="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
@@ -688,6 +615,157 @@
     <p class="text-gray-700 text-lg font-medium">
       Modifications enregistrées avec succès.
     </p>
+
+  </div>
+</div>
+-->
+
+
+
+
+
+
+
+<!-- POPUP MODIFICATION-->
+
+<div
+  *ngIf="showEditPopup && editPlan"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+>
+  <div class="bg-white rounded-2xl w-[720px] p-5 shadow-xl">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-xl font-semibold flex-1 text-center">
+        Modifier le plan
+      </h2>
+
+      <button (click)="closeEditPopup()" class="text-gray-400 hover:text-gray-600">
+        ✕
+      </button>
+    </div>
+
+    <!-- ================= FORMULAIRE ================= -->
+    <form #fEdit="ngForm">
+
+      <div class="grid grid-cols-2 gap-6">
+
+        <!-- NOM -->
+        <div>
+          <label class="text-sm font-medium text-gray-700 mb-2 block">
+            Nom du plan <span class="text-red-500">*</span>
+          </label>
+
+          <input
+            name="name"
+            [(ngModel)]="editPlan.name"
+            required
+            minlength="3"
+            pattern="^[A-Za-z0-9_-]{3,}$"
+            #nameEdit="ngModel"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
+                   focus:outline-none focus:ring-2 focus:ring-orange-500"
+            placeholder="Ex : ARTISAN_PLAN">
+
+          <p *ngIf="nameEdit.touched && nameEdit.invalid"
+             class="text-xs text-red-500 mt-1">
+            Nom requis (min 3 caractères, lettres/chiffres/_-).
+          </p>
+        </div>
+
+        <!-- PRIX MENSUEL -->
+        <div>
+          <label class="text-sm font-medium text-gray-700 mb-2 block">
+            Prix mensuel (FCFA) <span class="text-red-500">*</span>
+          </label>
+
+          <input
+            type="number"
+            name="monthlyPrice"
+            [(ngModel)]="editPlan.monthlyPrice"
+            required
+            min="0"
+            #monthlyPriceEdit="ngModel"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
+                   focus:outline-none focus:ring-2 focus:ring-orange-500"
+            placeholder="Ex : 1000">
+
+          <p *ngIf="monthlyPriceEdit.touched && monthlyPriceEdit.invalid"
+             class="text-xs text-red-500 mt-1">
+            Prix mensuel obligatoire (≥ 0).
+          </p>
+        </div>
+
+        <!-- REMISE ANNUELLE -->
+        <div>
+          <label class="text-sm font-medium text-gray-700 mb-2 block">
+            Remise annuelle (%)
+          </label>
+
+          <input
+            type="number"
+            name="yearlyDiscount"
+            [(ngModel)]="editPlan.yearlyDiscount"
+            min="0"
+            max="100"
+            #yearlyDiscountEdit="ngModel"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
+                   focus:outline-none focus:ring-2 focus:ring-orange-500"
+            placeholder="Ex : 10">
+
+          <p *ngIf="yearlyDiscountEdit.touched && yearlyDiscountEdit.invalid"
+             class="text-xs text-red-500 mt-1">
+            La remise doit être comprise entre 0 et 100.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- DESCRIPTION -->
+      <div class="mt-6">
+        <label class="text-sm font-medium text-gray-700 mb-2 block">
+          Description <span class="text-red-500">*</span>
+        </label>
+
+        <textarea
+          name="description"
+          [(ngModel)]="editPlan.description"
+          required
+          minlength="10"
+          maxlength="500"
+          #descriptionEdit="ngModel"
+          class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
+                 resize-none focus:outline-none focus:ring-2 focus:ring-orange-500"
+          placeholder="Ex : Plan destiné aux artisans">
+        </textarea>
+
+        <p *ngIf="descriptionEdit.touched && descriptionEdit.invalid"
+           class="text-xs text-red-500 mt-1">
+          Description obligatoire (10 à 500 caractères).
+        </p>
+      </div>
+
+      <!-- ================= ACTIONS ================= -->
+      <div class="flex justify-start mt-8 gap-4">
+        <button
+          type="button"
+          (click)="saveEditPlan()"
+          [disabled]="fEdit.invalid"
+          class="px-8 py-2.5 rounded-lg bg-[#E95F32] text-white font-medium
+                 hover:bg-[#d15528] transition-colors disabled:opacity-50">
+          Mettre à jour
+        </button>
+
+        <button
+          type="button"
+          (click)="closeEditPopup()"
+          class="px-8 py-2.5 rounded-lg border border-gray-300 text-gray-700
+                 font-medium hover:bg-gray-50 transition-colors">
+          Annuler
+        </button>
+      </div>
+
+    </form>
 
   </div>
 </div>

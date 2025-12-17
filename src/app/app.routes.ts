@@ -84,7 +84,7 @@ export const routes: Routes = [
             data: { title: 'Plans d’abonnement' },
           },
           {
-            path: 'detail',
+            path: 'detail/:id',
             loadComponent: () =>
               import('./pages/plan-abonnement/detail/detail/detail.component')
                 .then((m) => m.DetailComponent),

@@ -78,22 +78,30 @@ export class GestionMetiersComponent {
     this.loadMetiers();
   }
 
-  loadMetiers() {
-    this.loading = true;
+ loadMetiers() {
+  this.loading = true;
 
-    this.metierService.getTrades(this.page, this.size).subscribe({
-      next: (res) => {
-        this.metiers = res.content;
-        this.totalPages = res.totalPages;
-        this.totalElements = res.totalElements;
-        this.loading = false;
-      },
-      error: (err) => {
-        console.error('Erreur chargement métiers ❌', err);
-        this.loading = false;
-      },
-    });
-  }
+  this.metierService.getTrades(this.page, this.size).subscribe({
+    next: (res) => {
+      this.metiers = res.content;
+      this.totalPages = res.totalPages;
+      this.totalElements = res.totalElements;
+      console.log('Métiers chargés ✅', res);
+      this.loading = false;
+    },
+    error: (err) => {
+      console.error('Erreur chargement métiers ❌', err);
+      this.loading = false;
+
+      // 🔔 Alerte utilisateur
+      this.alertService.error(
+        "Erreur lors du chargement des métiers",
+        'light'
+      );
+    },
+  });
+}
+
 
   get filteredMetiers() {
     return this.metiers.filter((m) =>

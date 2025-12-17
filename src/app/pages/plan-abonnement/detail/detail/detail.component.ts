@@ -1,41 +1,43 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule, NgIf, NgFor } from '@angular/common';
 import { Location } from '@angular/common';
-import { NgChartsModule } from 'ng2-charts';
+import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { NgChartsModule } from 'ng2-charts';
+
+import { PlanAbonnementService } from '../../../../core/service/plan-abonnement/plan-abonnement.service';
+import { SwettAlerteService } from '../../../../core/service/alerte/swett-alerte.service';
+import { PlanAbonnement } from '../../../../models/pages/plan-d\'abonnement/plan-abonnement';
 
 @Component({
   selector: 'app-detail',
   standalone: true,
-  imports: [NgIf, NgFor, CommonModule, NgChartsModule,FormsModule],
+  imports: [NgIf, NgFor, CommonModule, NgChartsModule, FormsModule],
   templateUrl: './detail.component.html',
   styleUrls: ['./detail.component.css']
 })
-export class DetailComponent {
+export class DetailComponent implements OnInit {
 
-  constructor(private location: Location) {}
+  constructor(
+    private location: Location,
+    private route: ActivatedRoute,
+    private planService: PlanAbonnementService,
+    private alertService: SwettAlerteService
+  ) {}
 
   goBack() {
     this.location.back();
   }
 
   // ===============================
-  // 🔵 DONNÉES DU PLAN
+  // 🔵 DONNÉES DU PLAN (API)
   // ===============================
-  plan = {
-    id: "1201010",
-    nom: "ARTISAN PRO",
-    description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-    actif: true,
-    coutTotal: "14 900 F",
-    type: "Mensuel",
-    remise: "0%",
-    fonctionnalites: [
-      "Lorem Ipsum is simply dummy text",
-      "Lorem Ipsum is simply dummy text"
-    ]
-  };
+  plan: PlanAbonnement | null = null;
+  loading = false;
 
+  // ===============================
+  // 🔵 ABONNÉS (MOCK — À CONNECTER PLUS TARD)
+  // ===============================
   abonnes = [
     { nom: "Ousmane DIALLO", role: "Menuisier", telephone: "77 222 22 22", photo: "https://i.pravatar.cc/150?img=31", active: true },
     { nom: "Maguette NDIAYE", role: "Traiteur", telephone: "77 333 33 33", photo: "https://i.pravatar.cc/150?img=15", active: true },
@@ -43,123 +45,161 @@ export class DetailComponent {
   ];
 
   // ===============================
-  // 🔵 POPUPS EXISTANTS
+  // 🔵 POPUPS (CONFIRMATION OK)
   // ===============================
   showActivatePopup = false;
   showDeactivatePopup = false;
   showDeletePopup = false;
 
-  showSuccessActivate = false;
-  showSuccessDeactivate = false;
-  showSuccessDelete = false;
+  // ❌ POPUPS SUCCESS (DÉSACTIVÉS — GÉRÉS PAR SwettAlerteService)
+  // showSuccessActivate = false;
+  // showSuccessDeactivate = false;
+  // showSuccessDelete = false;
 
-  selectedPlan: any = null;
 
-  openActivationPopup() {
-    this.selectedPlan = this.plan;
-    this.showActivatePopup = true;
-  }
+// ================================
+  // 🗑️ SUPPRESSION
+  // ================================
+  selectedPlan: PlanAbonnement | null = null;
 
-  openDeactivate() {
-    this.selectedPlan = this.plan;
-    this.showDeactivatePopup = true;
-  }
-
-  openDelete() {
-    this.selectedPlan = this.plan;
+  openDeletePopup(plan: PlanAbonnement) {
+    this.selectedPlan = plan;
     this.showDeletePopup = true;
   }
 
-  closeActivate() { this.showActivatePopup = false; }
-  closeDeactivate() { this.showDeactivatePopup = false; }
-  closeDelete() { this.showDeletePopup = false; }
-
-  confirmActivate() {
-    this.plan.actif = true;
-    this.showActivatePopup = false;
-    this.showSuccessActivate = true;
-
-    setTimeout(() => { this.showSuccessActivate = false; }, 1800);
-  }
-
-  confirmDeactivate() {
-    this.plan.actif = false;
-    this.showDeactivatePopup = false;
-    this.showSuccessDeactivate = true;
-
-    setTimeout(() => { this.showSuccessDeactivate = false; }, 1800);
+  closeDelete() {
+    this.showDeletePopup = false;
+    this.selectedPlan = null;
   }
 
   confirmDelete() {
-    this.showDeletePopup = false;
-    this.showSuccessDelete = true;
+    if (!this.selectedPlan) return;
 
-    setTimeout(() => { this.showSuccessDelete = false; }, 1800);
+    this.planService.deletePlan(this.selectedPlan.id).subscribe({
+      next: () => {
+        this.alertService.success(
+          'Plan supprimé avec succès',
+          'light'
+        );
+
+
+        this.closeDelete();
+      },
+      error: () => {
+        this.alertService.error(
+          "Une erreur s'est produite lors de la suppression du plan",
+          'light'
+        );
+      }
+    });
+  }
+
+
+
+
+
+
+
+  // ===============================
+  // ✏️ MODIFICATION DU PLAN
+  // ===============================
+  showEditPopup = false;
+  editPlan: Partial<PlanAbonnement> | null = null;
+
+  ngOnInit(): void {
+    this.loadPlanDetail();
+    this.initDonutChart();
   }
 
   // ===============================
-  // 🟧 POPUP MODIFICATION DE PLAN
+  // 📌 RÉCUPÉRATION DU PLAN PAR ID
   // ===============================
-  showEditPopup = false;
-  showSuccessEdit = false;
+  loadPlanDetail() {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
 
-  editPlan: any = {
-    nom: "",
-    coutTotal: "",
-    type: "",
-    remise: "",
-    description: "",
-    fonctionnalites: "",
-    actif: true
-  };
+    if (!id) {
+      this.alertService.error('ID du plan invalide', 'light');
+      return;
+    }
 
-  // 👉 Ouvrir popup modification
+    this.loading = true;
+
+    console.log('🟡 ID récupéré depuis l’URL :', id);
+
+    this.planService.getPlanById(id).subscribe({
+      next: (res) => {
+        console.log('🟢 Plan récupéré depuis l’API :', res);
+        this.plan = res;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('🔴 Erreur récupération plan :', err);
+        this.loading = false;
+        this.alertService.error(
+          "Erreur lors du chargement du détail du plan",
+          'light'
+        );
+      }
+    });
+  }
+
+  // ===============================
+  // ✏️ OUVRIR MODIFICATION
+  // ===============================
   openEditPopup() {
+    if (!this.plan) return;
+
     this.editPlan = {
-      nom: this.plan.nom,
-      coutTotal: this.plan.coutTotal.replace(" F", ""),
-      type: this.plan.type,
-      remise: this.plan.remise.replace("%", ""),
+      name: this.plan.name,
       description: this.plan.description,
-      fonctionnalites: this.plan.fonctionnalites.join("\n"),
-      actif: this.plan.actif
+      monthlyPrice: this.plan.monthlyPrice
+      // ❌ yearlyDiscount non accepté par l’API
     };
+
     this.showEditPopup = true;
   }
 
-  // 👉 Fermer popup modification
   closeEditPopup() {
     this.showEditPopup = false;
-  }
-
-  // 👉 Sauvegarder modification
-  saveEditPlan() {
-    this.plan.nom = this.editPlan.nom;
-    this.plan.coutTotal = this.editPlan.coutTotal + " F";
-    this.plan.type = this.editPlan.type;
-    this.plan.remise = this.editPlan.remise + "%";
-    this.plan.description = this.editPlan.description;
-    this.plan.fonctionnalites = this.editPlan.fonctionnalites.split("\n");
-    this.plan.actif = this.editPlan.actif;
-
-    this.showEditPopup = false;
-    this.showSuccessEdit = true;
-
-    setTimeout(() => {
-      this.showSuccessEdit = false;
-    }, 1800);
+    this.editPlan = null;
   }
 
   // ===============================
-  // 📊 GRAPH DONUT
+  // 💾 SAUVEGARDER MODIFICATION (API)
+  // ===============================
+  saveEditPlan() {
+    if (!this.plan || !this.editPlan) return;
+
+    console.log('🟡 Payload UPDATE envoyé :', this.editPlan);
+
+    this.planService
+      .updatePlan(this.plan.id, this.editPlan)
+      .subscribe({
+        next: () => {
+          this.alertService.success(
+            'Plan modifié avec succès',
+            'light'
+          );
+
+          this.closeEditPopup();
+          this.loadPlanDetail();
+        },
+        error: (err) => {
+          console.error('🔴 Erreur UPDATE plan :', err);
+          this.alertService.error(
+            "Erreur lors de la modification du plan",
+            'light'
+          );
+        }
+      });
+  }
+
+  // ===============================
+  // 📊 GRAPH DONUT (INCHANGÉ)
   // ===============================
   donutLabels = ['Payé • 75%', 'Impayé • 25%'];
   donutData: any;
   donutOptions: any;
-
-  ngOnInit(): void {
-    this.initDonutChart();
-  }
 
   initDonutChart() {
     this.donutData = {

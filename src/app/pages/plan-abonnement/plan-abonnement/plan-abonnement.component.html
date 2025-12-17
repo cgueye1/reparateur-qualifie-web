@@ -47,7 +47,8 @@
 
         </div>
       </div>
-      <h2 class="text-xl font-bold text-[#111111]">{{ totalPlans < 10 ? '0' + totalPlans : totalPlans }}</h2>
+      <h2 class="text-xl font-bold text-[#111111]">2
+</h2>
       <div class="flex items-center gap-2 mt-2">
         <span class="text-xs font-light text-[#64748B]">Total</span>
       </div>
@@ -72,7 +73,7 @@
 
         </div>
       </div>
-      <h2 class="text-xl font-bold text-[#111111]">{{ plansActifs < 10 ? '0' + plansActifs : plansActifs }}</h2>
+      <h2 class="text-xl font-bold text-[#111111]">2</h2>
       <div class="flex items-center gap-2 mt-2">
         <span class="text-green-600 font-bold text-sm">
           <svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -97,7 +98,7 @@
 
         </div>
       </div>
-      <h2 class="text-xl font-bold text-[#111111]">{{ plansInactifs < 10 ? '0' + plansInactifs : plansInactifs }}</h2>
+      <h2 class="text-xl font-bold text-[#111111]">0</h2>
       <div class="flex items-center gap-2 mt-2">
         <span class="text-green-600 font-bold text-sm">
           <svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -120,9 +121,9 @@
 
         </div>
       </div>
-      <h2 class="text-xl font-bold text-[#111111]">{{ abonnesActifs < 10 ? '0' + abonnesActifs : abonnesActifs }}</h2>
+      <h2 class="text-xl font-bold text-[#111111]">2</h2>
       <div class="flex items-center gap-2 mt-2">
-        <span class="text-xs font-light text-[#64748B]">3 abonnés actifs</span>
+        <span class="text-xs font-light text-[#64748B]">2 abonnés actifs</span>
       </div>
     </div>
 
@@ -174,94 +175,104 @@
     <!-- TABLEAU DES PLANS -->
     <div class="bg-white rounded-xl overflow-x-auto border border-gray-200">
 
-      <table class="w-full min-w-max">
-        <thead class="bg-gray-50">
-          <tr class="text-left text-xs font-medium text-gray-600 border-b border-gray-200">
-            <th class="py-3 px-3 font-medium" style="min-width: 200px;">Nom du plan</th>
-            <th class="py-3 px-3 font-medium" style="min-width: 120px;">Coût total</th>
-            <th class="py-3 px-3 font-medium" style="min-width: 120px;">Type d'abonnement</th>
-            <th class="py-3 px-3 font-medium" style="min-width: 120px;">Remise annuelle</th>
-            <th class="py-3 px-3 font-medium" style="min-width: 100px;">Statut</th>
-            <th class="py-3 px-3 font-medium" style="min-width: 100px;">Actions</th>
-          </tr>
-        </thead>
+     <table class="w-full min-w-max">
+  <thead class="bg-gray-50">
+    <tr class="text-left text-xs font-medium text-gray-600 border-b border-gray-200">
+      <th class="py-3 px-3" style="min-width: 200px;">Nom du plan</th>
+      <th class="py-3 px-3" style="min-width: 120px;">Prix mensuel</th>
+      <th class="py-3 px-3" style="min-width: 120px;">Remise annuelle</th>
 
-        <tbody class="bg-white divide-y divide-gray-100">
+      <!-- ❌ PAS ENCORE DISPONIBLE DANS L’API -->
+      <!--
+      <th class="py-3 px-3" style="min-width: 120px;">Type d'abonnement</th>
+      <th class="py-3 px-3" style="min-width: 100px;">Statut</th>
+      -->
 
-          <tr *ngFor="let plan of filteredPlans" class="hover:bg-gray-50 transition-colors">
+      <th class="py-3 px-3" style="min-width: 100px;">Actions</th>
+    </tr>
+  </thead>
 
-            <!-- NOM DU PLAN -->
-            <td class="py-3 px-3">
-              <div class="min-w-0">
-                <p class="font-medium text-xs text-[#111111]">{{ plan.nom }}</p>
-                <p class="text-[10px] text-gray-500">{{ plan.description }}</p>
-              </div>
-            </td>
+  <tbody class="bg-white divide-y divide-gray-100">
+    <tr *ngFor="let plan of filteredPlans" class="hover:bg-gray-50 transition-colors">
 
-            <td class="py-3 px-3 text-xs text-[#111111]">{{ plan.coutTotal }}</td>
-            <td class="py-3 px-3 text-xs text-[#111111]">{{ plan.type }}</td>
-            <td class="py-3 px-3 text-xs text-[#111111]">{{ plan.remise }}</td>
+      <!-- NOM + DESCRIPTION -->
+      <td class="py-3 px-3">
+        <div class="min-w-0">
+          <p class="font-medium text-xs text-[#111111]">
+            {{ plan.name }}
+          </p>
+          <p class="text-[10px] text-gray-500">
+            {{ plan.description || '-' }}
+          </p>
+        </div>
+      </td>
 
-            <!-- STATUT -->
-            <td class="py-3 px-3">
-              <span class="px-2 py-1 rounded-full text-[10px] font-medium inline-flex items-center gap-1 whitespace-nowrap"
-                    [ngClass]="plan.active ? 'bg-green-50 text-[#008D36]' : 'bg-red-50 text-[#FF2828]'">
-                <span class="w-1.5 h-1.5 rounded-full"
-                      [ngClass]="plan.active ? 'bg-[#008D36]' : 'bg-[#FF2828]'"></span>
-                {{ plan.active ? 'Actif' : 'Inactif' }}
-              </span>
-            </td>
+      <!-- PRIX MENSUEL -->
+      <td class="py-3 px-3 text-xs text-[#111111]">
+        {{ plan.monthlyPrice }} FCFA
+      </td>
 
-            <!-- ACTIONS -->
-            <td class="py-3 px-3">
-              <div class="flex items-center gap-6">
+      <!-- REMISE ANNUELLE -->
+      <td class="py-3 px-3 text-xs text-[#111111]">
+        {{ plan.yearlyDiscount }} %
+      </td>
 
-                <!-- Voir -->
-                <button routerLink="/plans-abonnement/detail" class="text-gray-600 hover:opacity-70 transition-opacity" title="Voir">
-                  <svg width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M20 6.875C20 6.875 16.25 0 10 0C3.75 0 0 6.875 0 6.875C0 6.875 3.75 13.75 10 13.75C16.25 13.75 20 6.875 20 6.875ZM1.46625 6.875C2.06973 5.95573 2.76496 5.1001 3.54125 4.32125C5.15 2.71 7.35 1.25 10 1.25C12.65 1.25 14.8488 2.71 16.46 4.32125C17.2363 5.1001 17.9315 5.95573 18.535 6.875C18.4633 6.98333 18.3821 7.10333 18.2913 7.235C17.8725 7.835 17.2537 8.635 16.46 9.42875C14.8488 11.04 12.6488 12.5 10 12.5C7.35125 12.5 5.15125 11.04 3.54 9.42875C2.76371 8.6499 2.06973 7.79427 1.46625 6.875Z" fill="#6B7280"/>
-                    <path d="M10 3.75C9.1712 3.75 8.37634 4.07924 7.79029 4.66529C7.20424 5.25134 6.875 6.0462 6.875 6.875C6.875 7.7038 7.20424 8.49866 7.79029 9.08471C8.37634 9.67076 9.1712 10 10 10C10.8288 10 11.6237 9.67076 12.2097 9.08471C12.7958 8.49866 13.125 7.7038 13.125 6.875C13.125 6.0462 12.7958 5.25134 12.2097 4.66529C11.6237 4.07924 10.8288 3.75 10 3.75ZM5.625 6.875C5.625 5.71468 6.08594 4.60188 6.90641 3.78141C7.72688 2.96094 8.83968 2.5 10 2.5C11.1603 2.5 12.2731 2.96094 13.0936 3.78141C13.9141 4.60188 14.375 5.71468 14.375 6.875C14.375 8.03532 13.9141 9.14812 13.0936 9.96859C12.2731 10.7891 11.1603 11.25 10 11.25C8.83968 11.25 7.72688 10.7891 6.90641 9.96859C6.08594 9.14812 5.625 8.03532 5.625 6.875Z" fill="#6B7280"/>
-                  </svg>
-                </button>
+      <!-- ❌ STATUT (PAS ENCORE GÉRÉ) -->
+      <!--
+      <td class="py-3 px-3">
+        ...
+      </td>
+      -->
 
-                <!-- Modifier -->
-                <button class="text-gray-600 hover:opacity-70 transition-opacity" title="Modifier">
-                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M13.5 0.75L16.5 3.75L13.5 0.75ZM15 5.25L5.25 15H2.25V12L12 2.25L15 5.25Z" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </button>
+      <!-- ACTIONS -->
+      <td class="py-3 px-3">
+        <div class="flex items-center gap-4">
 
-                <!-- Activer (cadenas ouvert vert) -->
-                <button
-                  *ngIf="!plan.active"
-                  (click)="toggleStatus(plan)"
-                  class="text-[#008D36] hover:opacity-70 transition-opacity"
-                  title="Activer">
-                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M15 0C16.3261 0 17.5979 0.526784 18.5355 1.46447C19.4732 2.40215 20 3.67392 20 5V8.125H18.75V5C18.75 4.00544 18.3549 3.05161 17.6517 2.34835C16.9484 1.64509 15.9946 1.25 15 1.25C14.0054 1.25 13.0516 1.64509 12.3483 2.34835C11.6451 3.05161 11.25 4.00544 11.25 5V7.5H11.875C12.2854 7.5 12.6917 7.58083 13.0709 7.73788C13.45 7.89492 13.7945 8.12511 14.0847 8.41529C14.3749 8.70547 14.6051 9.04997 14.7621 9.42911C14.9192 9.80826 15 10.2146 15 10.625V16.875C15 17.2854 14.9192 17.6917 14.7621 18.0709C14.6051 18.45 14.3749 18.7945 14.0847 19.0847C13.7945 19.3749 13.45 19.6051 13.0709 19.7621C12.6917 19.9192 12.2854 20 11.875 20H3.125C2.2962 20 1.50134 19.6708 0.915291 19.0847C0.32924 18.4987 0 17.7038 0 16.875L0 10.625C0 9.7962 0.32924 9.00134 0.915291 8.41529C1.50134 7.82924 2.2962 7.5 3.125 7.5H10V5C10 3.67392 10.5268 2.40215 11.4645 1.46447C12.4021 0.526784 13.6739 0 15 0ZM3.125 8.75C2.62772 8.75 2.15081 8.94754 1.79917 9.29917C1.44754 9.65081 1.25 10.1277 1.25 10.625V16.875C1.25 17.3723 1.44754 17.8492 1.79917 18.2008C2.15081 18.5525 2.62772 18.75 3.125 18.75H11.875C12.3723 18.75 12.8492 18.5525 13.2008 18.2008C13.5525 17.8492 13.75 17.3723 13.75 16.875V10.625C13.75 10.1277 13.5525 9.65081 13.2008 9.29917C12.8492 8.94754 12.3723 8.75 11.875 8.75H3.125Z" fill="#008D36"/>
-                  </svg>
-                </button>
+          <!-- ❌ VOIR DÉTAIL (API DETAIL PAS UTILISÉE) -->
+          <!--
+          <button routerLink="/plans-abonnement/detail">Voir</button>
+          -->
 
-                <!-- Désactiver (cadenas fermé rouge) -->
-                <button
-                  *ngIf="plan.active"
-                  (click)="toggleStatus(plan)"
-                  class="text-[#E94E1B] hover:opacity-70 transition-opacity"
-                  title="Désactiver">
-                  <svg width="14" height="16" viewBox="0 0 15 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M7.5 0C8.82608 0 10.0979 0.526784 11.0355 1.46447C11.9732 2.40215 12.5 3.67392 12.5 5V7.5625C13.2059 7.70658 13.8402 8.09011 14.2958 8.64819C14.7514 9.20626 15.0001 9.90459 15 10.625V16.875C15 17.7038 14.6708 18.4987 14.0847 19.0847C13.4987 19.6708 12.7038 20 11.875 20H3.125C2.2962 20 1.50134 19.6708 0.915291 19.0847C0.32924 18.4987 6.51427e-08 17.7038 6.51427e-08 16.875V10.625C-0.000146969 9.90459 0.248615 9.20626 0.704184 8.64819C1.15975 8.09011 1.79415 7.70658 2.5 7.5625V5C2.5 3.67392 3.02678 2.40215 3.96447 1.46447C4.90215 0.526784 6.17392 0 7.5 0ZM3.125 8.75C2.62772 8.75 2.15081 8.94754 1.79917 9.29917C1.44754 9.65081 1.25 10.1277 1.25 10.625V16.875C1.25 17.3723 1.44754 17.8492 1.79917 18.2008C2.15081 18.5525 2.62772 18.75 3.125 18.75H11.875C12.3723 18.75 12.8492 18.5525 13.2008 18.2008C13.5525 17.8492 13.75 17.3723 13.75 16.875V10.625C13.75 10.1277 13.5525 9.65081 13.2008 9.29917C12.8492 8.94754 12.3723 8.75 11.875 8.75H3.125ZM7.5 1.25C6.50544 1.25 5.55161 1.64509 4.84835 2.34835C4.14509 3.05161 3.75 4.00544 3.75 5V7.5H11.25V5C11.25 4.00544 10.8549 3.05161 10.1517 2.34835C9.44839 1.64509 8.49456 1.25 7.5 1.25Z" fill="#E94E1B"/>
-                  </svg>
-                </button>
+             <!-- voir -->
+          <button
+
+             [routerLink]="['/plans-abonnement/detail', plan.id]"
+             class="text-gray-600 hover:opacity-70 transition-opacity"
+             title="Voir">
+
+           <svg width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M20 6.875C20 6.875 16.25 0 10 0C3.75 0 0 6.875 0 6.875C0 6.875 3.75 13.75 10 13.75C16.25 13.75 20 6.875 20 6.875ZM1.46625 6.875C2.06973 5.95573 2.76496 5.1001 3.54125 4.32125C5.15 2.71 7.35 1.25 10 1.25C12.65 1.25 14.8488 2.71 16.46 4.32125C17.2363 5.1001 17.9315 5.95573 18.535 6.875C18.4633 6.98333 18.3821 7.10333 18.2913 7.235C17.8725 7.835 17.2537 8.635 16.46 9.42875C14.8488 11.04 12.6488 12.5 10 12.5C7.35125 12.5 5.15125 11.04 3.54 9.42875C2.76371 8.6499 2.06973 7.79427 1.46625 6.875Z" fill="#6B7280"/>
+<path d="M10 3.75C9.1712 3.75 8.37634 4.07924 7.79029 4.66529C7.20424 5.25134 6.875 6.0462 6.875 6.875C6.875 7.7038 7.20424 8.49866 7.79029 9.08471C8.37634 9.67076 9.1712 10 10 10C10.8288 10 11.6237 9.67076 12.2097 9.08471C12.7958 8.49866 13.125 7.7038 13.125 6.875C13.125 6.0462 12.7958 5.25134 12.2097 4.66529C11.6237 4.07924 10.8288 3.75 10 3.75ZM5.625 6.875C5.625 5.71468 6.08594 4.60188 6.90641 3.78141C7.72688 2.96094 8.83968 2.5 10 2.5C11.1603 2.5 12.2731 2.96094 13.0936 3.78141C13.9141 4.60188 14.375 5.71468 14.375 6.875C14.375 8.03532 13.9141 9.14812 13.0936 9.96859C12.2731 10.7891 11.1603 11.25 10 11.25C8.83968 11.25 7.72688 10.7891 6.90641 9.96859C6.08594 9.14812 5.625 8.03532 5.625 6.875Z" fill="#6B7280"/>
+</svg>
+
+          </button>
+
+          <!-- MODIFIER -->
+          <button
+            (click)="openEditPopup(plan)"
+            class="text-gray-600 hover:opacity-70"
+            title="Modifier"
+          >
+            <!-- SVG SIMPLE -->
+           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M15.1823 0.183617C15.2403 0.125413 15.3093 0.0792346 15.3852 0.0477266C15.4611 0.0162185 15.5425 0 15.6248 0C15.707 0 15.7884 0.0162185 15.8643 0.0477266C15.9402 0.0792346 16.0092 0.125413 16.0673 0.183617L19.8173 3.93362C19.8755 3.99167 19.9216 4.06064 19.9531 4.13657C19.9847 4.21251 20.0009 4.29391 20.0009 4.37612C20.0009 4.45833 19.9847 4.53973 19.9531 4.61566C19.9216 4.69159 19.8755 4.76056 19.8173 4.81862L7.31726 17.3186C7.25728 17.3782 7.18583 17.425 7.10726 17.4561L0.857258 19.9561C0.743678 20.0016 0.619252 20.0127 0.499407 19.9881C0.379562 19.9635 0.269567 19.9043 0.183058 19.8178C0.0965504 19.7313 0.0373335 19.6213 0.0127492 19.5015C-0.0118351 19.3816 -0.000705742 19.2572 0.0447576 19.1436L2.54476 12.8936C2.57592 12.815 2.62269 12.7436 2.68226 12.6836L15.1823 0.183617ZM14.0085 3.12612L16.8748 5.99237L18.491 4.37612L15.6248 1.50987L14.0085 3.12612ZM15.991 6.87612L13.1248 4.00987L4.99976 12.1349V12.5011H5.62476C5.79052 12.5011 5.94949 12.567 6.0667 12.6842C6.18391 12.8014 6.24976 12.9604 6.24976 13.1261V13.7511H6.87476C7.04052 13.7511 7.19949 13.817 7.3167 13.9342C7.43391 14.0514 7.49976 14.2104 7.49976 14.3761V15.0011H7.86601L15.991 6.87612ZM3.78976 13.3449L3.65726 13.4774L1.74726 18.2536L6.52351 16.3436L6.65601 16.2111C6.53678 16.1666 6.434 16.0867 6.3614 15.9821C6.2888 15.8776 6.24985 15.7534 6.24976 15.6261V15.0011H5.62476C5.459 15.0011 5.30003 14.9353 5.18282 14.8181C5.06561 14.7008 4.99976 14.5419 4.99976 14.3761V13.7511H4.37476C4.24748 13.751 4.12327 13.7121 4.01873 13.6395C3.91419 13.5669 3.8343 13.4641 3.78976 13.3449Z" fill="#4B4848"/>
+</svg>
+
+          </button>
 
 
 
-              </div>
-            </td>
+          <!-- ❌ ACTIVATION / DÉSACTIVATION (PAS ENCORE) -->
+          <!--
+          <button>Activer</button>
+          <button>Désactiver</button>
+          -->
 
-          </tr>
-
-        </tbody>
-      </table>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
     </div>
 
@@ -312,7 +323,7 @@
 <!-- ========================================= -->
 
 
-<!-- POPUP ACTIVER -->
+<!-- POPUP ACTIVER
 <div
   *ngIf="showActivatePopup"
   class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
@@ -352,9 +363,11 @@
 
   </div>
 </div>
+-->
 
 
-<!-- POPUP DÉSACTIVER -->
+
+<!-- POPUP DÉSACTIVER
 <div
   *ngIf="showDeactivatePopup"
   class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
@@ -394,9 +407,12 @@
 
   </div>
 </div>
+-->
+
 
 
 <!-- POPUP SUPPRIMER -->
+
 <div
   *ngIf="showDeletePopup"
   class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
@@ -414,7 +430,7 @@
     <h2 class="text-xl font-bold mb-2">Confirmation</h2>
 
     <p class="text-sm text-gray-600 mb-8">
-      Êtes-vous sûr de vouloir <b>supprimer</b> le plan <b>"{{ selectedPlan?.nom }}"</b> ?<br>
+      Êtes-vous sûr de vouloir <b>supprimer</b> le plan <b>"{{ selectedPlan?.name }}"</b> ?<br>
       Cette action est irréversible et supprimera toutes les données associées.
     </p>
 
@@ -438,7 +454,12 @@
 </div>
 
 
-<!-- SUCCESS ACTIVER -->
+
+
+
+<!--
+SUCCESS ACTIVER
+
 <div
   *ngIf="showSuccessActivate"
   class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
@@ -458,9 +479,11 @@
   </div>
 </div>
 
+-->
 
 
-<!-- SUCCESS DÉSACTIVER -->
+
+<!-- SUCCESS DÉSACTIVER
 <div
   *ngIf="showSuccessDeactivate"
   class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
@@ -479,10 +502,12 @@
 
   </div>
 </div>
+-->
 
 
 
-<!-- SUCCESS SUPPRIMER -->
+
+<!-- SUCCESS SUPPRIMER
 <div
   *ngIf="showSuccessDelete"
   class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
@@ -501,6 +526,7 @@
 
   </div>
 </div>
+-->
 
 
 
@@ -515,7 +541,9 @@
 
 
 
-<!-- POPUP CRÉATION -->
+
+<!-- POPUP CRÉATION-->
+
 <div
   *ngIf="showCreatePopup"
   class="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
@@ -524,99 +552,136 @@
 
     <!-- Header -->
     <div class="flex justify-between items-center mb-6">
-      <h2 class="text-xl font-semibold flex-1 text-center">Créer un nouveau plan</h2>
+      <h2 class="text-xl font-semibold flex-1 text-center">
+        Créer un nouveau plan
+      </h2>
 
-      <!-- close -->
       <button (click)="closeCreatePopup()" class="text-gray-400 hover:text-gray-600">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
+        ✕
       </button>
     </div>
 
-    <!-- Formulaire -->
-    <div class="grid grid-cols-2 gap-6">
+    <!-- ================= FORMULAIRE ================= -->
+    <form #f="ngForm">
 
-      <!-- Nom -->
-      <div>
-        <label class="text-sm font-medium text-gray-700 mb-2 block">Nom du plan</label>
-        <input [(ngModel)]="newPlan.nom"
-               class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-               placeholder="Ex: ARTISAN_PLAN">
+      <div class="grid grid-cols-2 gap-6">
+
+        <!-- NOM -->
+        <div>
+          <label class="text-sm font-medium text-gray-700 mb-2 block">
+            Nom du plan <span class="text-red-500">*</span>
+          </label>
+
+          <input
+            name="name"
+            [(ngModel)]="newPlan.name"
+            required
+            minlength="3"
+            pattern="^[A-Za-z0-9_-]{3,}$"
+            #name="ngModel"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
+                   focus:outline-none focus:ring-2 focus:ring-orange-500"
+            placeholder="Ex : ARTISAN_PLAN">
+
+          <p *ngIf="name.touched && name.invalid"
+             class="text-xs text-red-500 mt-1">
+            Nom requis (min 3 caractères, lettres/chiffres/_-).
+          </p>
+        </div>
+
+        <!-- PRIX MENSUEL -->
+        <div>
+          <label class="text-sm font-medium text-gray-700 mb-2 block">
+            Prix mensuel (FCFA) <span class="text-red-500">*</span>
+          </label>
+
+          <input
+            type="number"
+            name="monthlyPrice"
+            [(ngModel)]="newPlan.monthlyPrice"
+            required
+            min="0"
+            #monthlyPrice="ngModel"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
+                   focus:outline-none focus:ring-2 focus:ring-orange-500"
+            placeholder="Ex : 1000">
+
+          <p *ngIf="monthlyPrice.touched && monthlyPrice.invalid"
+             class="text-xs text-red-500 mt-1">
+            Prix mensuel obligatoire (valeur ≥ 0).
+          </p>
+        </div>
+
+        <!-- REMISE ANNUELLE -->
+        <div>
+          <label class="text-sm font-medium text-gray-700 mb-2 block">
+            Remise annuelle (%)
+          </label>
+
+          <input
+            type="number"
+            name="yearlyDiscount"
+            [(ngModel)]="newPlan.yearlyDiscount"
+            min="0"
+            max="100"
+            #yearlyDiscount="ngModel"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
+                   focus:outline-none focus:ring-2 focus:ring-orange-500"
+            placeholder="Ex : 10">
+
+          <p *ngIf="yearlyDiscount.touched && yearlyDiscount.invalid"
+             class="text-xs text-red-500 mt-1">
+            La remise doit être comprise entre 0 et 100.
+          </p>
+        </div>
+
       </div>
 
-      <!-- Coût total -->
-      <div>
-        <label class="text-sm font-medium text-gray-700 mb-2 block">Coût total (F CFA)</label>
-        <input [(ngModel)]="newPlan.coutTotal"
-               type="number"
-               class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-               placeholder="Ex: 14 900">
+      <!-- DESCRIPTION -->
+      <div class="mt-6">
+        <label class="text-sm font-medium text-gray-700 mb-2 block">
+          Description <span class="text-red-500">*</span>
+        </label>
+
+        <textarea
+          name="description"
+          [(ngModel)]="newPlan.description"
+          required
+          minlength="10"
+          maxlength="500"
+          #description="ngModel"
+          class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
+                 resize-none focus:outline-none focus:ring-2 focus:ring-orange-500"
+          placeholder="Ex : Plan destiné aux artisans">
+        </textarea>
+
+        <p *ngIf="description.touched && description.invalid"
+           class="text-xs text-red-500 mt-1">
+          Description obligatoire (10 à 500 caractères).
+        </p>
       </div>
 
-      <!-- Type -->
-      <div>
-        <label class="text-sm font-medium text-gray-700 mb-2 block">Type d'abonnement</label>
-        <select [(ngModel)]="newPlan.type"
-                class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm text-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent appearance-none bg-white cursor-pointer">
-          <option value="">Sélectionner( Mensuel ou Annuel)</option>
-          <option value="Mensuel">Mensuel</option>
-          <option value="Annuel">Annuel</option>
-        </select>
+      <!-- ================= ACTIONS ================= -->
+      <div class="flex justify-start mt-8 gap-4">
+        <button
+          type="button"
+          (click)="saveNewPlan()"
+          [disabled]="f.invalid"
+          class="px-8 py-2.5 rounded-lg bg-[#E95F32] text-white font-medium
+                 hover:bg-[#d15528] transition-colors disabled:opacity-50">
+          Enregistrer
+        </button>
+
+        <button
+          type="button"
+          (click)="closeCreatePopup()"
+          class="px-8 py-2.5 rounded-lg border border-gray-300 text-gray-700
+                 font-medium hover:bg-gray-50 transition-colors">
+          Annuler
+        </button>
       </div>
 
-      <!-- Remise -->
-      <div>
-        <label class="text-sm font-medium text-gray-700 mb-2 block">Remise annuelle (%)</label>
-        <input [(ngModel)]="newPlan.remise"
-               type="number"
-               class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-               placeholder="Ex: 10%">
-      </div>
-
-    </div>
-
-    <!-- Description -->
-    <div class="mt-6">
-      <label class="text-sm font-medium text-gray-700 mb-2 block">Description</label>
-      <input [(ngModel)]="newPlan.description"
-             class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-             placeholder="Ex: Plan pour artisans">
-    </div>
-
-    <!-- Fonctionnalités -->
-    <div class="mt-6">
-      <label class="text-sm font-medium text-gray-700 mb-2 block">Fonctionnalités</label>
-      <div class="border border-gray-300 rounded-lg p-3 min-h-[120px] focus-within:ring-2 focus-within:ring-orange-500 focus-within:border-transparent">
-        <textarea [(ngModel)]="newPlan.fonctionnalites"
-                  class="w-full h-full outline-none text-sm resize-none"
-                  placeholder="Saisir"></textarea>
-      </div>
-    </div>
-
-    <!-- Status -->
-    <div class="mt-6 flex items-center gap-3">
-      <label class="text-sm font-medium text-gray-700">Statut plan</label>
-
-      <label class="relative inline-flex items-center cursor-pointer">
-        <input type="checkbox" [(ngModel)]="newPlan.active" class="sr-only peer">
-        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-orange-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"></div>
-        <span class="ml-3 text-sm font-medium text-gray-700">{{ newPlan.active ? 'Actif' : 'Inactif' }}</span>
-      </label>
-    </div>
-
-    <!-- Buttons -->
-    <div class="flex justify-start mt-8 gap-4">
-      <button (click)="saveNewPlan()"
-              class="px-8 py-2.5 rounded-lg bg-[#E95F32] text-white font-medium hover:bg-[#d15528] transition-colors">
-        Enregistrer
-      </button>
-
-      <button (click)="closeCreatePopup()"
-              class="px-8 py-2.5 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors">
-        Annuler
-      </button>
-    </div>
+    </form>
 
   </div>
 </div>
@@ -628,6 +693,8 @@
 
 
 
+
+<!-- SUCCESS CRÉATION
 <div
   *ngIf="showSuccessCreate"
   class="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
@@ -642,6 +709,152 @@
     <p class="text-gray-700 text-lg font-medium">
       Plan d’abonnement créé avec succès.
     </p>
+
+  </div>
+</div>
+-->
+
+
+<!-- POPUP MODIFICATION-->
+
+<div
+  *ngIf="showEditPopup && editPlan"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+>
+  <div class="bg-white rounded-2xl w-[720px] p-5 shadow-xl">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-xl font-semibold flex-1 text-center">
+        Modifier le plan
+      </h2>
+
+      <button (click)="closeEditPopup()" class="text-gray-400 hover:text-gray-600">
+        ✕
+      </button>
+    </div>
+
+    <!-- ================= FORMULAIRE ================= -->
+    <form #fEdit="ngForm">
+
+      <div class="grid grid-cols-2 gap-6">
+
+        <!-- NOM -->
+        <div>
+          <label class="text-sm font-medium text-gray-700 mb-2 block">
+            Nom du plan <span class="text-red-500">*</span>
+          </label>
+
+          <input
+            name="name"
+            [(ngModel)]="editPlan.name"
+            required
+            minlength="3"
+            pattern="^[A-Za-z0-9_-]{3,}$"
+            #nameEdit="ngModel"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
+                   focus:outline-none focus:ring-2 focus:ring-orange-500"
+            placeholder="Ex : ARTISAN_PLAN">
+
+          <p *ngIf="nameEdit.touched && nameEdit.invalid"
+             class="text-xs text-red-500 mt-1">
+            Nom requis (min 3 caractères, lettres/chiffres/_-).
+          </p>
+        </div>
+
+        <!-- PRIX MENSUEL -->
+        <div>
+          <label class="text-sm font-medium text-gray-700 mb-2 block">
+            Prix mensuel (FCFA) <span class="text-red-500">*</span>
+          </label>
+
+          <input
+            type="number"
+            name="monthlyPrice"
+            [(ngModel)]="editPlan.monthlyPrice"
+            required
+            min="0"
+            #monthlyPriceEdit="ngModel"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
+                   focus:outline-none focus:ring-2 focus:ring-orange-500"
+            placeholder="Ex : 1000">
+
+          <p *ngIf="monthlyPriceEdit.touched && monthlyPriceEdit.invalid"
+             class="text-xs text-red-500 mt-1">
+            Prix mensuel obligatoire (≥ 0).
+          </p>
+        </div>
+
+        <!-- REMISE ANNUELLE -->
+        <div>
+          <label class="text-sm font-medium text-gray-700 mb-2 block">
+            Remise annuelle (%)
+          </label>
+
+          <input
+            type="number"
+            name="yearlyDiscount"
+            [(ngModel)]="editPlan.yearlyDiscount"
+            min="0"
+            max="100"
+            #yearlyDiscountEdit="ngModel"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
+                   focus:outline-none focus:ring-2 focus:ring-orange-500"
+            placeholder="Ex : 10">
+
+          <p *ngIf="yearlyDiscountEdit.touched && yearlyDiscountEdit.invalid"
+             class="text-xs text-red-500 mt-1">
+            La remise doit être comprise entre 0 et 100.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- DESCRIPTION -->
+      <div class="mt-6">
+        <label class="text-sm font-medium text-gray-700 mb-2 block">
+          Description <span class="text-red-500">*</span>
+        </label>
+
+        <textarea
+          name="description"
+          [(ngModel)]="editPlan.description"
+          required
+          minlength="10"
+          maxlength="500"
+          #descriptionEdit="ngModel"
+          class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
+                 resize-none focus:outline-none focus:ring-2 focus:ring-orange-500"
+          placeholder="Ex : Plan destiné aux artisans">
+        </textarea>
+
+        <p *ngIf="descriptionEdit.touched && descriptionEdit.invalid"
+           class="text-xs text-red-500 mt-1">
+          Description obligatoire (10 à 500 caractères).
+        </p>
+      </div>
+
+      <!-- ================= ACTIONS ================= -->
+      <div class="flex justify-start mt-8 gap-4">
+        <button
+          type="button"
+          (click)="saveEditPlan()"
+          [disabled]="fEdit.invalid"
+          class="px-8 py-2.5 rounded-lg bg-[#E95F32] text-white font-medium
+                 hover:bg-[#d15528] transition-colors disabled:opacity-50">
+          Mettre à jour
+        </button>
+
+        <button
+          type="button"
+          (click)="closeEditPopup()"
+          class="px-8 py-2.5 rounded-lg border border-gray-300 text-gray-700
+                 font-medium hover:bg-gray-50 transition-colors">
+          Annuler
+        </button>
+      </div>
+
+    </form>
 
   </div>
 </div>

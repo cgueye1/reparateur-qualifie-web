@@ -1,235 +1,231 @@
 import { CommonModule, NgFor, NgIf } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink, RouterModule } from "@angular/router";
+import { RouterModule } from '@angular/router';
+import { PlanAbonnementService } from '../../../core/service/plan-abonnement/plan-abonnement.service';
+import { SwettAlerteService } from '../../../core/service/alerte/swett-alerte.service';
+import { PlanAbonnement } from '../../../models/pages/plan-d\'abonnement/plan-abonnement';
 
 @Component({
   selector: 'app-plan-abonnement',
   standalone: true,
-  imports: [NgIf, NgFor, CommonModule, RouterModule,FormsModule],
+  imports: [NgIf, NgFor, CommonModule, RouterModule, FormsModule],
   templateUrl: './plan-abonnement.component.html',
   styleUrl: './plan-abonnement.component.css'
 })
-export class PlanAbonnementComponent {
-  plans = [
-    {
-      nom: "Artisan Pro",
-      description: "Lorem Ipsum is simply dummy text",
-      coutTotal: "14 900 Fcfa",
-      type: "Mensuel",
-      remise: "0%",
-      active: true
+export class PlanAbonnementComponent implements OnInit {
+
+  /* ============================================================
+   📌 PAGINATION (❌ DÉSACTIVÉE)
+   ============================================================
+
+   ⚠️ IMPORTANT :
+   L’API "plan abonnement" NE RENVOIE PAS de pagination.
+
+   Réponse backend réelle :
+   [
+     { id, name, description, monthlyPrice, yearlyPrice, ... }
+   ]
+
+   ❌ Il n’y a PAS :
+   - res.content
+   - res.totalPages
+   - res.totalElements
+
+   👉 La pagination sera ajoutée PLUS TARD
+   👉 quand le backend la supportera.
+  ============================================================ */
+
+  // page = 0;
+  // size = 10;
+  // totalPages = 0;
+  // totalElements = 0;
+
+  // ================================
+  // 📌 DONNÉES
+  // ================================
+  plans: PlanAbonnement[] = [];
+  searchTerm = '';
+  loading = false;
+
+  constructor(
+    private planService: PlanAbonnementService,
+    private alertService: SwettAlerteService
+  ) {}
+
+  ngOnInit(): void {
+    this.loadPlans();
+  }
+
+  // ================================
+  // 📌 LISTE DES PLANS
+  // ================================
+  loadPlans() {
+  this.loading = true;
+
+  this.planService.getPlans().subscribe({
+    next: (res: PlanAbonnement[]) => {
+      
+      this.plans = res;
+
+      console.log('Plans chargés avec succès ✅', res);
+
+      this.loading = false;
     },
-    {
-      nom: "Artisan Pro",
-      description: "Lorem Ipsum is simply dummy text",
-      coutTotal: "79 900 Fcfa",
-      type: "Annuel",
-      remise: "20%",
-      active: false
-    },
-    {
-      nom: "Client Basic",
-      description: "Lorem Ipsum is simply dummy text",
-      coutTotal: "5 000 Fcfa",
-      type: "Mensuel",
-      remise: "0%",
-      active: true
-    },
-    {
-      nom: "Client Premium",
-      description: "Lorem Ipsum is simply dummy text",
-      coutTotal: "50 000 Fcfa",
-      type: "Annuel",
-      remise: "15%",
-      active: true
+    error: (err) => {
+      console.error('Erreur chargement plans ❌', err);
+      this.loading = false;
+
+      // 🔔 Alerte utilisateur
+      this.alertService.error(
+        "Erreur lors du chargement des plans d’abonnement",
+        'light'
+      );
     }
-  ];
+  });
+}
 
-  searchTerm = "";
-
-  // Statistiques
-  get totalPlans() {
-    return this.plans.length;
-  }
-
-  get plansActifs() {
-    return this.plans.filter(p => p.active).length;
-  }
-
-  get plansInactifs() {
-    return this.plans.filter(p => !p.active).length;
-  }
-
-  get abonnesActifs() {
-    return 3; // Nombre statique pour l'exemple
-  }
-
-  // Filtrage recherche
-  get filteredPlans() {
-    return this.plans.filter(p =>
-      p.nom.toLowerCase().includes(this.searchTerm.toLowerCase())
+  // ================================
+  // 🔍 FILTRAGE RECHERCHE
+  // ================================
+  get filteredPlans(): PlanAbonnement[] {
+    return (this.plans || []).filter(plan =>
+      plan.name?.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
   }
 
-  // ===============================
-  // 🔵 GESTION DES ACTIONS
-  // ===============================
+  // ================================
+  // 🗑️ SUPPRESSION
+  // ================================
+  showDeletePopup = false;
+  selectedPlan: PlanAbonnement | null = null;
 
-  toggleStatus(plan: any) {
-    this.selectedPlan = plan;
-
-    if (plan.active) {
-      this.showDeactivatePopup = true;
-    } else {
-      this.showActivatePopup = true;
-    }
-  }
-
-  openDeletePopup(plan: any) {
+  openDeletePopup(plan: PlanAbonnement) {
     this.selectedPlan = plan;
     this.showDeletePopup = true;
   }
 
-  // ===============================
-  // 🔵 POPUPS ACTIVATION / DESACTIVATION / SUPPRESSION
-  // ===============================
-
-  // État des popups
-  showActivatePopup: boolean = false;
-  showDeactivatePopup: boolean = false;
-  showDeletePopup: boolean = false;
-
-  // Popups success
-  showSuccessActivate: boolean = false;
-  showSuccessDeactivate: boolean = false;
-  showSuccessDelete: boolean = false;
-
-  // Plan sélectionné
-  selectedPlan: any = null;
-
-  // 👉 Fermer popup Activer
-  closeActivate() {
-    this.showActivatePopup = false;
-  }
-
-  // 👉 Fermer popup Désactiver
-  closeDeactivate() {
-    this.showDeactivatePopup = false;
-  }
-
-  // 👉 Fermer popup Supprimer
   closeDelete() {
     this.showDeletePopup = false;
+    this.selectedPlan = null;
   }
 
-  // 👉 Confirmer ACTIVATION
-  confirmActivate() {
-    if (this.selectedPlan) {
-      this.selectedPlan.active = true;
-    }
-
-    this.showActivatePopup = false;
-    this.showSuccessActivate = true;
-
-    setTimeout(() => {
-      this.showSuccessActivate = false;
-    }, 1800);
-  }
-
-  // 👉 Confirmer DESACTIVATION
-  confirmDeactivate() {
-    if (this.selectedPlan) {
-      this.selectedPlan.active = false;
-    }
-
-    this.showDeactivatePopup = false;
-    this.showSuccessDeactivate = true;
-
-    setTimeout(() => {
-      this.showSuccessDeactivate = false;
-    }, 1800);
-  }
-
-  // 👉 Confirmer SUPPRESSION
   confirmDelete() {
-    if (this.selectedPlan) {
-      const index = this.plans.indexOf(this.selectedPlan);
-      if (index > -1) {
-        this.plans.splice(index, 1);
+    if (!this.selectedPlan) return;
+
+    this.planService.deletePlan(this.selectedPlan.id).subscribe({
+      next: () => {
+        this.alertService.success(
+          'Plan supprimé avec succès',
+          'light'
+        );
+
+        this.loadPlans();
+        this.closeDelete();
+      },
+      error: () => {
+        this.alertService.error(
+          "Une erreur s'est produite lors de la suppression du plan",
+          'light'
+        );
       }
-    }
-
-    this.showDeletePopup = false;
-    this.showSuccessDelete = true;
-
-    setTimeout(() => {
-      this.showSuccessDelete = false;
-    }, 1800);
+    });
   }
 
-  // ===============================
-// 🟧 POPUP CRÉATION DE PLAN
-// ===============================
+  // ================================
+  // ➕ CRÉATION
+  // ================================
+  showCreatePopup = false;
 
-// Ouverture & fermeture du popup
-showCreatePopup: boolean = false;
-showSuccessCreate: boolean = false;
-
-// Données du formulaire
-newPlan = {
-  nom: "",
-  coutTotal: "",
-  type: "",
-  remise: "",
-  description: "",
-  fonctionnalites: "",
-  active: true
-};
-
-// 👉 Ouvrir popup création
-openCreatePopup() {
-  this.showCreatePopup = true;
-}
-
-// 👉 Fermer popup création
-closeCreatePopup() {
-  this.showCreatePopup = false;
-}
-
-// 👉 Enregistrer le nouveau plan
-saveNewPlan() {
-  const plan = {
-    nom: this.newPlan.nom,
-    description: this.newPlan.description,
-    coutTotal: this.newPlan.coutTotal,
-    type: this.newPlan.type,
-    remise: this.newPlan.remise + "%",
-    active: this.newPlan.active
+  newPlan = {
+    name: '',
+    description: '',
+    monthlyPrice: 0,
+    yearlyDiscount: 0
   };
 
-  this.plans.push(plan); // ajoute dans la liste
+  openCreatePopup() {
+    this.showCreatePopup = true;
+  }
 
-  // Fermer popup création
-  this.showCreatePopup = false;
+  closeCreatePopup() {
+    this.showCreatePopup = false;
+  }
 
-  // Afficher succès
-  this.showSuccessCreate = true;
+  saveNewPlan() {
+    this.planService.addPlan(this.newPlan).subscribe({
+      next: () => {
+        this.alertService.success(
+          'Plan créé avec succès',
+          'light'
+        );
 
-  setTimeout(() => {
-    this.showSuccessCreate = false;
-  }, 1800);
+        this.closeCreatePopup();
+        this.loadPlans();
+      },
+      error: () => {
+        this.alertService.error(
+          "Une erreur s'est produite lors de la création du plan",
+          'light'
+        );
+      }
+    });
+  }
 
-  // Reset du formulaire
-  this.newPlan = {
-    nom: "",
-    coutTotal: "",
-    type: "",
-    remise: "",
-    description: "",
-    fonctionnalites: "",
-    active: true
+  // ================================
+  // ✏️ MODIFICATION
+  // ================================
+  showEditPopup = false;
+  editPlan: PlanAbonnement | null = null;
+
+  openEditPopup(plan: PlanAbonnement) {
+    this.editPlan = { ...plan };
+    this.showEditPopup = true;
+  }
+
+  closeEditPopup() {
+    this.showEditPopup = false;
+    this.editPlan = null;
+  }
+
+ saveEditPlan() {
+  if (!this.editPlan) return;
+
+  // ✅ Payload STRICTEMENT conforme à BadgePlanRequest
+  const payload = {
+    name: this.editPlan.name,
+    description: this.editPlan.description,
+    monthlyPrice: this.editPlan.monthlyPrice
+    // ❌ PAS de id
+    // ❌ PAS de yearlyDiscount
   };
+
+  console.log('🟡 Payload envoyé au backend :', payload);
+
+  this.planService
+    .updatePlan(this.editPlan.id, payload)
+    .subscribe({
+      next: (res) => {
+        console.log('🟢 UPDATE SUCCESS :', res);
+
+        this.alertService.success(
+          'Plan modifié avec succès',
+          'light'
+        );
+
+        this.loadPlans();
+        this.closeEditPopup();
+      },
+      error: (err) => {
+        console.error('🔴 UPDATE ERROR :', err?.error);
+
+        this.alertService.error(
+          "Erreur lors de la modification du plan",
+          'light'
+        );
+      }
+    });
 }
+
 
 }
