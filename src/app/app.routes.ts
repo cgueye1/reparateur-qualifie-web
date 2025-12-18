@@ -142,12 +142,7 @@ export const routes: Routes = [
         import('./auth/login/login/login.component')
           .then((m) => m.LoginComponent),
     },
-    {
-      path: 'change-password',
-      loadComponent: () =>
-        import('./auth/password-change/password-change.component')
-          .then((m) => m.PasswordChangeComponent),
-    },
+    
     {
       path: 'password-reset',
       loadComponent: () =>

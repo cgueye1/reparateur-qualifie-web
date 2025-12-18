@@ -62,7 +62,7 @@ export class LoginComponent {
       }
 
       // ✅ SweetAlert succès (discret)
-      this.alert.success('Connexion réussie');
+      this.alert.success('Connexion réussie','light');
 
       // 🚀 Redirection après succès
       this.router.navigate(['/tableau-de-bord']);
