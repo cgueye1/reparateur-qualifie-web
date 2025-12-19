@@ -336,11 +336,11 @@
 
           <!-- 👁️ VOIR (placeholder simple) -->
           <button
-           [routerLink]="
-        user.profil === 'ARTISAN'
-      ? ['/utilisateurs/detail']
-      : ['/utilisateurs/detail-client']
-  "
+          [routerLink]="
+  user.profil === 'ARTISAN'
+    ? ['/utilisateurs/detail-artisan', user.id]
+    : ['/utilisateurs/detail-client', user.id]
+"
             class="text-gray-600 hover:opacity-70"
             title="Voir">
             <svg width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg">
