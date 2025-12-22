@@ -35,7 +35,7 @@ export const routes: Routes = [
             data: { title: 'Vérifications' },
           },
           {
-            path: 'detail',
+            path: 'detail/:id',
             loadComponent: () =>
               import('./pages/verification/detail-verification/detail-verification.component')
                 .then((m) => m.DetailVerificationComponent),

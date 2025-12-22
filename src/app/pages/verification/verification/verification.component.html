@@ -122,18 +122,110 @@
 
 <!-- BARRE RECHERCHE -->
   <div class="bg-white rounded-xl  p-5 mb-6">
+
+
     <div class="w-full mb-5 flex flex-col lg:flex-row items-center justify-between gap-3">
 
-      <!-- Recherche -->
-      <div class="flex items-center w-full lg:w-auto border border-gray-300 rounded-lg px-3 py-2 bg-white">
-        <input type="text" placeholder="Rechercher une demande" class="w-full outline-none text-sm" />
-      </div>
+     <!-- ================= RECHERCHE ================= -->
+<div class="flex items-center w-full lg:w-auto border border-gray-300 rounded-lg px-3 py-2 bg-white">
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" class="mr-2">
+    <path d="M13.15 12.2L10.68 9.75..." fill="#777"/>
+  </svg>
 
-      <!-- Filtres -->
-      <div class="flex items-center gap-3">
-        <button class="border border-gray-300 rounded-lg px-4 py-2 bg-white text-sm font-medium">Tous les statuts</button>
-        <button class="border border-gray-300 rounded-lg px-4 py-2 bg-white text-sm font-medium">Tous les profils</button>
-      </div>
+  <input
+    type="text"
+    [(ngModel)]="searchTerm"
+    placeholder="Rechercher une demande"
+    class="w-full outline-none text-sm"
+  />
+</div>
+
+<!-- ================= FILTRES ================= -->
+<div class="flex items-center gap-3">
+
+<!-- ================= FILTRES ================= -->
+<div class="flex items-center gap-3">
+
+  <!-- FILTRE STATUT -->
+  <div class="relative">
+    <button
+      (click)="toggleStatusDropdown()"
+      class="border border-gray-300 rounded-lg px-4 py-2 bg-white text-sm font-medium">
+      {{ selectedStatusLabel }}
+    </button>
+
+    <div
+      *ngIf="showStatusDropdown"
+      class="absolute z-20 mt-2 w-44 bg-white border rounded-lg shadow">
+
+      <button
+        class="w-full px-4 py-2 text-sm hover:bg-gray-50"
+        (click)="setStatusFilter('ALL','Tous les statuts')">
+        Tous
+      </button>
+
+      <button
+        class="w-full px-4 py-2 text-sm text-[#6B7280]"
+        (click)="setStatusFilter('PENDING','En attente')">
+        En attente
+      </button>
+
+      <button
+        class="w-full px-4 py-2 text-sm text-[#008D36]"
+        (click)="setStatusFilter('VALIDATED','Validées')">
+        Validées
+      </button>
+
+      <button
+        class="w-full px-4 py-2 text-sm text-[#FF2828]"
+        (click)="setStatusFilter('REJECTED','Rejetées')">
+        Rejetées
+      </button>
+    </div>
+  </div>
+
+  <!-- FILTRE PROFIL -->
+  <div class="relative">
+    <button
+      (click)="toggleTypeDropdown()"
+      class="border border-gray-300 rounded-lg px-4 py-2 bg-white text-sm font-medium">
+      {{ selectedTypeLabel }}
+    </button>
+
+    <div
+      *ngIf="showTypeDropdown"
+      class="absolute z-20 mt-2 w-44 bg-white border rounded-lg shadow">
+
+      <button
+        class="w-full px-4 py-2 text-sm hover:bg-gray-50"
+        (click)="setTypeFilter('ALL','Tous les profils')">
+        Tous
+      </button>
+
+      <button
+        class="w-full px-4 py-2 text-sm hover:bg-gray-50"
+        (click)="setTypeFilter('ADMIN','Admin')">
+        Admin
+      </button>
+
+      <button
+        class="w-full px-4 py-2 text-sm hover:bg-gray-50"
+        (click)="setTypeFilter('ARTISAN','Artisan')">
+        Artisan
+      </button>
+
+      <button
+        class="w-full px-4 py-2 text-sm hover:bg-gray-50"
+        (click)="setTypeFilter('CLIENT','Client')">
+        Client
+      </button>
+    </div>
+  </div>
+
+</div>
+
+</div>
+
 
     </div>
 
@@ -142,148 +234,212 @@
 
 
     <div class="bg-white rounded-xl overflow-x-auto border border-gray-200">
-    <table class="w-full min-w-max">
-      <thead class="bg-gray-50">
-        <tr class="text-left text-xs font-medium text-gray-600 border-b">
-          <th class="py-3 px-3">Demandeur</th>
-          <th class="py-3 px-3">Date demande</th>
-          <th class="py-3 px-3">Documents fournis</th>
-          <th class="py-3 px-3">Paiement</th>
-          <th class="py-3 px-3">Statut</th>
-          <th class="py-3 px-3">Actions</th>
-        </tr>
-      </thead>
-
-      <tbody class="bg-white divide-y divide-gray-100">
-
-        <tr *ngFor="let item of demandes" class="hover:bg-gray-50">
-
-          <!-- Demandeur -->
-          <td class="py-3 px-3">
-            <div class="flex items-center gap-2">
-              <div class="min-w-0">
-                <p class="font-medium text-xs">{{ item.demandeur }}</p>
-                <p class="text-[10px] text-gray-500">{{ item.profession }}</p>
-              </div>
-            </div>
-          </td>
-
-          <!-- Date -->
-          <td class="py-3 px-3 text-xs">{{ item.date }}</td>
-
-          <!-- Documents -->
-          <td class="py-3 px-3 text-xs">
-            <span class="bg-gray-100 px-2 py-1 rounded text-gray-700">{{ item.documents }}</span>
-          </td>
-
-          <!-- Paiement -->
-          <td class="py-3 px-3 text-xs">
-  <span
-    class="flex items-center gap-1"
-    [ngClass]="item.paiement === 'Complet' ? 'text-[#008D36]' : 'text-[#FF2828]'"
-  >
-    ● {{ item.paiement }}
-  </span>
-</td>
 
 
-          <!-- Statut -->
-          <td class="py-3 px-3">
-  <span
-    class="px-2 py-1 rounded-full text-[10px] font-medium inline-flex items-center gap-1"
-    [ngClass]="
-      item.statut === 'En attente'
-        ? 'bg-gray-100 text-gray-600'
-        : item.statut === 'Validée'
-        ? 'bg-[#E6F5EC] text-[#008D36]'
-        : 'bg-[#FFECEC] text-[#FF2828]'
-    "
-  >
-    {{ item.statut }}
-  </span>
-</td>
+<table class="w-full min-w-max">
+  <thead class="bg-gray-50">
+    <tr class="text-left text-xs font-medium text-gray-600 border-b">
+      <th class="py-3 px-3">Demandeur</th>
+      <th class="py-3 px-3">Date demande</th>
+      <th class="py-3 px-3">Documents fournis</th>
+      <th class="py-3 px-3">Paiement</th>
+      <th class="py-3 px-3">Statut</th>
+      <th class="py-3 px-3">Actions</th>
+    </tr>
+  </thead>
 
+  <tbody class="bg-white divide-y divide-gray-100">
 
-          <!-- Actions -->
-          <td class="py-3 px-3">
-            <div class="flex items-center gap-5">
+    <tr *ngFor="let item of filteredVerifications" class="hover:bg-gray-50">
 
-              <!-- Voir -->
-              <button class="text-gray-500 hover:text-gray-700" routerLink="/verification/detail">
-                <svg width="16" height="11" viewBox="0 0 16 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- ================= DEMANDEUR (API : user) ================= -->
+      <td class="py-3 px-3">
+        <div class="flex items-center gap-2">
+          <div class="min-w-0">
+            <p class="font-medium text-xs">
+              {{ item.user.prenom }} {{ item.user.nom }}
+            </p>
+
+            <!-- ❌ PROFESSION NON FOURNIE PAR L'API -->
+            <!--
+            <p class="text-[10px] text-gray-500">
+              {{ item.profession }}
+            </p>
+            -->
+          </div>
+        </div>
+      </td>
+
+      <!-- ================= DATE DEMANDE (API : startDate) ================= -->
+      <td class="py-3 px-3 text-xs">
+        {{ item.startDate | date:'dd/MM/yyyy' }}
+      </td>
+
+      <!-- ================= DOCUMENTS (NON API) ================= -->
+      <td class="py-3 px-3 text-xs">
+        <!-- ❌ Champ non disponible dans l'API -->
+        <!--
+        <span class="bg-gray-100 px-2 py-1 rounded text-gray-700">
+          {{ item.documents }}
+        </span>
+        -->
+        <span class="text-gray-400 italic text-[11px]">
+          Non disponible
+        </span>
+      </td>
+
+      <!-- ================= PAIEMENT (API : amountPaid) ================= -->
+      <td class="py-3 px-3 text-xs">
+        <span
+          class="flex items-center gap-1"
+          [ngClass]="item.amountPaid > 0 ? 'text-[#008D36]' : 'text-[#FF2828]'"
+        >
+          ● {{ item.amountPaid | number }} FCFA
+        </span>
+      </td>
+
+      <!-- ================= STATUT (API : status) ================= -->
+      <td class="py-3 px-3">
+        <span
+          class="px-2 py-1 rounded-full text-[10px] font-medium inline-flex items-center gap-1"
+          [ngClass]="
+            item.status === 'PENDING'
+              ? 'bg-gray-100 text-gray-600'
+              : item.status === 'VALIDATED'
+              ? 'bg-[#E6F5EC] text-[#008D36]'
+              : 'bg-[#FFECEC] text-[#FF2828]'
+          "
+        >
+          {{
+            item.status === 'PENDING'
+              ? 'En attente'
+              : item.status === 'VALIDATED'
+              ? 'Validée'
+              : 'Rejetée'
+          }}
+        </span>
+      </td>
+
+      <!-- ================= ACTIONS ================= -->
+      <td class="py-3 px-3">
+        <div class="flex items-center gap-5">
+
+          <!-- Voir (navigation uniquement) -->
+          <button
+            class="text-gray-500 hover:text-gray-700"
+           [routerLink]="['/verification/detail', item.id]"
+          >
+          <svg width="16" height="11" viewBox="0 0 16 11" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M16 5.5C16 5.5 13 0 8 0C3 0 0 5.5 0 5.5C0 5.5 3 11 8 11C13 11 16 5.5 16 5.5ZM1.173 5.5C1.65578 4.76459 2.21197 4.08008 2.833 3.457C4.12 2.168 5.88 1 8 1C10.12 1 11.879 2.168 13.168 3.457C13.789 4.08008 14.3452 4.76459 14.828 5.5C14.7707 5.58667 14.7057 5.68267 14.633 5.788C14.298 6.268 13.803 6.908 13.168 7.543C11.879 8.832 10.119 10 8 10C5.881 10 4.121 8.832 2.832 7.543C2.21097 6.91992 1.65578 6.23541 1.173 5.5Z" fill="#64748B"/>
 <path d="M8 3C7.33696 3 6.70107 3.26339 6.23223 3.73223C5.76339 4.20107 5.5 4.83696 5.5 5.5C5.5 6.16304 5.76339 6.79893 6.23223 7.26777C6.70107 7.73661 7.33696 8 8 8C8.66304 8 9.29893 7.73661 9.76777 7.26777C10.2366 6.79893 10.5 6.16304 10.5 5.5C10.5 4.83696 10.2366 4.20107 9.76777 3.73223C9.29893 3.26339 8.66304 3 8 3ZM4.5 5.5C4.5 4.57174 4.86875 3.6815 5.52513 3.02513C6.1815 2.36875 7.07174 2 8 2C8.92826 2 9.8185 2.36875 10.4749 3.02513C11.1313 3.6815 11.5 4.57174 11.5 5.5C11.5 6.42826 11.1313 7.3185 10.4749 7.97487C9.8185 8.63125 8.92826 9 8 9C7.07174 9 6.1815 8.63125 5.52513 7.97487C4.86875 7.3185 4.5 6.42826 4.5 5.5Z" fill="#64748B"/>
 </svg>
 
-              </button>
+          </button>
 
-              <!-- Valider -->
-              <button (click)="openApprovePopup(item)" class="text-green-600 hover:opacity-70">
-                 <svg width="15" height="10" viewBox="0 0 15 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Activer (simulation) -->
+          <button
+            *ngIf="!item.active"
+            (click)="openActivatePopup(item)"
+            class="text-green-600 hover:opacity-70"
+          >
+           <svg width="15" height="10" viewBox="0 0 15 10" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M14.1933 0.183617C14.2515 0.241674 14.2977 0.310644 14.3292 0.386575C14.3607 0.462507 14.3769 0.543908 14.3769 0.626117C14.3769 0.708326 14.3607 0.789728 14.3292 0.865659C14.2977 0.941591 14.2515 1.01056 14.1933 1.06862L5.44329 9.81862C5.38523 9.87682 5.31626 9.923 5.24033 9.95451C5.1644 9.98602 5.083 10.0022 5.00079 10.0022C4.91858 10.0022 4.83718 9.98602 4.76125 9.95451C4.68532 9.923 4.61635 9.87682 4.55829 9.81862L0.183289 5.44362C0.0659311 5.32626 0 5.16709 0 5.00112C0 4.83515 0.0659311 4.67598 0.183289 4.55862C0.300648 4.44126 0.45982 4.37533 0.625789 4.37533C0.791759 4.37533 0.950931 4.44126 1.06829 4.55862L5.00079 8.49237L13.3083 0.183617C13.3663 0.125413 13.4353 0.0792347 13.5112 0.0477266C13.5872 0.0162186 13.6686 0 13.7508 0C13.833 0 13.9144 0.0162186 13.9903 0.0477266C14.0663 0.0792347 14.1352 0.125413 14.1933 0.183617Z" fill="#008D36"/>
 </svg>
 
-              </button>
+          </button>
 
-              <!-- Rejeter -->
-              <button (click)="openRejectPopup(item)" class="text-red-600 hover:opacity-70">
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Désactiver (simulation) -->
+          <button
+            *ngIf="item.active"
+            (click)="openDeactivatePopup(item)"
+            class="text-red-600 hover:opacity-70"
+          >
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M0.146631 0.854632C0.100144 0.808144 0.0632674 0.752954 0.0381083 0.692215C0.0129493 0.631476 4.8983e-10 0.566375 0 0.500632C-4.8983e-10 0.434888 0.0129493 0.369788 0.0381083 0.309048C0.0632674 0.248309 0.100144 0.193119 0.146631 0.146631C0.193119 0.100144 0.248309 0.0632674 0.309048 0.0381083C0.369788 0.0129493 0.434888 -4.8983e-10 0.500632 0C0.566375 4.8983e-10 0.631476 0.0129493 0.692215 0.0381083C0.752954 0.0632674 0.808144 0.100144 0.854632 0.146631L6.00063 5.29363L11.1466 0.146631C11.1931 0.100144 11.2483 0.0632674 11.309 0.0381083C11.3698 0.0129493 11.4349 0 11.5006 0C11.5664 0 11.6315 0.0129493 11.6922 0.0381083C11.753 0.0632674 11.8081 0.100144 11.8546 0.146631C11.9011 0.193119 11.938 0.248309 11.9632 0.309048C11.9883 0.369788 12.0013 0.434888 12.0013 0.500632C12.0013 0.566375 11.9883 0.631476 11.9632 0.692215C11.938 0.752954 11.9011 0.808144 11.8546 0.854632L6.70763 6.00063L11.8546 11.1466C11.9011 11.1931 11.938 11.2483 11.9632 11.309C11.9883 11.3698 12.0013 11.4349 12.0013 11.5006C12.0013 11.5664 11.9883 11.6315 11.9632 11.6922C11.938 11.753 11.9011 11.8081 11.8546 11.8546C11.8081 11.9011 11.753 11.938 11.6922 11.9632C11.6315 11.9883 11.5664 12.0013 11.5006 12.0013C11.4349 12.0013 11.3698 11.9883 11.309 11.9632C11.2483 11.938 11.1931 11.9011 11.1466 11.8546L6.00063 6.70763L0.854632 11.8546C0.808144 11.9011 0.752954 11.938 0.692215 11.9632C0.631476 11.9883 0.566375 12.0013 0.500632 12.0013C0.434888 12.0013 0.369788 11.9883 0.309048 11.9632C0.248309 11.938 0.193119 11.9011 0.146631 11.8546C0.100144 11.8081 0.0632674 11.753 0.0381083 11.6922C0.0129493 11.6315 0 11.5664 0 11.5006C0 11.4349 0.0129493 11.3698 0.0381083 11.309C0.0632674 11.2483 0.100144 11.1931 0.146631 11.1466L5.29363 6.00063L0.146631 0.854632Z" fill="#FF2828"/>
 </svg>
-              </button>
 
-            </div>
-          </td>
+          </button>
 
-        </tr>
+        </div>
+      </td>
 
-      </tbody>
-    </table>
+    </tr>
 
-
-
+  </tbody>
+</table>
 
 
-  </div>
-
- <!-- ========================= -->
-  <!-- 🔢 PAGINATION -->
-  <!-- ========================= -->
-  <div class="bg-white rounded-xl p-4 flex justify-between items-center mt-4">
-
-    <!-- Éléments par page -->
-    <div class="flex items-center gap-2 text-sm text-gray-600">
-      <span>éléments par page:</span>
-      <select class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none">
-        <option>10</option>
-        <option>25</option>
-        <option>50</option>
-      </select>
-    </div>
-
-    <!-- Info pagination + flèches -->
-    <div class="flex items-center gap-4 text-sm text-gray-700">
-      <span>1 – 10 sur 40</span>
-
-      <div class="flex items-center gap-2">
-        <!-- Flèche gauche -->
-        <button class="text-gray-400 hover:text-gray-600 p-1 disabled:opacity-30">
-          <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
-            <path d="M12 15L7 10L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </button>
-
-        <!-- Flèche droite -->
-        <button class="text-gray-400 hover:text-gray-600 p-1 disabled:opacity-30">
-          <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
-            <path d="M8 5L13 10L8 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </button>
-      </div>
-
-    </div>
 
   </div>
+
+<!-- ========================= -->
+<!-- 🔢 PAGINATION -->
+<!-- ========================= -->
+<div class="bg-white rounded-xl p-4 flex justify-between items-center mt-4">
+
+  <!-- Éléments par page -->
+  <div class="flex items-center gap-2 text-sm text-gray-600">
+    <span>éléments par page :</span>
+    <select
+      class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none"
+      [(ngModel)]="size"
+      (change)="onSizeChange()"
+    >
+      <option [value]="10">10</option>
+      <option [value]="25">25</option>
+      <option [value]="50">50</option>
+    </select>
+  </div>
+
+  <!-- Info pagination + flèches -->
+  <div class="flex items-center gap-4 text-sm text-gray-700">
+
+    <!-- Texte dynamique -->
+    <span>
+      {{ startIndex }} – {{ endIndex }} sur {{ totalElements }}
+    </span>
+
+    <div class="flex items-center gap-2">
+
+      <!-- Flèche gauche -->
+      <button
+        (click)="prevPage()"
+        [disabled]="page === 0"
+        class="text-gray-400 hover:text-gray-600 p-1 disabled:opacity-30"
+      >
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+          <path
+            d="M12 15L7 10L12 5"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+        </svg>
+      </button>
+
+      <!-- Flèche droite -->
+      <button
+        (click)="nextPage()"
+        [disabled]="page + 1 >= totalPages"
+        class="text-gray-400 hover:text-gray-600 p-1 disabled:opacity-30"
+      >
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+          <path
+            d="M8 5L13 10L8 15"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+        </svg>
+      </button>
+
+    </div>
+  </div>
+
+</div>
+
+
+
   </div>
 
 
@@ -323,7 +479,7 @@
 
 
 <!-- POPUP CONFIRM APPROUVER -->
-<div *ngIf="showApproveConfirm" class="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
+<div *ngIf="showActivatePopup" class="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
   <div class="bg-white rounded-2xl px-10 py-12 w-[460px] text-center shadow-xl">
 
     <!-- Icône -->
@@ -342,10 +498,10 @@
     </p>
 
     <div class="flex justify-center gap-4">
-      <button (click)="confirmApprove()" class="bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-700">
+      <button (click)="confirmActivate()" class="bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-700">
         Approuver
       </button>
-      <button (click)="closeAllPopups()" class="bg-gray-100 px-8 py-3 rounded-lg hover:bg-gray-200">
+      <button (click)="closePopups()" class="bg-gray-100 px-8 py-3 rounded-lg hover:bg-gray-200">
         Annuler
       </button>
     </div>
@@ -357,13 +513,13 @@
 
 
 <!-- POPUP REJET MOTIF -->
-<div *ngIf="showRejectForm" class="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
+<div *ngIf="showDeactivatePopup" class="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
   <div class="bg-white rounded-2xl px-10 py-10 w-[520px] shadow-xl">
 
     <div class="flex justify-between items-start mb-4">
       <h2 class="text-xl font-bold">Rejeter la demande</h2>
 
-      <button (click)="closeAllPopups()" class="text-gray-500 hover:text-gray-800">
+      <button (click)="closePopups()" class="text-gray-500 hover:text-gray-800">
         ✕
       </button>
     </div>
@@ -374,7 +530,7 @@
 
     <label class="text-sm font-semibold text-gray-700">Motif du rejet</label>
     <textarea
-      [(ngModel)]="rejectReason"
+
       class="w-full border border-gray-300 rounded-lg p-3 text-sm mt-2"
       rows="4"
       placeholder="Ex : Documents incomplets, photo de mauvaise qualité..."
@@ -382,14 +538,14 @@
 
     <div class="flex justify-end gap-4 mt-6">
       <button
-        (click)="confirmReject()"
+        (click)="confirmDeactivate()"
         class="bg-[#E95420] text-white px-6 py-3 rounded-lg hover:bg-[#d64515]"
       >
         Confirmer le rejet
       </button>
 
       <button
-        (click)="closeAllPopups()"
+        (click)="closePopups()"
         class="bg-gray-100 px-6 py-3 rounded-lg hover:bg-gray-200"
       >
         Annuler
@@ -400,7 +556,8 @@
 </div>
 
 
-<!-- SUCCESS APPROUVE -->
+<!-- SUCCESS APPROUVE
+
 <div *ngIf="showSuccessApprove" class="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
   <div class="bg-white rounded-2xl w-[420px] p-10 text-center shadow-xl">
 
@@ -416,9 +573,11 @@
 
   </div>
 </div>
+ -->
 
 
-<!-- SUCCESS REJET -->
+
+<!-- SUCCESS REJET
 <div *ngIf="showSuccessReject" class="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
   <div class="bg-white rounded-2xl w-[420px] p-10 text-center shadow-xl">
 
@@ -434,3 +593,5 @@
 
   </div>
 </div>
+-->
+
