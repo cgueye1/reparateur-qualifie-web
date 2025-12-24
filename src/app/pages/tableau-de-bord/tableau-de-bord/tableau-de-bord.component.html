@@ -84,7 +84,7 @@
       </div>
     </div>
 
-    <h2 class="text-xl font-bold text-[#111111]">156</h2>
+    <h2 class="text-xl font-bold text-[#111111]">{{usersStats?.totalUsers}}</h2>
 
     <div class="flex items-center gap-2 mt-2">
       <span class="text-green-600 font-bold text-sm">
@@ -101,7 +101,7 @@
             />
           </svg>
       </span>
-      <span class="text-xs font-light text-green-600 ml-1">+12%</span>
+      <span class="text-xs font-light text-green-600 ml-1">{{usersStats?.evolutionPercentage}}%</span>
       <span class="text-xs text-[#64748B] font-light ml-2">ce mois</span>
     </div>
   </div>
@@ -122,7 +122,7 @@
       </div>
     </div>
 
-    <h2 class="text-xl font-bold text-[#111111]">28</h2>
+    <h2 class="text-xl font-bold text-[#111111]">{{badgeStats?.totalActiveBadges}}</h2>
 
     <div class="flex items-center gap-2 mt-2">
       <span class="text-green-600 font-bold text-sm">
@@ -139,7 +139,7 @@
             />
           </svg>
       </span>
-      <span class="text-xs font-light text-green-600 ml-1">+12%</span>
+      <span class="text-xs font-light text-green-600 ml-1">{{badgeStats?.evolutionPercent}}%</span>
       <span class="text-xs text-[#64748B] font-light ml-2">ce mois</span>
     </div>
   </div>
@@ -159,7 +159,7 @@
       </div>
     </div>
 
-    <h2 class="text-xl font-bold text-[#111111]">234</h2>
+    <h2 class="text-xl font-bold text-[#111111]">{{ratingStats?.totalRatings}}</h2>
 
     <div class="flex items-center gap-2 mt-2">
       <span class="text-red-500 font-bold text-sm">
@@ -168,7 +168,7 @@
 </svg>
 
 </span>
-      <span class="text-xs text-red-500 font-light ml-1">-3.1%</span>
+      <span class="text-xs text-red-500 font-light ml-1">non disponible</span>
       <span class="text-xs text-[#64748B] font-light ml-2">ce mois</span>
     </div>
   </div>
@@ -206,7 +206,7 @@
       </div>
     </div>
 
-    <h2 class="text-xl font-bold text-[#111111]">1 250 000 FCFA</h2>
+    <h2 class="text-xl font-bold text-[#111111]">Non disponible</h2>
 
     <div class="flex items-center gap-2 mt-2">
       <span class="text-green-600 font-bold text-sm">
@@ -236,66 +236,120 @@
 
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
 
-  <!-- CARD 1 : Nombre d’utilisateurs -->
-  <div class="bg-white p-5 rounded-2xl shadow-sm h-[350px] w-full">
+  <!-- ===================================================== -->
+<!-- CARD 1 : Nombre d'utilisateurs -->
+<!-- ===================================================== -->
+<div class="bg-white p-5 rounded-2xl shadow-sm h-[350px] w-full">
 
-    <div class="flex items-center justify-between mb-4">
+  <div class="flex items-center justify-between mb-4">
 
-      <!-- TITRE -->
-      <h2 class="text-base font-semibold text-[#343A40]">Nombre d’utilisateurs</h2>
+    <!-- TITRE -->
+    <h2 class="text-base font-semibold text-[#343A40]">Nombre d'utilisateurs</h2>
 
-      <!-- SELECT -->
-      <div class="flex items-center h-1">
-        <div class="flex items-center justify-between bg-white border border-gray-300 rounded-sm - px-4 h-8  cursor-pointer text-lg">
-          <span class="text-sm font-medium text-[#343A40]">Ce semestre</span>
-          <span class="text-gray-500">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M10 12.8333L5 7.83329L6.16667 6.66663L10 10.5L13.8333 6.66663L15 7.83329L10 12.8333Z" fill="#808080"/>
-            </svg>
-          </span>
-        </div>
+    <!-- SELECT -->
+    <div class="flex items-center h-1">
+      <div class="flex items-center justify-between bg-white border border-gray-300 rounded-sm px-4 h-8 cursor-pointer text-lg">
+        <span class="text-sm font-medium text-[#343A40]">Ce semestre</span>
+        <span class="text-gray-500">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 12.8333L5 7.83329L6.16667 6.66663L10 10.5L13.8333 6.66663L15 7.83329L10 12.8333Z" fill="#808080"/>
+          </svg>
+        </span>
       </div>
-
-    </div>
-
-    <!-- GRAPH -->
-    <div class="h-[240px] w-full">
-      <canvas baseChart
-        [data]="userChartData"
-        [options]="userChartOptions"
-        [type]="'line'">
-      </canvas>
     </div>
 
   </div>
 
-
-
-  <!-- CARD 2 : Revenus mensuels -->
-  <div class="bg-white p-5 rounded-2xl shadow-sm h-[350px] w-full">
-
-    <div class="flex items-center justify-between mb-4">
-
-      <!-- TITRE -->
-      <h2 class="text-base font-semibold text-[#343A40]">Revenus mensuels</h2>
-
-      <!-- POUR ALIGNEMENT → même DIV que la carte 1 (même largeur, même padding) -->
-      <div class="flex items-center gap-3">
-        <div class="w-32"></div> <!-- Div vide pour aligner parfaitement -->
-      </div>
-
+  <!-- Loading -->
+  <div *ngIf="usersChartLoading" class="h-[280px] flex items-center justify-center">
+    <div class="text-center">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-3"></div>
+      <p class="text-gray-500 text-sm">Chargement des données...</p>
     </div>
+  </div>
 
-    <!-- GRAPH -->
-    <div class="h-[240px] w-full">
-      <canvas baseChart
-        [data]="revenueChartData"
-        [options]="revenueChartOptions"
-        [type]="'line'">
-      </canvas>
+  <!-- Erreur ou données vides -->
+  <div *ngIf="!usersChartLoading && usersChartError"
+       class="h-[280px] flex items-center justify-center">
+    <div class="text-center">
+      <svg class="w-16 h-16 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+      </svg>
+      <p class="text-gray-600 font-medium mb-2">Données non disponibles</p>
+      <p class="text-gray-400 text-sm mb-4">Impossible de charger les statistiques</p>
+      <button (click)="retryUsersChart()"
+              class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition text-sm">
+        Réessayer
+      </button>
+    </div>
+  </div>
+
+  <!-- GRAPH -->
+  <div *ngIf="!usersChartLoading && usersChartReady" class="h-[280px] w-full">
+    <canvas baseChart
+      [data]="userChartData"
+      [options]="userChartOptions"
+      [type]="'line'">
+    </canvas>
+  </div>
+
+</div>
+
+
+
+<!-- ===================================================== -->
+<!-- CARD 2 : Revenus mensuels -->
+<!-- ===================================================== -->
+<div class="bg-white p-5 rounded-2xl shadow-sm h-[350px] w-full">
+
+  <div class="flex items-center justify-between mb-4">
+
+    <!-- TITRE -->
+    <h2 class="text-base font-semibold text-[#343A40]">Revenus mensuels</h2>
+
+    <!-- POUR ALIGNEMENT → même DIV que la carte 1 (même largeur, même padding) -->
+    <div class="flex items-center gap-3">
+      <div class="w-32"></div> <!-- Div vide pour aligner parfaitement -->
     </div>
 
   </div>
+
+  <!-- Loading -->
+  <div *ngIf="revenueChartLoading" class="h-[280px] flex items-center justify-center">
+    <div class="text-center">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-3"></div>
+      <p class="text-gray-500 text-sm">Chargement des données...</p>
+    </div>
+  </div>
+
+  <!-- Erreur ou données vides -->
+  <div *ngIf="!revenueChartLoading && revenueChartError"
+       class="h-[280px] flex items-center justify-center">
+    <div class="text-center">
+      <svg class="w-16 h-16 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <p class="text-gray-600 font-medium mb-2">Données non disponibles</p>
+      <p class="text-gray-400 text-sm mb-4">Aucune donnée de revenu disponible</p>
+      <button (click)="retryRevenueChart()"
+              class="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition text-sm">
+        Réessayer
+      </button>
+    </div>
+  </div>
+
+  <!-- GRAPH -->
+  <div *ngIf="!revenueChartLoading && revenueChartReady" class="h-[280px] w-full">
+    <canvas baseChart
+      [data]="revenueChartData"
+      [options]="revenueChartOptions"
+      [type]="'line'">
+    </canvas>
+  </div>
+
+</div>
 
 </div>
 
@@ -307,66 +361,153 @@
 
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
 
-  <!-- 🟧 Carte 1 — Top 10 métiers -->
-  <div class="bg-white p-5 rounded-2xl shadow-sm w-full h-[380px]">
+  <!-- 🟧 Carte — Top 10 métiers -->
+<div class="bg-white p-5 rounded-2xl shadow-sm w-full h-[380px]">
 
-    <!-- Titre -->
-    <h2 class="text-base font-semibold text-[#343A40]">Top 10 métiers les plus représentés</h2>
-    <p class="text-sm text-gray-500 mb-4">Ce mois-ci</p>
-
-    <!-- Bar chart -->
-    <div class="h-[290px] w-full">
-      <canvas baseChart
-        [data]="jobsChartData"
-        [options]="jobsChartOptions"
-        type="bar">
-      </canvas>
-    </div>
-
+  <!-- TITRE -->
+  <div class="mb-4">
+    <h2 class="text-base font-semibold text-[#343A40]">
+      Top 10 métiers les plus représentés
+    </h2>
+    <p class="text-sm text-gray-500">Ce mois-ci</p>
   </div>
 
-  <!-- 🟧 Carte 2 — Répartition par type d’utilisateur -->
-  <div class="bg-white p-5 rounded-2xl shadow-sm w-full h-[380px]">
+  <!-- LOADING -->
+  <div *ngIf="jobsChartLoading"
+       class="h-[290px] flex items-center justify-center">
+    <div class="text-center">
+      <div
+        class="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-3">
+      </div>
+      <p class="text-gray-500 text-sm">Chargement des données...</p>
+    </div>
+  </div>
 
-  <h2 class="text-base font-semibold text-[#343A40]">Répartition par type d’utilisateur</h2>
+  <!-- ERREUR -->
+  <div *ngIf="!jobsChartLoading && jobsChartError"
+       class="h-[290px] flex items-center justify-center">
+    <div class="text-center">
+      <svg class="w-16 h-16 text-gray-300 mx-auto mb-3"
+           fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M9 17v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+      </svg>
+
+      <p class="text-gray-600 font-medium mb-2">
+        Données non disponibles
+      </p>
+      <p class="text-gray-400 text-sm mb-4">
+        Impossible de charger les statistiques
+      </p>
+
+      <button
+        (click)="retryJobsChart()"
+        class="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition text-sm">
+        Réessayer
+      </button>
+    </div>
+  </div>
+
+  <!-- GRAPH -->
+  <div *ngIf="!jobsChartLoading && jobsChartReady"
+       class="h-[290px] w-full">
+    <canvas
+      baseChart
+      [data]="jobsChartData"
+      [options]="jobsChartOptions"
+      type="bar">
+    </canvas>
+  </div>
+
+</div>
+
+<!-- 🟧 Carte — Répartition par type d’utilisateur -->
+<div class="bg-white p-5 rounded-2xl shadow-sm w-full h-[380px]">
+
+  <!-- TITRE -->
+  <h2 class="text-base font-semibold text-[#343A40]">
+    Répartition par type d’utilisateur
+  </h2>
   <p class="text-sm text-gray-500 mb-4">Ce mois-ci</p>
 
-  <div class="flex items-center justify-between h-[290px]">
+  <!-- LOADING -->
+  <div *ngIf="donutChartLoading"
+       class="h-[290px] flex items-center justify-center">
+    <div class="text-center">
+      <div
+        class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-3">
+      </div>
+      <p class="text-gray-500 text-sm">Chargement des données...</p>
+    </div>
+  </div>
 
-    <!-- GRAPHIQUE AVEC TEXTE AU CENTRE -->
+  <!-- ERREUR -->
+  <div *ngIf="!donutChartLoading && donutChartError"
+       class="h-[290px] flex items-center justify-center">
+    <div class="text-center">
+      <svg class="w-16 h-16 text-gray-300 mx-auto mb-3"
+           fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+
+      <p class="text-gray-600 font-medium mb-2">
+        Données non disponibles
+      </p>
+      <p class="text-gray-400 text-sm mb-4">
+        Impossible de charger la répartition
+      </p>
+
+      <button
+        (click)="retryDonutChart()"
+        class="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition text-sm">
+        Réessayer
+      </button>
+    </div>
+  </div>
+
+  <!-- DONUT -->
+  <div *ngIf="!donutChartLoading && donutChartReady"
+       class="flex items-center justify-between h-[290px]">
+
+    <!-- GRAPHIQUE -->
     <div class="relative h-full w-1/2 flex items-center justify-center">
-
-        <canvas baseChart
+      <canvas
+        baseChart
         [data]="donutChartData"
         [options]="donutChartOptions"
         type="doughnut">
       </canvas>
 
-
-
-      <!-- TEXTE AU CENTRE -->
+      <!-- TEXTE CENTRAL -->
       <div class="absolute flex flex-col items-center">
-        <span class="text-2xl font-bold text-[#1E293B]">42</span>
+        <span class="text-2xl font-bold text-[#1E293B]">
+          {{ totalUsers }}
+        </span>
         <span class="text-sm text-gray-500">Total</span>
       </div>
-
     </div>
 
-    <!-- Légende -->
+    <!-- LÉGENDE -->
     <div class="flex flex-col text-sm space-y-3 w-1/3">
       <div class="flex items-center gap-2">
-        <span class="w-3 h-3 rounded-full" style="background:#EC6A3B"></span>
-        <span class="text-gray-600">Client (33%)</span>
+        <span class="w-3 h-3 rounded-full bg-[#EC6A3B]"></span>
+        <span class="text-gray-600">
+          Clients ({{ clientPercentage }}%)
+        </span>
       </div>
       <div class="flex items-center gap-2">
-        <span class="w-3 h-3 rounded-full" style="background:#262626"></span>
-        <span class="text-gray-600">Artisan (67%)</span>
+        <span class="w-3 h-3 rounded-full bg-[#262626]"></span>
+        <span class="text-gray-600">
+          Artisans ({{ artisanPercentage }}%)
+        </span>
       </div>
     </div>
 
   </div>
 
 </div>
+
 
 
 </div>
