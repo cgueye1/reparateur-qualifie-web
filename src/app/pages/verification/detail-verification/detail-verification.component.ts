@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-detail-verification',
   standalone: true,
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './detail-verification.component.html',
   styleUrls: ['./detail-verification.component.css']
 })
@@ -100,14 +100,6 @@ export class DetailVerificationComponent implements OnInit {
       return 'bg-gray-100 text-gray-600';
     }
   }
-
-
-
-
-
-
-
-
 
 
 

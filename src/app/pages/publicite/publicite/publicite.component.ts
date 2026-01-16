@@ -17,7 +17,7 @@ export class PubliciteComponent implements OnInit {
   constructor(
     private publiciteService: PubliciteService,
     private alertService: SwettAlerteService
-  ) {}
+  ) { }
 
   /* ============================================================
    * 🔢 STATISTIQUES (API /api/ads/stats)
@@ -216,7 +216,8 @@ export class PubliciteComponent implements OnInit {
           'light'
         );
       },
-      error: () => {
+      error: (er) => {
+        console.error('Erreur lors de la création de la publicité:', er);
         this.alertService.error(
           "Erreur lors de la création de la publicité",
           'light'

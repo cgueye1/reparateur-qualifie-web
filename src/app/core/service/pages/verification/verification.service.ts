@@ -15,7 +15,7 @@ export class VerificationService {
   private baseUrl = environment.apiUrl;
   private endpoint = `${this.baseUrl}/api/badges`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   /* ============================================================
    * 📌 LISTE DES VÉRIFICATIONS (PAGINÉE)
@@ -40,6 +40,17 @@ export class VerificationService {
     }
 
     return this.http.get<Page<Verification>>(this.endpoint, { params });
+  }
+
+  /* ============================================================
+   * ✅ CHANGER LE STATUT D'UNE VÉRIFICATION
+   * ============================================================
+   * @param badgeId  ID du badge
+   * @param active   true = Valider | false = Rejeter
+   */
+  updateBadgeStatus(badgeId: number, active: boolean): Observable<void> {
+    const params = new HttpParams().set('active', active);
+    return this.http.put<void>(`${this.endpoint}/${badgeId}/status`, {}, { params });
   }
 
 }

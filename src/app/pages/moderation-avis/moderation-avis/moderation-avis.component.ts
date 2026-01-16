@@ -74,83 +74,83 @@ export class ModerationAvisComponent {
 
 
   // POPUPS VISIBILITY
-showApprovePopup = false;
-showMaskPopup = false;
-showDeletePopup = false;
+  showApprovePopup = false;
+  showMaskPopup = false;
+  showDeletePopup = false;
 
-showSuccessApprove = false;
-showSuccessMask = false;
-showSuccessDelete = false;
+  showSuccessApprove = false;
+  showSuccessMask = false;
+  showSuccessDelete = false;
 
-showHistoryPopup = false;
+  showHistoryPopup = false;
 
-// ELEMENT SELECTIONNÉ
-selectedAvis: any = null;
+  // ELEMENT SELECTIONNÉ
+  selectedAvis: any = null;
 
-// === OPEN POPUPS ===
-openApprovePopup(avis: any) {
-  this.selectedAvis = avis;
-  this.showApprovePopup = true;
-}
+  // === OPEN POPUPS ===
+  openApprovePopup(avis: any) {
+    this.selectedAvis = avis;
+    this.showApprovePopup = true;
+  }
 
-openMaskPopup(avis: any) {
-  this.selectedAvis = avis;
-  this.showMaskPopup = true;
-}
+  openMaskPopup(avis: any) {
+    this.selectedAvis = avis;
+    this.showMaskPopup = true;
+  }
 
-openDeletePopup(avis: any) {
-  this.selectedAvis = avis;
-  this.showDeletePopup = true;
-}
+  openDeletePopup(avis: any) {
+    this.selectedAvis = avis;
+    this.showDeletePopup = true;
+  }
 
-openHistoryPopup(avis: any) {
-  this.selectedAvis = avis;
-  this.showHistoryPopup = true;
-}
+  openHistoryPopup(avis: any) {
+    this.selectedAvis = avis;
+    this.showHistoryPopup = true;
+  }
 
-// === CLOSE POPUPS ===
-closePopups() {
-  this.showApprovePopup = false;
-  this.showMaskPopup = false;
-  this.showDeletePopup = false;
-  this.showHistoryPopup = false;
-}
+  // === CLOSE POPUPS ===
+  closePopups() {
+    this.showApprovePopup = false;
+    this.showMaskPopup = false;
+    this.showDeletePopup = false;
+    this.showHistoryPopup = false;
+  }
 
-// === CONFIRM ACTIONS ===
-confirmApprove() {
-  this.showApprovePopup = false;
-
-  setTimeout(() => {
-    this.showSuccessApprove = true;
+  // === CONFIRM ACTIONS ===
+  confirmApprove() {
+    this.showApprovePopup = false;
 
     setTimeout(() => {
-      this.showSuccessApprove = false;
-    }, 1500);
-  }, 300);
-}
+      this.showSuccessApprove = true;
 
-confirmMask() {
-  this.showMaskPopup = false;
+      setTimeout(() => {
+        this.showSuccessApprove = false;
+      }, 1500);
+    }, 300);
+  }
 
-  setTimeout(() => {
-    this.showSuccessMask = true;
-
-    setTimeout(() => {
-      this.showSuccessMask = false;
-    }, 1500);
-  }, 300);
-}
-
-confirmDelete() {
-  this.showDeletePopup = false;
-
-  setTimeout(() => {
-    this.showSuccessDelete = true;
+  confirmMask() {
+    this.showMaskPopup = false;
 
     setTimeout(() => {
-      this.showSuccessDelete = false;
-    }, 1500);
-  }, 300);
-}
+      this.showSuccessMask = true;
+
+      setTimeout(() => {
+        this.showSuccessMask = false;
+      }, 1500);
+    }, 300);
+  }
+
+  confirmDelete() {
+    this.showDeletePopup = false;
+
+    setTimeout(() => {
+      this.showSuccessDelete = true;
+
+      setTimeout(() => {
+        this.showSuccessDelete = false;
+      }, 1500);
+    }, 300);
+  }
 
 }

@@ -13,7 +13,7 @@ export class PubliciteService {
   private baseUrl = environment.apiUrl;
   private endpoint = `${this.baseUrl}/api/ads`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   /* ============================================================
    * 📌 LISTE DES PUBLICITÉS
@@ -50,7 +50,7 @@ export class PubliciteService {
     return this.http.delete<void>(`${this.endpoint}/${id}`);
   }
 
-   getAdsStats(): Observable<PubliciteStats> {
+  getAdsStats(): Observable<PubliciteStats> {
     return this.http.get<PubliciteStats>(`${this.endpoint}/stats`);
   }
 }

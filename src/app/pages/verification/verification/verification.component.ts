@@ -11,7 +11,7 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-verification',
   standalone: true,
-  imports: [CommonModule, FormsModule,RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './verification.component.html',
   styleUrl: './verification.component.css',
 })
@@ -20,7 +20,7 @@ export class VerificationComponent implements OnInit {
   constructor(
     private verificationService: VerificationService,
     private alertService: SwettAlerteService
-  ) {}
+  ) { }
 
   /* ============================================================
    * 📌 DONNÉES PRINCIPALES
@@ -206,28 +206,40 @@ export class VerificationComponent implements OnInit {
   }
 
   confirmActivate() {
-    if (this.selectedVerification) {
-      this.selectedVerification.active = true;
-    }
+    if (!this.selectedVerification) return;
 
-    this.closePopups();
-
-    this.alertService.success(
-      'Vérification activée avec succès',
-      'light'
-    );
+    this.verificationService.updateBadgeStatus(this.selectedVerification.id, true).subscribe({
+      next: () => {
+        if (this.selectedVerification) {
+          this.selectedVerification.active = true;
+        }
+        this.closePopups();
+        this.alertService.success('Vérification activée avec succès', 'light');
+        this.loadVerifications(); // Recharger la liste
+      },
+      error: () => {
+        this.closePopups();
+        this.alertService.error("Erreur lors de l'activation de la vérification", 'light');
+      }
+    });
   }
 
   confirmDeactivate() {
-    if (this.selectedVerification) {
-      this.selectedVerification.active = false;
-    }
+    if (!this.selectedVerification) return;
 
-    this.closePopups();
-
-    this.alertService.success(
-      'Vérification désactivée avec succès',
-      'light'
-    );
+    this.verificationService.updateBadgeStatus(this.selectedVerification.id, false).subscribe({
+      next: () => {
+        if (this.selectedVerification) {
+          this.selectedVerification.active = false;
+        }
+        this.closePopups();
+        this.alertService.success('Vérification désactivée avec succès', 'light');
+        this.loadVerifications(); // Recharger la liste
+      },
+      error: () => {
+        this.closePopups();
+        this.alertService.error("Erreur lors de la désactivation de la vérification", 'light');
+      }
+    });
   }
 }
