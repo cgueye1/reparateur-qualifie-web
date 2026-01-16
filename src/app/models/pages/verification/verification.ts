@@ -24,6 +24,25 @@ export interface Verification {
 }
 
 
+/**
+ * Document utilisateur (API: user-document-controller)
+ */
+export type DocumentStatus = 'PENDING' | 'VALIDATED' | 'REJECTED' | 'NEEDS_COMPLETION';
+
+export interface UserDocument {
+  id: number;
+  name: string;
+  fileUrl: string;
+  status: DocumentStatus;
+  comment: string | null;
+  user: {
+    id: number;
+    nom: string;
+    prenom: string;
+    email: string;
+  };
+}
+
 
 export interface Page<T> {
   content: T[];

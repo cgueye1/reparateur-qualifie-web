@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 import { VerificationService } from '../../../core/service/pages/verification/verification.service';
 import { SwettAlerteService } from '../../../core/service/alerte/swett-alerte.service';
-import { Verification } from '../../../models/pages/verification/verification';
+import { Verification, UserDocument } from '../../../models/pages/verification/verification';
 import { Page } from '../../../models/pages/plan-d\'abonnement/plan-abonnement';
 import { RouterModule } from '@angular/router';
 
@@ -27,6 +29,17 @@ export class VerificationComponent implements OnInit {
    * ============================================================ */
   verifications: Verification[] = [];
   loading = false;
+  userDocuments: Map<number, UserDocument[]> = new Map();
+
+  /* ============================================================
+   * 📊 STATISTIQUES (KPIs)
+   * ============================================================ */
+  stats = {
+    total: 0,
+    pending: 0,
+    validated: 0,
+    rejected: 0
+  };
 
   /* ============================================================
    * 🔢 PAGINATION (API)
@@ -59,7 +72,24 @@ export class VerificationComponent implements OnInit {
    * 🚀 INITIALISATION
    * ============================================================ */
   ngOnInit(): void {
+    this.loadBadgeKpis();
     this.loadVerifications();
+  }
+
+  /* ============================================================
+   * 📊 CHARGEMENT DES KPIs
+   * ============================================================ */
+  private loadBadgeKpis(): void {
+    this.verificationService.getBadgeStats().subscribe({
+      next: (stats) => {
+        console.log('Stats reçues:', stats);
+        this.stats = stats;
+      },
+      error: (err) => {
+        console.error('Erreur lors du chargement des statistiques:', err);
+        // Garder les valeurs par défaut à 0
+      }
+    });
   }
 
   /* ============================================================
@@ -79,7 +109,7 @@ export class VerificationComponent implements OnInit {
           this.verifications = res.content;
           this.totalPages = res.totalPages;
           this.totalElements = res.totalElements;
-          this.loading = false;
+          this.loadDocumentsForUsers(res.content);
         },
         error: () => {
           this.loading = false;
@@ -92,7 +122,54 @@ export class VerificationComponent implements OnInit {
   }
 
   /* ============================================================
-   * 🔍 FILTRAGE LOCAL (RECHERCHE + PROFIL)
+   * 📄 CHARGEMENT DES DOCUMENTS UTILISATEURS
+   * ============================================================ */
+  private loadDocumentsForUsers(verifications: Verification[]): void {
+    if (verifications.length === 0) {
+      this.loading = false;
+      return;
+    }
+
+    // Créer un tableau d'observables pour charger les documents de chaque utilisateur
+    const documentRequests = verifications.map(v =>
+      this.verificationService.getUserDocuments(v.user.id).pipe(
+        catchError(() => of([]))
+      )
+    );
+
+    // Charger tous les documents en parallèle
+    forkJoin(documentRequests).subscribe({
+      next: (allDocs: UserDocument[][]) => {
+        // Stocker les documents dans le Map par userId
+        verifications.forEach((v, index) => {
+          this.userDocuments.set(v.user.id, allDocs[index]);
+        });
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+      }
+    });
+  }
+
+  /* ============================================================
+   * 📄 OBTENIR LES NOMS DES DOCUMENTS D'UN UTILISATEUR
+   * ============================================================ */
+  getDocumentNames(userId: number): string {
+    const docs = this.userDocuments.get(userId);
+    if (!docs || docs.length === 0) {
+      return '—';
+    }
+    return docs.map(d => d.name).join(', ');
+  }
+
+  getDocumentCount(userId: number): number {
+    const docs = this.userDocuments.get(userId);
+    return docs ? docs.length : 0;
+  }
+
+  /* ============================================================
+   * � FILTRAGE LOCAL (RECHERCHE + PROFIL)
    * ============================================================ */
   get filteredVerifications(): Verification[] {
     let data = [...this.verifications];
