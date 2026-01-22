@@ -20,7 +20,7 @@ export class MonCompteComponent implements OnInit {
   // ======================================================
   // 🔹 DONNÉES UTILISATEUR
   // ======================================================
-  user!: UserConnected;
+  user: UserConnected | null = null;
   loading = false;
   saving = false;
 
@@ -41,7 +41,7 @@ export class MonCompteComponent implements OnInit {
     private monCompteService: MonCompteService,
     private passwordChangeService: PasswordChangeService,
     private alert: SwettAlerteService
-  ) {}
+  ) { }
 
   // ======================================================
   // 🔹 INITIALISATION
@@ -76,16 +76,17 @@ export class MonCompteComponent implements OnInit {
 
     this.saving = true;
 
-    const payload: UpdateUserPayload = {
+    const payload: any = {
       nom: this.user.nom,
       prenom: this.user.prenom,
       email: this.user.email,
       telephone: this.user.telephone,
-      adress: this.user.adress,
-      lat: this.user.lat,
-      lon: this.user.lon,
+      adresse: this.user.adress,  // API attend 'adresse' avec 'e'
       profil: this.user.profil,
     };
+
+    console.log('📤 Payload envoyé:', payload);
+    console.log('🆔 User ID:', this.user.id);
 
     this.monCompteService.updateMonCompte(this.user.id, payload).subscribe({
       next: (updatedUser) => {
@@ -93,7 +94,9 @@ export class MonCompteComponent implements OnInit {
         this.saving = false;
         this.alert.success('Compte mis à jour avec succès', 'light');
       },
-      error: () => {
+      error: (err) => {
+        console.error('❌ Erreur complète:', err);
+        console.error('❌ Message d\'erreur:', err.error);
         this.saving = false;
         this.alert.error('Échec de la mise à jour du compte', 'light');
       },
@@ -113,7 +116,7 @@ export class MonCompteComponent implements OnInit {
     this.showPopupChangePassword = true;
 
     // pré-remplir l’email si dispo
-    if (this.user?.email) {
+    if (this.user && this.user.email) {
       this.email = this.user.email;
     }
   }
@@ -179,7 +182,7 @@ export class MonCompteComponent implements OnInit {
 
     this.passwordChangeService.changePassword(userId, data).subscribe({
       next: () => {
-        this.alert.success('Mot de passe mis à jour avec succès','light');
+        this.alert.success('Mot de passe mis à jour avec succès', 'light');
         this.closePopupChangePassword();
       },
       error: () => {

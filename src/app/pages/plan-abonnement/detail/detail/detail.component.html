@@ -10,19 +10,17 @@
     <div class="flex items-start md:items-center gap-4">
 
       <!-- Bouton retour -->
-      <button
-        (click)="goBack()"
-        class="bg-[#F8FBF9] rounded-lg shadow p-1.5 flex items-center justify-center w-12 h-12"
-      >
+      <button (click)="goBack()"
+        class="bg-[#F8FBF9] rounded-lg shadow p-1.5 flex items-center justify-center w-12 h-12">
         <svg width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M16.75 6.75H0.75M0.75 6.75L6.75 0.75M0.75 6.75L6.75 12.75"
-                stroke="#2B3674" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M16.75 6.75H0.75M0.75 6.75L6.75 0.75M0.75 6.75L6.75 12.75" stroke="#2B3674" stroke-width="1.5"
+            stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </button>
 
       <!-- Nom + ID -->
       <div>
-        <h1 class="text-2xl font-semibold text-[#111]">Détails du plan</h1>
+        <h1 class="text-2xl font-semibold text-[#2C3E50]">Détails du plan</h1>
         <p class="text-sm text-[#343A40]">ID : {{ plan?.id }}</p>
       </div>
 
@@ -36,19 +34,21 @@
       <button (click)="openEditPopup()">
 
         <svg width="120" height="44" viewBox="0 0 120 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect x="0.5" y="0.5" width="119" height="43" rx="7.5" fill="#212121"/>
-<rect x="0.5" y="0.5" width="119" height="43" rx="7.5" stroke="#212121"/>
-<path d="M33.704 27V17.06H35.776L38.73 25.222L41.684 17.06H43.756V27H42.244V19.72L39.57 26.986H37.89L35.216 19.72V27H33.704ZM48.9344 27.168C48.225 27.168 47.6044 27.0093 47.0724 26.692C46.5404 26.3747 46.1297 25.922 45.8404 25.334C45.551 24.746 45.4064 24.06 45.4064 23.276C45.4064 22.4827 45.551 21.7967 45.8404 21.218C46.1297 20.6393 46.5404 20.1913 47.0724 19.874C47.6044 19.5473 48.225 19.384 48.9344 19.384C49.6437 19.384 50.2644 19.5473 50.7964 19.874C51.3284 20.1913 51.739 20.6393 52.0284 21.218C52.3177 21.7967 52.4624 22.4827 52.4624 23.276C52.4624 24.06 52.3177 24.746 52.0284 25.334C51.739 25.922 51.3284 26.3747 50.7964 26.692C50.2644 27.0093 49.6437 27.168 48.9344 27.168ZM48.9344 25.88C49.569 25.88 50.059 25.6513 50.4044 25.194C50.7497 24.7273 50.9224 24.088 50.9224 23.276C50.9224 22.464 50.7497 21.8293 50.4044 21.372C50.059 20.9053 49.569 20.672 48.9344 20.672C48.309 20.672 47.819 20.9053 47.4644 21.372C47.119 21.8293 46.9464 22.464 46.9464 23.276C46.9464 24.088 47.119 24.7273 47.4644 25.194C47.819 25.6513 48.309 25.88 48.9344 25.88ZM56.6081 27.168C55.9734 27.168 55.4181 27.0093 54.9421 26.692C54.4754 26.3747 54.1161 25.9267 53.8641 25.348C53.6214 24.76 53.5001 24.0693 53.5001 23.276C53.5001 22.4827 53.6261 21.7967 53.8781 21.218C54.1301 20.63 54.4894 20.1773 54.9561 19.86C55.4228 19.5427 55.9734 19.384 56.6081 19.384C57.1214 19.384 57.5788 19.4913 57.9801 19.706C58.3814 19.9207 58.6848 20.2193 58.8901 20.602V17.06H60.3741V27H58.9881L58.9461 25.88C58.7408 26.2813 58.4281 26.5987 58.0081 26.832C57.5974 27.056 57.1308 27.168 56.6081 27.168ZM57.0001 25.88C57.4014 25.88 57.7421 25.7773 58.0221 25.572C58.3021 25.3667 58.5168 25.068 58.6661 24.676C58.8154 24.284 58.8901 23.8173 58.8901 23.276C58.8901 22.716 58.8154 22.2447 58.6661 21.862C58.5168 21.47 58.3021 21.176 58.0221 20.98C57.7421 20.7747 57.4014 20.672 57.0001 20.672C56.4028 20.672 55.9268 20.9053 55.5721 21.372C55.2174 21.8293 55.0401 22.464 55.0401 23.276C55.0401 24.0787 55.2174 24.7133 55.5721 25.18C55.9268 25.6467 56.4028 25.88 57.0001 25.88ZM62.2336 27V19.552H63.7176V27H62.2336ZM62.2056 18.474V16.99H63.7456V18.474H62.2056ZM66.1205 27V19.076C66.1205 18.46 66.2931 17.97 66.6385 17.606C66.9838 17.242 67.5251 17.06 68.2625 17.06H69.5785V18.278H68.4585C68.1691 18.278 67.9545 18.3573 67.8145 18.516C67.6745 18.6653 67.6045 18.88 67.6045 19.16V27H66.1205ZM65.0845 20.854V19.65H69.4665V20.854H65.0845ZM70.9225 27V19.552H72.4065V27H70.9225ZM70.9085 18.474V16.99H72.4485V18.474H70.9085ZM77.4539 27.168C76.7259 27.168 76.0959 27.0093 75.5639 26.692C75.0412 26.3747 74.6352 25.922 74.3459 25.334C74.0659 24.746 73.9259 24.06 73.9259 23.276C73.9259 22.492 74.0659 21.8107 74.3459 21.232C74.6352 20.644 75.0412 20.1913 75.5639 19.874C76.0866 19.5473 76.7026 19.384 77.4119 19.384C78.0839 19.384 78.6766 19.5427 79.1899 19.86C79.7032 20.168 80.0999 20.616 80.3799 21.204C80.6692 21.792 80.8139 22.5013 80.8139 23.332V23.71H75.4659C75.5032 24.438 75.6946 24.984 76.0399 25.348C76.3946 25.712 76.8706 25.894 77.4679 25.894C77.9066 25.894 78.2706 25.7913 78.5599 25.586C78.8492 25.3807 79.0499 25.1053 79.1619 24.76L80.7019 24.858C80.5059 25.5487 80.1186 26.1087 79.5399 26.538C78.9706 26.958 78.2752 27.168 77.4539 27.168ZM75.4659 22.59H79.2459C79.1992 21.9273 79.0079 21.4373 78.6719 21.12C78.3452 20.8027 77.9252 20.644 77.4119 20.644C76.8799 20.644 76.4412 20.812 76.0959 21.148C75.7599 21.4747 75.5499 21.9553 75.4659 22.59ZM82.3176 27V19.552H83.6756L83.7316 21.526L83.6056 21.484C83.7082 20.812 83.9136 20.322 84.2216 20.014C84.5389 19.706 84.9636 19.552 85.4956 19.552H86.2096V20.882H85.4956C85.1222 20.882 84.8096 20.9427 84.5576 21.064C84.3056 21.1853 84.1142 21.372 83.9836 21.624C83.8622 21.876 83.8016 22.2027 83.8016 22.604V27H82.3176Z" fill="white"/>
-</svg>
+          <rect x="0.5" y="0.5" width="119" height="43" rx="7.5" fill="#212121" />
+          <rect x="0.5" y="0.5" width="119" height="43" rx="7.5" stroke="#212121" />
+          <path
+            d="M33.704 27V17.06H35.776L38.73 25.222L41.684 17.06H43.756V27H42.244V19.72L39.57 26.986H37.89L35.216 19.72V27H33.704ZM48.9344 27.168C48.225 27.168 47.6044 27.0093 47.0724 26.692C46.5404 26.3747 46.1297 25.922 45.8404 25.334C45.551 24.746 45.4064 24.06 45.4064 23.276C45.4064 22.4827 45.551 21.7967 45.8404 21.218C46.1297 20.6393 46.5404 20.1913 47.0724 19.874C47.6044 19.5473 48.225 19.384 48.9344 19.384C49.6437 19.384 50.2644 19.5473 50.7964 19.874C51.3284 20.1913 51.739 20.6393 52.0284 21.218C52.3177 21.7967 52.4624 22.4827 52.4624 23.276C52.4624 24.06 52.3177 24.746 52.0284 25.334C51.739 25.922 51.3284 26.3747 50.7964 26.692C50.2644 27.0093 49.6437 27.168 48.9344 27.168ZM48.9344 25.88C49.569 25.88 50.059 25.6513 50.4044 25.194C50.7497 24.7273 50.9224 24.088 50.9224 23.276C50.9224 22.464 50.7497 21.8293 50.4044 21.372C50.059 20.9053 49.569 20.672 48.9344 20.672C48.309 20.672 47.819 20.9053 47.4644 21.372C47.119 21.8293 46.9464 22.464 46.9464 23.276C46.9464 24.088 47.119 24.7273 47.4644 25.194C47.819 25.6513 48.309 25.88 48.9344 25.88ZM56.6081 27.168C55.9734 27.168 55.4181 27.0093 54.9421 26.692C54.4754 26.3747 54.1161 25.9267 53.8641 25.348C53.6214 24.76 53.5001 24.0693 53.5001 23.276C53.5001 22.4827 53.6261 21.7967 53.8781 21.218C54.1301 20.63 54.4894 20.1773 54.9561 19.86C55.4228 19.5427 55.9734 19.384 56.6081 19.384C57.1214 19.384 57.5788 19.4913 57.9801 19.706C58.3814 19.9207 58.6848 20.2193 58.8901 20.602V17.06H60.3741V27H58.9881L58.9461 25.88C58.7408 26.2813 58.4281 26.5987 58.0081 26.832C57.5974 27.056 57.1308 27.168 56.6081 27.168ZM57.0001 25.88C57.4014 25.88 57.7421 25.7773 58.0221 25.572C58.3021 25.3667 58.5168 25.068 58.6661 24.676C58.8154 24.284 58.8901 23.8173 58.8901 23.276C58.8901 22.716 58.8154 22.2447 58.6661 21.862C58.5168 21.47 58.3021 21.176 58.0221 20.98C57.7421 20.7747 57.4014 20.672 57.0001 20.672C56.4028 20.672 55.9268 20.9053 55.5721 21.372C55.2174 21.8293 55.0401 22.464 55.0401 23.276C55.0401 24.0787 55.2174 24.7133 55.5721 25.18C55.9268 25.6467 56.4028 25.88 57.0001 25.88ZM62.2336 27V19.552H63.7176V27H62.2336ZM62.2056 18.474V16.99H63.7456V18.474H62.2056ZM66.1205 27V19.076C66.1205 18.46 66.2931 17.97 66.6385 17.606C66.9838 17.242 67.5251 17.06 68.2625 17.06H69.5785V18.278H68.4585C68.1691 18.278 67.9545 18.3573 67.8145 18.516C67.6745 18.6653 67.6045 18.88 67.6045 19.16V27H66.1205ZM65.0845 20.854V19.65H69.4665V20.854H65.0845ZM70.9225 27V19.552H72.4065V27H70.9225ZM70.9085 18.474V16.99H72.4485V18.474H70.9085ZM77.4539 27.168C76.7259 27.168 76.0959 27.0093 75.5639 26.692C75.0412 26.3747 74.6352 25.922 74.3459 25.334C74.0659 24.746 73.9259 24.06 73.9259 23.276C73.9259 22.492 74.0659 21.8107 74.3459 21.232C74.6352 20.644 75.0412 20.1913 75.5639 19.874C76.0866 19.5473 76.7026 19.384 77.4119 19.384C78.0839 19.384 78.6766 19.5427 79.1899 19.86C79.7032 20.168 80.0999 20.616 80.3799 21.204C80.6692 21.792 80.8139 22.5013 80.8139 23.332V23.71H75.4659C75.5032 24.438 75.6946 24.984 76.0399 25.348C76.3946 25.712 76.8706 25.894 77.4679 25.894C77.9066 25.894 78.2706 25.7913 78.5599 25.586C78.8492 25.3807 79.0499 25.1053 79.1619 24.76L80.7019 24.858C80.5059 25.5487 80.1186 26.1087 79.5399 26.538C78.9706 26.958 78.2752 27.168 77.4539 27.168ZM75.4659 22.59H79.2459C79.1992 21.9273 79.0079 21.4373 78.6719 21.12C78.3452 20.8027 77.9252 20.644 77.4119 20.644C76.8799 20.644 76.4412 20.812 76.0959 21.148C75.7599 21.4747 75.5499 21.9553 75.4659 22.59ZM82.3176 27V19.552H83.6756L83.7316 21.526L83.6056 21.484C83.7082 20.812 83.9136 20.322 84.2216 20.014C84.5389 19.706 84.9636 19.552 85.4956 19.552H86.2096V20.882H85.4956C85.1222 20.882 84.8096 20.9427 84.5576 21.064C84.3056 21.1853 84.1142 21.372 83.9836 21.624C83.8622 21.876 83.8016 22.2027 83.8016 22.604V27H82.3176Z"
+            fill="white" />
+        </svg>
 
 
       </button>
 
       <!-- Bouton  -->
-     <!-- Bouton ACTIVER (si plan inactif) -->
+      <!-- Bouton ACTIVER (si plan inactif) -->
 
 
-  <!--<button
+      <!--<button
 
   *ngIf="!plan.actif"
   (click)="openActivationPopup()"
@@ -58,7 +58,7 @@
 </button> -->
 
 
-<!-- Bouton DÉSACTIVER (si plan actif)
+      <!-- Bouton DÉSACTIVER (si plan actif)
 <button
   *ngIf="plan.actif"
   (click)="openDeactivate()"
@@ -98,88 +98,82 @@
   <!-- 🟦 COLONNE GAUCHE : Infos Plan (4/12)  -->
   <!-- ====================================== -->
   <div class="lg:col-span-4 col-span-1">
-    <div class="bg-white p-4 rounded-2xl shadow-sm border h-full flex flex-col justify-between">
+    <div class="bg-white p-4 rounded-2xl h-full flex flex-col justify-between">
 
-  <div>
-    <!-- NOM -->
-    <h2 class="text-xl font-bold mb-1">
-      {{ plan?.name }}
-    </h2>
-
-    <!-- DESCRIPTION -->
-    <p class="text-gray-600 text-sm mb-3">
-      {{ plan?.description || 'Aucune description fournie pour ce plan.' }}
-    </p>
-
-    <!-- STATUT (NON FOURNI PAR L’API) -->
-    <span
-      class="px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-600"
-    >
-      Statut non disponible
-    </span>
-
-    <hr class="my-4">
-
-    <!-- DÉTAILS DU PLAN -->
-    <h3 class="font-semibold mb-2 text-gray-700">
-      Détails du plan
-    </h3>
-
-    <div class="grid grid-cols-2 text-sm text-gray-600 gap-y-2">
-
-      <!-- COÛT TOTAL (NON FOURNI PAR L’API) -->
       <div>
-        <p class="text-gray-400">Coût total</p>
-        <p class="font-medium">Calculé automatiquement selon la durée</p>
-      </div>
+        <!-- NOM -->
+        <h2 class="text-xl font-bold text-[#2C3E50] mb-1">
+          {{ plan?.name }}
+        </h2>
 
-      <!-- TYPE D’ABONNEMENT (NON FOURNI PAR L’API) -->
-      <div>
-        <p class="text-gray-400">Type d’abonnement</p>
-        <p class="font-medium">Mensuel / Annuel</p>
-      </div>
+        <!-- DESCRIPTION -->
+        <p class="text-[#64748B] text-base mb-3">
+          {{ plan?.description || 'Aucune description fournie pour ce plan.' }}
+        </p>
 
-      <!-- PRIX MENSUEL (API) -->
-      <div>
-        <p class="text-gray-400">Prix mensuel</p>
-        <p class="font-medium">
-          {{ plan?.monthlyPrice }} FCFA
+        <!-- STATUT (NON FOURNI PAR L’API) -->
+        <span class="px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-600">
+          Statut non disponible
+        </span>
+
+        <hr class="my-4">
+
+        <!-- DÉTAILS DU PLAN -->
+        <h3 class="font-semibold mb-2 text-gray-700">
+          Détails du plan
+        </h3>
+
+        <div class="grid grid-cols-2 text-sm text-gray-600 gap-y-2">
+
+          <!-- COÛT TOTAL (NON FOURNI PAR L’API) -->
+          <div>
+            <p class="text-gray-400">Coût total</p>
+            <p class="font-medium">Calculé automatiquement selon la durée</p>
+          </div>
+
+          <!-- TYPE D’ABONNEMENT (NON FOURNI PAR L’API) -->
+          <div>
+            <p class="text-gray-400">Type d’abonnement</p>
+            <p class="font-medium">Mensuel / Annuel</p>
+          </div>
+
+          <!-- PRIX MENSUEL (API) -->
+          <div>
+            <p class="text-gray-400">Prix mensuel</p>
+            <p class="font-medium">
+              {{ plan?.monthlyPrice }} FCFA
+            </p>
+          </div>
+
+          <!-- REMISE ANNUELLE (API) -->
+          <div>
+            <p class="text-gray-400">Remise annuelle</p>
+            <p class="font-medium">
+              {{ plan?.yearlyDiscount }} %
+            </p>
+          </div>
+
+        </div>
+
+        <hr class="my-4">
+
+        <!-- FONCTIONNALITÉS (NON FOURNIES PAR L’API) -->
+        <h3 class="font-semibold text-[#2C3E50] mb-2">
+          Fonctionnalités
+        </h3>
+
+        <p class="text-sm text-[#6B7280]">
+          Les fonctionnalités associées à ce plan ne sont pas encore disponibles.
         </p>
       </div>
 
-      <!-- REMISE ANNUELLE (API) -->
-      <div>
-        <p class="text-gray-400">Remise annuelle</p>
-        <p class="font-medium">
-          {{ plan?.yearlyDiscount }} %
-        </p>
-      </div>
+      <!-- SUPPRESSION -->
+      <button *ngIf="plan" (click)="openDeletePopup(plan)" class="w-full mt-6 border border-[#E95F32] text-[#E95F32]
+           rounded-xl py-2 hover:bg-red-50 transition">
+        Supprimer
+      </button>
 
     </div>
-
-    <hr class="my-4">
-
-    <!-- FONCTIONNALITÉS (NON FOURNIES PAR L’API) -->
-    <h3 class="font-semibold mb-2">
-      Fonctionnalités
-    </h3>
-
-    <p class="text-sm text-gray-600">
-      Les fonctionnalités associées à ce plan ne sont pas encore disponibles.
-    </p>
-  </div>
-
-  <!-- SUPPRESSION -->
-  <button
-     *ngIf="plan"
-  (click)="openDeletePopup(plan)"
-    class="w-full mt-6 border border-[#E95F32] text-[#E95F32]
-           rounded-xl py-2 hover:bg-red-50 transition"
-  >
-    Supprimer
-  </button>
-
-</div>
 
   </div>
 
@@ -189,17 +183,14 @@
   <div class="lg:col-span-8 col-span-1 flex flex-col gap-4">
 
     <!-- === CARD DONUT === -->
-    <div class="bg-white p-4 rounded-2xl shadow-sm border">
-      <h2 class="text-lg font-semibold mb-3">Répartition des abonnements</h2>
+    <div class="bg-white p-4 rounded-2xl">
+      <h2 class="text-lg font-semibold text-[#2C3E50] mb-3">Répartition des abonnements</h2>
 
       <div class="flex flex-col md:flex-row items-center gap-4">
 
         <!-- Donut réduit -->
         <div class="w-40 h-40">
-          <canvas baseChart
-            [data]="donutData"
-            [options]="donutOptions"
-             type="doughnut">
+          <canvas baseChart [data]="donutData" [options]="donutOptions" type="doughnut">
           </canvas>
         </div>
 
@@ -220,13 +211,24 @@
     </div>
 
     <!-- === CARD UTILISATEURS ABONNÉS === -->
-    <div class="bg-white p-4 rounded-2xl shadow-sm border">
-      <h2 class="text-lg font-semibold mb-4">Utilisateurs abonnés</h2>
+    <div class="bg-white p-4 rounded-2xl">
+      <h2 class="text-lg font-semibold text-[#2C3E50] mb-4">Utilisateurs abonnés</h2>
 
-      <div class="overflow-x-auto">
+      <!-- Loading state -->
+      <div *ngIf="loadingSubscribers" class="flex justify-center items-center py-8">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#E95F32]"></div>
+      </div>
+
+      <!-- Empty state -->
+      <div *ngIf="!loadingSubscribers && abonnes.length === 0" class="text-center py-8 text-gray-500">
+        <p>Aucun utilisateur abonné à ce plan</p>
+      </div>
+
+      <!-- Liste des abonnés -->
+      <div *ngIf="!loadingSubscribers && abonnes.length > 0" class="overflow-x-auto">
         <table class="w-full min-w-[700px]">
           <thead>
-            <tr class="text-left text-gray-500 text-sm border-b">
+            <tr class="text-left text-[#2C3E50] text-xs border-b">
               <th class="pb-2">Nom</th>
               <th class="pb-2">Rôle</th>
               <th class="pb-2">Téléphone</th>
@@ -241,25 +243,21 @@
 
               <!-- Nom + Photo -->
               <td class="flex items-center gap-3 py-3">
-                <img [src]="user.photo" class="w-10 h-10 rounded-full object-cover">
+                <img [src]="user.photo" class="w-10 h-10 rounded-full object-cover" alt="{{ user.nom }}">
                 <div>
-                  <p class="font-medium text-gray-700">{{ user.nom }}</p>
-                  <p class="text-sm text-gray-400 leading-tight">{{ user.role }}</p>
+                  <p class="text-sm font-semibold text-[#4B4848]">{{ user.nom }}</p>
+                  <p class="text-xs text-[#6B7280] leading-tight">{{ user.role }}</p>
                 </div>
               </td>
 
-              <td class="text-gray-600">{{ user.role }}</td>
-              <td class="text-gray-600">{{ user.telephone }}</td>
+              <td class="text-sm text-[#4B4848]">{{ user.role }}</td>
+              <td class="text-sm text-[#4B4848]">{{ user.telephone }}</td>
 
               <!-- Statut -->
               <td>
-                <span
-                  class="px-3 py-1 rounded-full text-sm"
-                  [class.bg-green-100]="user.active"
-                  [class.text-green-700]="user.active"
-                  [class.bg-red-100]="!user.active"
-                  [class.text-red-700]="!user.active"
-                >
+                <span class="px-3 py-1 rounded-full text-xs" [class.bg-green-100]="user.active"
+                  [class.text-green-700]="user.active" [class.bg-red-100]="!user.active"
+                  [class.text-red-700]="!user.active">
                   {{ user.active ? 'Active' : 'Désactivé' }}
                 </span>
               </td>
@@ -469,17 +467,18 @@
 
 
 <!-- POPUP SUPPRIMER -->
-<div
-  *ngIf="showDeletePopup"
-  class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
->
+<div *ngIf="showDeletePopup" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
   <div class="bg-white rounded-2xl px-10 py-12 w-[460px] text-center shadow-xl">
 
     <div class="w-16 h-16 mx-auto mb-6 flex items-center justify-center">
       <svg width="95" height="95" viewBox="0 0 95 95" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M51.2407 58.166L43.8188 58.166L43.8188 28.4785L51.2407 28.4785L51.2407 58.166Z" fill="#EFBD8E"/>
-        <path d="M47.5 65.291C45.3685 65.291 43.6406 67.0189 43.6406 69.1504C43.6406 71.2819 45.3685 73.0098 47.5 73.0098C49.6315 73.0098 51.3594 71.2819 51.3594 69.1504C51.3594 67.0189 49.6315 65.291 47.5 65.291Z" fill="#EFBD8E"/>
-        <path d="M47.5 94.9776C59.6972 95.3703 71.5436 90.595 80.446 81.6968C89.3483 72.7986 94.5815 60.5025 95 47.5C94.5815 34.4975 89.3483 22.2014 80.446 13.3032C71.5436 4.40504 59.6972 -0.370316 47.5 0.0224457C35.3028 -0.370316 23.4564 4.40504 14.554 13.3032C5.65166 22.2014 0.418472 34.4975 0 47.5C0.418472 60.5025 5.65166 72.7986 14.554 81.6968C23.4564 90.595 35.3028 95.3703 47.5 94.9776ZM47.5 7.93537C57.7293 7.54133 67.6886 11.4827 75.1994 18.8972C82.7101 26.3117 87.1609 36.5959 87.5781 47.5C87.1609 58.4041 82.7101 68.6883 75.1994 76.1028C67.6886 83.5174 57.7293 87.4587 47.5 87.0646C37.2707 87.4587 27.3114 83.5174 19.8006 76.1028C12.2899 68.6883 7.83908 58.4041 7.42188 47.5C7.83908 36.5959 12.2899 26.3117 19.8006 18.8972C27.3114 11.4827 37.2707 7.54133 47.5 7.93537Z" fill="#EFBD8E"/>
+        <path d="M51.2407 58.166L43.8188 58.166L43.8188 28.4785L51.2407 28.4785L51.2407 58.166Z" fill="#EFBD8E" />
+        <path
+          d="M47.5 65.291C45.3685 65.291 43.6406 67.0189 43.6406 69.1504C43.6406 71.2819 45.3685 73.0098 47.5 73.0098C49.6315 73.0098 51.3594 71.2819 51.3594 69.1504C51.3594 67.0189 49.6315 65.291 47.5 65.291Z"
+          fill="#EFBD8E" />
+        <path
+          d="M47.5 94.9776C59.6972 95.3703 71.5436 90.595 80.446 81.6968C89.3483 72.7986 94.5815 60.5025 95 47.5C94.5815 34.4975 89.3483 22.2014 80.446 13.3032C71.5436 4.40504 59.6972 -0.370316 47.5 0.0224457C35.3028 -0.370316 23.4564 4.40504 14.554 13.3032C5.65166 22.2014 0.418472 34.4975 0 47.5C0.418472 60.5025 5.65166 72.7986 14.554 81.6968C23.4564 90.595 35.3028 95.3703 47.5 94.9776ZM47.5 7.93537C57.7293 7.54133 67.6886 11.4827 75.1994 18.8972C82.7101 26.3117 87.1609 36.5959 87.5781 47.5C87.1609 58.4041 82.7101 68.6883 75.1994 76.1028C67.6886 83.5174 57.7293 87.4587 47.5 87.0646C37.2707 87.4587 27.3114 83.5174 19.8006 76.1028C12.2899 68.6883 7.83908 58.4041 7.42188 47.5C7.83908 36.5959 12.2899 26.3117 19.8006 18.8972C27.3114 11.4827 37.2707 7.54133 47.5 7.93537Z"
+          fill="#EFBD8E" />
       </svg>
     </div>
 
@@ -491,17 +490,12 @@
     </p>
 
     <div class="flex justify-center gap-4">
-      <button
-        (click)="confirmDelete()"
-        class="bg-red-600 text-white px-8 py-3 rounded-lg hover:bg-red-700 transition-colors"
-      >
+      <button (click)="confirmDelete()"
+        class="bg-red-600 text-white px-8 py-3 rounded-lg hover:bg-red-700 transition-colors">
         Supprimer
       </button>
 
-      <button
-        (click)="closeDelete()"
-        class="bg-gray-100 px-8 py-3 rounded-lg hover:bg-gray-200 transition-colors"
-      >
+      <button (click)="closeDelete()" class="bg-gray-100 px-8 py-3 rounded-lg hover:bg-gray-200 transition-colors">
         Annuler
       </button>
     </div>
@@ -628,10 +622,7 @@
 
 <!-- POPUP MODIFICATION-->
 
-<div
-  *ngIf="showEditPopup && editPlan"
-  class="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
->
+<div *ngIf="showEditPopup && editPlan" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
   <div class="bg-white rounded-2xl w-[720px] p-5 shadow-xl">
 
     <!-- Header -->
@@ -656,19 +647,11 @@
             Nom du plan <span class="text-red-500">*</span>
           </label>
 
-          <input
-            name="name"
-            [(ngModel)]="editPlan.name"
-            required
-            minlength="3"
-            pattern="^[A-Za-z0-9_-]{3,}$"
-            #nameEdit="ngModel"
-            class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
-                   focus:outline-none focus:ring-2 focus:ring-orange-500"
-            placeholder="Ex : ARTISAN_PLAN">
+          <input name="name" [(ngModel)]="editPlan.name" required minlength="3" pattern="^[A-Za-z0-9_-]{3,}$"
+            #nameEdit="ngModel" class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
+                   focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Ex : ARTISAN_PLAN">
 
-          <p *ngIf="nameEdit.touched && nameEdit.invalid"
-             class="text-xs text-red-500 mt-1">
+          <p *ngIf="nameEdit.touched && nameEdit.invalid" class="text-xs text-red-500 mt-1">
             Nom requis (min 3 caractères, lettres/chiffres/_-).
           </p>
         </div>
@@ -679,19 +662,11 @@
             Prix mensuel (FCFA) <span class="text-red-500">*</span>
           </label>
 
-          <input
-            type="number"
-            name="monthlyPrice"
-            [(ngModel)]="editPlan.monthlyPrice"
-            required
-            min="0"
-            #monthlyPriceEdit="ngModel"
-            class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
-                   focus:outline-none focus:ring-2 focus:ring-orange-500"
-            placeholder="Ex : 1000">
+          <input type="number" name="monthlyPrice" [(ngModel)]="editPlan.monthlyPrice" required min="0"
+            #monthlyPriceEdit="ngModel" class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
+                   focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Ex : 1000">
 
-          <p *ngIf="monthlyPriceEdit.touched && monthlyPriceEdit.invalid"
-             class="text-xs text-red-500 mt-1">
+          <p *ngIf="monthlyPriceEdit.touched && monthlyPriceEdit.invalid" class="text-xs text-red-500 mt-1">
             Prix mensuel obligatoire (≥ 0).
           </p>
         </div>
@@ -702,19 +677,11 @@
             Remise annuelle (%)
           </label>
 
-          <input
-            type="number"
-            name="yearlyDiscount"
-            [(ngModel)]="editPlan.yearlyDiscount"
-            min="0"
-            max="100"
-            #yearlyDiscountEdit="ngModel"
-            class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
-                   focus:outline-none focus:ring-2 focus:ring-orange-500"
-            placeholder="Ex : 10">
+          <input type="number" name="yearlyDiscount" [(ngModel)]="editPlan.yearlyDiscount" min="0" max="100"
+            #yearlyDiscountEdit="ngModel" class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
+                   focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Ex : 10">
 
-          <p *ngIf="yearlyDiscountEdit.touched && yearlyDiscountEdit.invalid"
-             class="text-xs text-red-500 mt-1">
+          <p *ngIf="yearlyDiscountEdit.touched && yearlyDiscountEdit.invalid" class="text-xs text-red-500 mt-1">
             La remise doit être comprise entre 0 et 100.
           </p>
         </div>
@@ -727,39 +694,25 @@
           Description <span class="text-red-500">*</span>
         </label>
 
-        <textarea
-          name="description"
-          [(ngModel)]="editPlan.description"
-          required
-          minlength="10"
-          maxlength="500"
-          #descriptionEdit="ngModel"
-          class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
+        <textarea name="description" [(ngModel)]="editPlan.description" required minlength="10" maxlength="500"
+          #descriptionEdit="ngModel" class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
                  resize-none focus:outline-none focus:ring-2 focus:ring-orange-500"
           placeholder="Ex : Plan destiné aux artisans">
         </textarea>
 
-        <p *ngIf="descriptionEdit.touched && descriptionEdit.invalid"
-           class="text-xs text-red-500 mt-1">
+        <p *ngIf="descriptionEdit.touched && descriptionEdit.invalid" class="text-xs text-red-500 mt-1">
           Description obligatoire (10 à 500 caractères).
         </p>
       </div>
 
       <!-- ================= ACTIONS ================= -->
       <div class="flex justify-start mt-8 gap-4">
-        <button
-          type="button"
-          (click)="saveEditPlan()"
-          [disabled]="fEdit.invalid"
-          class="px-8 py-2.5 rounded-lg bg-[#E95F32] text-white font-medium
+        <button type="button" (click)="saveEditPlan()" [disabled]="fEdit.invalid" class="px-8 py-2.5 rounded-lg bg-[#E95F32] text-white font-medium
                  hover:bg-[#d15528] transition-colors disabled:opacity-50">
           Mettre à jour
         </button>
 
-        <button
-          type="button"
-          (click)="closeEditPopup()"
-          class="px-8 py-2.5 rounded-lg border border-gray-300 text-gray-700
+        <button type="button" (click)="closeEditPopup()" class="px-8 py-2.5 rounded-lg border border-gray-300 text-gray-700
                  font-medium hover:bg-gray-50 transition-colors">
           Annuler
         </button>

@@ -11,7 +11,7 @@ import { environment } from '../../../../../environments/environments';
 export class PasswordChangeService {
 
   private baseUrl = environment.apiUrl;
-  private endpoint = `${this.baseUrl}/api/auth/password/change`;
+private endpoint = `${this.baseUrl}/api/v1/user/password/change`;
 
   constructor(private http: HttpClient) {}
 

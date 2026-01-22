@@ -7,7 +7,7 @@ import { NgChartsModule } from 'ng2-charts';
 
 import { PlanAbonnementService } from '../../../../core/service/plan-abonnement/plan-abonnement.service';
 import { SwettAlerteService } from '../../../../core/service/alerte/swett-alerte.service';
-import { PlanAbonnement } from '../../../../models/pages/plan-d\'abonnement/plan-abonnement';
+import { PlanAbonnement, PlanSubscriber } from '../../../../models/pages/plan-d\'abonnement/plan-abonnement';
 
 @Component({
   selector: 'app-detail',
@@ -23,7 +23,7 @@ export class DetailComponent implements OnInit {
     private route: ActivatedRoute,
     private planService: PlanAbonnementService,
     private alertService: SwettAlerteService
-  ) {}
+  ) { }
 
   goBack() {
     this.location.back();
@@ -36,13 +36,10 @@ export class DetailComponent implements OnInit {
   loading = false;
 
   // ===============================
-  // 🔵 ABONNÉS (MOCK — À CONNECTER PLUS TARD)
+  // � ABONNÉS DU PLAN (API)
   // ===============================
-  abonnes = [
-    { nom: "Ousmane DIALLO", role: "Menuisier", telephone: "77 222 22 22", photo: "https://i.pravatar.cc/150?img=31", active: true },
-    { nom: "Maguette NDIAYE", role: "Traiteur", telephone: "77 333 33 33", photo: "https://i.pravatar.cc/150?img=15", active: true },
-    { nom: "Al Amine SENE", role: "Plombier", telephone: "77 444 44 44", photo: "https://i.pravatar.cc/150?img=52", active: false }
-  ];
+  abonnes: PlanSubscriber[] = [];
+  loadingSubscribers = false;
 
   // ===============================
   // 🔵 POPUPS (CONFIRMATION OK)
@@ -57,7 +54,7 @@ export class DetailComponent implements OnInit {
   // showSuccessDelete = false;
 
 
-// ================================
+  // ================================
   // 🗑️ SUPPRESSION
   // ================================
   selectedPlan: PlanAbonnement | null = null;
@@ -108,6 +105,7 @@ export class DetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadPlanDetail();
+    this.loadSubscribers();
     this.initDonutChart();
   }
 
@@ -139,6 +137,45 @@ export class DetailComponent implements OnInit {
           "Erreur lors du chargement du détail du plan",
           'light'
         );
+      }
+    });
+  }
+
+  // ===============================
+  // 👥 RÉCUPÉRATION DES ABONNÉS
+  // ===============================
+  loadSubscribers() {
+    const planId = Number(this.route.snapshot.paramMap.get('id'));
+
+    if (!planId) return;
+
+    this.loadingSubscribers = true;
+
+    this.planService.getPlanSubscribers(planId).subscribe({
+      next: (response) => {
+        console.log('🟢 Abonnés récupérés :', response);
+
+        // Filtrer par badgePlanId côté frontend
+        const filtered = response.content?.filter((badge: any) =>
+          badge.badgePlan?.id === planId
+        ) || [];
+
+        // Mapper vers le format attendu par le template
+        this.abonnes = filtered.map((badge: any) => ({
+          nom: `${badge.user?.prenom || ''} ${badge.user?.nom || ''}`.trim(),
+          photo: badge.user?.photo || 'https://i.pravatar.cc/150?img=1',
+          role: badge.user?.trade?.name || 'Non spécifié',
+          telephone: badge.user?.telephone || 'N/A',
+          active: badge.active || false
+        }));
+
+        console.log('🟢 Abonnés mappés :', this.abonnes);
+        this.loadingSubscribers = false;
+      },
+      error: (err) => {
+        console.error('🔴 Erreur chargement abonnés :', err);
+        this.loadingSubscribers = false;
+        this.abonnes = [];
       }
     });
   }

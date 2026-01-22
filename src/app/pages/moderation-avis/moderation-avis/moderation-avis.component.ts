@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ModerationAvisService } from '../../../core/service/pages/moderation-avis/moderation-avis.service';
+import { Rating, RatingStats } from '../../../models/pages/moderation-avis/moderation-avis';
 
 @Component({
   selector: 'app-moderation-avis',
@@ -12,52 +14,126 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './moderation-avis.component.html',
   styleUrl: './moderation-avis.component.css'
 })
-export class ModerationAvisComponent {
+export class ModerationAvisComponent implements OnInit {
+
+  constructor(private moderationService: ModerationAvisService) { }
 
   // 📌 STATISTIQUES
-  stats = {
-    total: 8,
-    attente: 5,
-    resolus: 3
+  stats: RatingStats = {
+    totalRatings: 0,
+    pending: 0,
+    solved: 0,
+    ok: 0,
+    hidden: 0
   };
+  loadingStats = false;
 
-  // 📌 LISTE DES AVIS SIGNALÉS
-  avis = [
-    {
-      date: "25/11/2025",
-      auteur: "Moussa Sow",
-      raison: "Commentaire inapproprié",
-      contenu: "Bon service, travail de qualité.",
-      statut: "Signalé"
-    },
-    {
-      date: "25/11/2025",
-      auteur: "Moussa Sow",
-      raison: "Commentaire inapproprié",
-      contenu: "Bon service, travail de qualité.",
-      statut: "Publié"
-    },
-    {
-      date: "25/11/2025",
-      auteur: "Moussa Sow",
-      raison: "Commentaire inapproprié",
-      contenu: "Bon service, travail de qualité.",
-      statut: "Publié"
-    }
-  ];
+  // 📌 LISTE DES AVIS
+  ratings: Rating[] = [];
+  loading = false;
+
+  // 📌 PAGINATION
+  page = 0;
+  size = 10;
+  totalPages = 0;
+  totalElements = 0;
+
+  // 📌 FILTRES
+  selectedStatus: string = ''; // Filtre par statut
 
   // 🔍 CHAMP RECHERCHE
   searchText: string = '';
 
+  // ===============================
+  // 🔄 INITIALISATION
+  // ===============================
+  ngOnInit(): void {
+    this.loadStats();
+    this.loadRatings();
+  }
+
+  // ===============================
+  // 📊 CHARGER LES STATISTIQUES
+  // ===============================
+  loadStats() {
+    this.loadingStats = true;
+
+    this.moderationService.getRatingStats().subscribe({
+      next: (stats) => {
+        this.stats = stats;
+        console.log('✅ Stats chargées:', stats);
+        this.loadingStats = false;
+      },
+      error: (err) => {
+        console.error('❌ Erreur chargement stats:', err);
+        this.loadingStats = false;
+      }
+    });
+  }
+
+  // ===============================
+  // 📋 CHARGER LA LISTE DES AVIS
+  // ⚠️ ENDPOINT NON DISPONIBLE - Fonctionnalité désactivée temporairement
+  // ===============================
+  loadRatings() {
+    this.loading = true;
+
+    // ⚠️ L'API ne fournit pas d'endpoint pour lister tous les avis
+    // Seuls les endpoints par userId sont disponibles:
+    // - GET /api/ratings/received/{userId}
+    // - GET /api/ratings/given-by-user/{userId}
+
+    console.warn('⚠️ Endpoint /api/ratings non disponible dans l\'API');
+    this.ratings = [];
+    this.loading = false;
+
+    // TODO: Demander au backend d'ajouter:
+    // GET /api/ratings?status={status}&page={page}&size={size}
+    // pour permettre la modération globale des avis
+  }
+
   // 🔍 FILTRAGE DES AVIS
   get filteredAvis() {
-    if (!this.searchText.trim()) return this.avis;
+    if (!this.searchText.trim()) return this.ratings;
 
-    return this.avis.filter(a =>
-      a.auteur.toLowerCase().includes(this.searchText.toLowerCase()) ||
-      a.contenu.toLowerCase().includes(this.searchText.toLowerCase()) ||
-      a.raison.toLowerCase().includes(this.searchText.toLowerCase())
-    );
+    return this.ratings.filter(rating => {
+      const auteur = `${rating.reviewer?.prenom || ''} ${rating.reviewer?.nom || ''}`.toLowerCase();
+      const contenu = (rating.comment || '').toLowerCase();
+      const raison = (rating.reportReason || '').toLowerCase();
+      const search = this.searchText.toLowerCase();
+
+      return auteur.includes(search) || contenu.includes(search) || raison.includes(search);
+    });
+  }
+
+  // ===============================
+  // 🎨 FORMATER LA DATE
+  // ===============================
+  formatDate(dateString: string): string {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('fr-FR');
+  }
+
+  // ===============================
+  // 🎨 OBTENIR LE NOM COMPLET
+  // ===============================
+  getAuthorName(rating: Rating): string {
+    if (!rating.reviewer) return 'Anonyme';
+    return `${rating.reviewer.prenom || ''} ${rating.reviewer.nom || ''}`.trim();
+  }
+
+  // ===============================
+  // 🎨 MAPPER LE STATUT POUR L'AFFICHAGE
+  // ===============================
+  getStatusLabel(status: string): string {
+    const statusMap: { [key: string]: string } = {
+      'PENDING': 'Signalé',
+      'VALIDATED': 'Publié',
+      'REJECTED': 'Rejeté',
+      'HIDDEN': 'Masqué'
+    };
+    return statusMap[status] || status;
   }
 
 
@@ -118,39 +194,69 @@ export class ModerationAvisComponent {
 
   // === CONFIRM ACTIONS ===
   confirmApprove() {
-    this.showApprovePopup = false;
+    if (!this.selectedAvis) return;
 
-    setTimeout(() => {
-      this.showSuccessApprove = true;
+    this.moderationService.updateRatingStatus(this.selectedAvis.id, { status: 'VALIDATED' })
+      .subscribe({
+        next: () => {
+          this.showApprovePopup = false;
+          this.showSuccessApprove = true;
 
-      setTimeout(() => {
-        this.showSuccessApprove = false;
-      }, 1500);
-    }, 300);
+          setTimeout(() => {
+            this.showSuccessApprove = false;
+            this.loadRatings(); // Recharger la liste
+            this.loadStats();   // Recharger les stats
+          }, 1500);
+        },
+        error: (err) => {
+          console.error('❌ Erreur approbation:', err);
+          this.showApprovePopup = false;
+        }
+      });
   }
 
   confirmMask() {
-    this.showMaskPopup = false;
+    if (!this.selectedAvis) return;
 
-    setTimeout(() => {
-      this.showSuccessMask = true;
+    this.moderationService.updateRatingStatus(this.selectedAvis.id, { status: 'HIDDEN' })
+      .subscribe({
+        next: () => {
+          this.showMaskPopup = false;
+          this.showSuccessMask = true;
 
-      setTimeout(() => {
-        this.showSuccessMask = false;
-      }, 1500);
-    }, 300);
+          setTimeout(() => {
+            this.showSuccessMask = false;
+            this.loadRatings();
+            this.loadStats();
+          }, 1500);
+        },
+        error: (err) => {
+          console.error('❌ Erreur masquage:', err);
+          this.showMaskPopup = false;
+        }
+      });
   }
 
   confirmDelete() {
-    this.showDeletePopup = false;
+    if (!this.selectedAvis) return;
 
-    setTimeout(() => {
-      this.showSuccessDelete = true;
+    this.moderationService.updateRatingStatus(this.selectedAvis.id, { status: 'REJECTED' })
+      .subscribe({
+        next: () => {
+          this.showDeletePopup = false;
+          this.showSuccessDelete = true;
 
-      setTimeout(() => {
-        this.showSuccessDelete = false;
-      }, 1500);
-    }, 300);
+          setTimeout(() => {
+            this.showSuccessDelete = false;
+            this.loadRatings();
+            this.loadStats();
+          }, 1500);
+        },
+        error: (err) => {
+          console.error('❌ Erreur suppression:', err);
+          this.showDeletePopup = false;
+        }
+      });
   }
 
 }

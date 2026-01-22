@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../../environments/environments';
-import { Publicite, PubliciteStats } from '../../../../models/pages/publicite/publicite';
+import { Publicite, PubliciteStats, Page } from '../../../../models/pages/publicite/publicite';
 
 
 @Injectable({
@@ -17,17 +17,15 @@ export class PubliciteService {
 
   /* ============================================================
    * 📌 LISTE DES PUBLICITÉS
-   * ❌ API NON DISPONIBLE POUR LE MOMENT
    * ============================================================
-   *
-   * Le backend ne fournit pas encore l’endpoint permettant
-   * de récupérer toutes les publicités (GET /api/ads).
-   *
-   * Cette méthode sera implémentée dès que l’API sera disponible.
    */
-  // getAds(page = 0, size = 10): Observable<Page<Publicite>> {
-  //   return this.http.get<Page<Publicite>>(this.endpoint);
-  // }
+  getAds(page = 0, size = 10): Observable<Page<Publicite>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.get<Page<Publicite>>(`${this.endpoint}/search`, { params });
+  }
 
   /* ============================================================
    * ➕ CRÉATION D’UNE PUBLICITÉ

@@ -20,7 +20,7 @@ export class MonCompteService {
   // 🔹 Endpoint pour mise à jour utilisateur
   private updateEndpoint = `${this.baseUrl}/api/v1/user/update`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   /**
    * 🔐 Récupérer les informations de l’utilisateur connecté

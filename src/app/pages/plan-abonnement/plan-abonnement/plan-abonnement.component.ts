@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { PlanAbonnementService } from '../../../core/service/plan-abonnement/plan-abonnement.service';
 import { SwettAlerteService } from '../../../core/service/alerte/swett-alerte.service';
-import { PlanAbonnement } from '../../../models/pages/plan-d\'abonnement/plan-abonnement';
+import { PlanAbonnement, PlanStats } from '../../../models/pages/plan-d\'abonnement/plan-abonnement';
 
 @Component({
   selector: 'app-plan-abonnement',
@@ -48,45 +48,77 @@ export class PlanAbonnementComponent implements OnInit {
   searchTerm = '';
   loading = false;
 
+  // ================================
+  // 📊 STATISTIQUES
+  // ================================
+  stats: PlanStats = {
+    totalPlans: 0,
+    activePlans: 0,
+    inactivePlans: 0,
+    subscribers: 0
+  };
+  loadingStats = false;
+
   constructor(
     private planService: PlanAbonnementService,
     private alertService: SwettAlerteService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadPlans();
+    this.loadPlanStats();
   }
 
   // ================================
   // 📌 LISTE DES PLANS
   // ================================
   loadPlans() {
-  this.loading = true;
+    this.loading = true;
 
-  this.planService.getPlans().subscribe({
-    next: (res: PlanAbonnement[]) => {
-      
-      this.plans = res;
+    this.planService.getPlans().subscribe({
+      next: (res: PlanAbonnement[]) => {
 
-      console.log('Plans chargés avec succès ✅', res);
+        this.plans = res;
 
-      this.loading = false;
-    },
-    error: (err) => {
-      console.error('Erreur chargement plans ❌', err);
-      this.loading = false;
+        console.log('Plans chargés avec succès ✅', res);
 
-      // 🔔 Alerte utilisateur
-      this.alertService.error(
-        "Erreur lors du chargement des plans d’abonnement",
-        'light'
-      );
-    }
-  });
-}
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Erreur chargement plans ❌', err);
+        this.loading = false;
+
+        // 🔔 Alerte utilisateur
+        this.alertService.error(
+          "Erreur lors du chargement des plans d’abonnement",
+          'light'
+        );
+      }
+    });
+  }
 
   // ================================
-  // 🔍 FILTRAGE RECHERCHE
+  // � CHARGER LES STATISTIQUES
+  // ================================
+  loadPlanStats() {
+    this.loadingStats = true;
+
+    this.planService.getPlanStats().subscribe({
+      next: (stats: PlanStats) => {
+        this.stats = stats;
+        console.log('Stats reçues ✅', stats);
+        this.loadingStats = false;
+      },
+      error: (err) => {
+        console.error('Erreur chargement stats ❌', err);
+        this.loadingStats = false;
+        // Garder les valeurs à 0 en cas d'erreur
+      }
+    });
+  }
+
+  // ================================
+  // �🔍 FILTRAGE RECHERCHE
   // ================================
   get filteredPlans(): PlanAbonnement[] {
     return (this.plans || []).filter(plan =>
@@ -188,44 +220,43 @@ export class PlanAbonnementComponent implements OnInit {
     this.editPlan = null;
   }
 
- saveEditPlan() {
-  if (!this.editPlan) return;
+  saveEditPlan() {
+    if (!this.editPlan) return;
 
-  // ✅ Payload STRICTEMENT conforme à BadgePlanRequest
-  const payload = {
-    name: this.editPlan.name,
-    description: this.editPlan.description,
-    monthlyPrice: this.editPlan.monthlyPrice
-    // ❌ PAS de id
-    // ❌ PAS de yearlyDiscount
-  };
+    // ✅ Payload conforme à BadgePlanRequest
+    const payload = {
+      name: this.editPlan.name,
+      description: this.editPlan.description,
+      monthlyPrice: this.editPlan.monthlyPrice,
+      yearlyDiscount: this.editPlan.yearlyDiscount
+    };
 
-  console.log('🟡 Payload envoyé au backend :', payload);
+    console.log('🟡 Payload envoyé au backend :', payload);
 
-  this.planService
-    .updatePlan(this.editPlan.id, payload)
-    .subscribe({
-      next: (res) => {
-        console.log('🟢 UPDATE SUCCESS :', res);
+    this.planService
+      .updatePlan(this.editPlan.id, payload)
+      .subscribe({
+        next: (res) => {
+          console.log('🟢 UPDATE SUCCESS :', res);
 
-        this.alertService.success(
-          'Plan modifié avec succès',
-          'light'
-        );
+          this.alertService.success(
+            'Plan modifié avec succès',
+            'light'
+          );
 
-        this.loadPlans();
-        this.closeEditPopup();
-      },
-      error: (err) => {
-        console.error('🔴 UPDATE ERROR :', err?.error);
+          this.loadPlans();
+          this.closeEditPopup();
+        },
+        error: (err) => {
+          console.error('🔴 UPDATE ERROR :', err?.error);
 
-        this.alertService.error(
-          "Erreur lors de la modification du plan",
-          'light'
-        );
-      }
-    });
-}
+          this.alertService.error(
+            "Erreur lors de la modification du plan",
+            'light'
+          );
+        }
+      });
+  }
 
 
 }
