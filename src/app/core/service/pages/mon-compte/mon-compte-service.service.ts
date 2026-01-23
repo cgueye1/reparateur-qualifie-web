@@ -32,11 +32,11 @@ export class MonCompteService {
   /**
    * ✏️ Mettre à jour les informations de l’utilisateur
    * @param id ID de l’utilisateur
-   * @param data Données à mettre à jour
+   * @param data Données à mettre à jour (FormData pour supporter l'upload de photo)
    */
   updateMonCompte(
     id: number,
-    data: UpdateUserPayload
+    data: FormData
   ): Observable<UserConnected> {
     return this.http.put<UserConnected>(`${this.updateEndpoint}/${id}`, data);
   }

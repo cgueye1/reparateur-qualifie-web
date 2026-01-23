@@ -9,6 +9,7 @@ export interface UserConnected {
   lat: number;
   lon: number;
   profil: string;
+  photo?: string | null;
   sponsor: string | null;
   activeBadge: string | null;
   averageRating: number;

@@ -7,6 +7,7 @@ import { MonCompteService } from '../../../core/service/pages/mon-compte/mon-com
 import { SwettAlerteService } from '../../../core/service/alerte/swett-alerte.service';
 import { PasswordChangeService } from '../../../core/service/auth/password-change/password-change.service';
 import { PasswordChange } from '../../../models/auth/password-change/password-change';
+import { environment } from '../../../../environments/environments';
 
 @Component({
   selector: 'app-mon-compte',
@@ -23,6 +24,12 @@ export class MonCompteComponent implements OnInit {
   user: UserConnected | null = null;
   loading = false;
   saving = false;
+
+  // ======================================================
+  // 🔹 PHOTO DE PROFIL
+  // ======================================================
+  photoFile: File | null = null;
+  photoPreview: string | null = null;
 
   // ======================================================
   // 🔹 POPUP CHANGEMENT DE MOT DE PASSE
@@ -59,6 +66,9 @@ export class MonCompteComponent implements OnInit {
     this.monCompteService.getMonCompte().subscribe({
       next: (data) => {
         this.user = data;
+        if (data.photo) {
+          this.photoPreview = this.getPhotoUrl(data.photo);
+        }
         this.loading = false;
       },
       error: (err) => {
@@ -69,6 +79,53 @@ export class MonCompteComponent implements OnInit {
   }
 
   // ======================================================
+  // 🔹 GESTION PHOTO DE PROFIL
+  // ======================================================
+
+  /**
+   * Construire l'URL complète de la photo de profil
+   * @param photo nom du fichier photo retourné par l'API
+   * @returns URL complète ou placeholder
+   */
+  getPhotoUrl(photo: string | null | undefined): string {
+    if (!photo) return '';
+    if (photo.startsWith('http')) return photo;
+    return `${environment.imageUrl}/${photo}`;
+  }
+
+  /**
+   * Gestionnaire de sélection de photo
+   * @param event Événement input file
+   */
+  onPhotoSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || !input.files[0]) return;
+
+    const file = input.files[0];
+
+    // Validation type
+    if (!file.type.startsWith('image/')) {
+      this.alert.error('Veuillez sélectionner une image', 'light');
+      return;
+    }
+
+    // Validation taille (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      this.alert.error('L\'image ne doit pas dépasser 5MB', 'light');
+      return;
+    }
+
+    this.photoFile = file;
+
+    // Créer un aperçu
+    const reader = new FileReader();
+    reader.onload = (e: ProgressEvent<FileReader>) => {
+      this.photoPreview = e.target?.result as string;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // ======================================================
   // 🔹 MISE À JOUR DES INFOS DU COMPTE
   // ======================================================
   update(): void {
@@ -76,21 +133,29 @@ export class MonCompteComponent implements OnInit {
 
     this.saving = true;
 
-    const payload: any = {
-      nom: this.user.nom,
-      prenom: this.user.prenom,
-      email: this.user.email,
-      telephone: this.user.telephone,
-      adresse: this.user.adress,  // API attend 'adresse' avec 'e'
-      profil: this.user.profil,
-    };
+    // Utiliser FormData pour supporter l'upload de photo
+    const formData = new FormData();
+    formData.append('nom', this.user.nom);
+    formData.append('prenom', this.user.prenom);
+    formData.append('email', this.user.email);
+    formData.append('telephone', this.user.telephone);
+    formData.append('adress', this.user.adress);
+    formData.append('lat', this.user.lat.toString());
+    formData.append('lon', this.user.lon.toString());
+    formData.append('profil', this.user.profil);
 
-    console.log('📤 Payload envoyé:', payload);
-    console.log('🆔 User ID:', this.user.id);
+    // Ajouter la photo si un nouveau fichier a été sélectionné
+    if (this.photoFile) {
+      formData.append('photo', this.photoFile, this.photoFile.name);
+    }
 
-    this.monCompteService.updateMonCompte(this.user.id, payload).subscribe({
+    this.monCompteService.updateMonCompte(this.user.id, formData).subscribe({
       next: (updatedUser) => {
         this.user = updatedUser;
+        if (updatedUser.photo) {
+          this.photoPreview = this.getPhotoUrl(updatedUser.photo);
+        }
+        this.photoFile = null;
         this.saving = false;
         this.alert.success('Compte mis à jour avec succès', 'light');
       },

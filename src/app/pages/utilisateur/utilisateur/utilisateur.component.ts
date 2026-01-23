@@ -60,7 +60,7 @@ usersStatsCounter?: UserStatsCounter;
 
   // Labels affichés dans les dropdowns
   selectedStatusLabel: string = 'Tous les statuts';
-  selectedTypeLabel: string = 'Tous les types';
+  selectedTypeLabel: string = 'Tous les profils';
 
   // États des dropdowns
   showStatusDropdown: boolean = false;
