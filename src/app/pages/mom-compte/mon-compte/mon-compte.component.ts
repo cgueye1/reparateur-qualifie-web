@@ -8,6 +8,7 @@ import { SwettAlerteService } from '../../../core/service/alerte/swett-alerte.se
 import { PasswordChangeService } from '../../../core/service/auth/password-change/password-change.service';
 import { PasswordChange } from '../../../models/auth/password-change/password-change';
 import { environment } from '../../../../environments/environments';
+import { UserStateService } from '../../../core/service/user-state.service';
 
 @Component({
   selector: 'app-mon-compte',
@@ -47,7 +48,8 @@ export class MonCompteComponent implements OnInit {
   constructor(
     private monCompteService: MonCompteService,
     private passwordChangeService: PasswordChangeService,
-    private alert: SwettAlerteService
+    private alert: SwettAlerteService,
+    private userStateService: UserStateService
   ) { }
 
   // ======================================================
@@ -157,6 +159,10 @@ export class MonCompteComponent implements OnInit {
         }
         this.photoFile = null;
         this.saving = false;
+
+        // Mettre à jour l'état global pour synchroniser le topbar
+        this.userStateService.setUser(updatedUser);
+
         this.alert.success('Compte mis à jour avec succès', 'light');
       },
       error: (err) => {

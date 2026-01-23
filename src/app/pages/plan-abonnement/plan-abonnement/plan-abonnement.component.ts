@@ -49,15 +49,15 @@ export class PlanAbonnementComponent implements OnInit {
   loading = false;
 
   // ================================
-  // 📊 STATISTIQUES
+  // ❌ STATISTIQUES (COMMENTÉES)
   // ================================
-  stats: PlanStats = {
-    totalPlans: 0,
-    activePlans: 0,
-    inactivePlans: 0,
-    subscribers: 0
-  };
-  loadingStats = false;
+  // stats: PlanStats = {
+  //   totalPlans: 0,
+  //   activePlans: 0,
+  //   inactivePlans: 0,
+  //   subscribers: 0
+  // };
+  // loadingStats = false;
 
   constructor(
     private planService: PlanAbonnementService,
@@ -66,7 +66,7 @@ export class PlanAbonnementComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadPlans();
-    this.loadPlanStats();
+    // this.loadPlanStats();
   }
 
   // ================================
@@ -98,24 +98,24 @@ export class PlanAbonnementComponent implements OnInit {
   }
 
   // ================================
-  // � CHARGER LES STATISTIQUES
+  // ❌ CHARGER LES STATISTIQUES (COMMENTÉ)
   // ================================
-  loadPlanStats() {
-    this.loadingStats = true;
+  // loadPlanStats() {
+  //   this.loadingStats = true;
 
-    this.planService.getPlanStats().subscribe({
-      next: (stats: PlanStats) => {
-        this.stats = stats;
-        console.log('Stats reçues ✅', stats);
-        this.loadingStats = false;
-      },
-      error: (err) => {
-        console.error('Erreur chargement stats ❌', err);
-        this.loadingStats = false;
-        // Garder les valeurs à 0 en cas d'erreur
-      }
-    });
-  }
+  //   this.planService.getPlanStats().subscribe({
+  //     next: (stats: PlanStats) => {
+  //       this.stats = stats;
+  //       console.log('Stats reçues ✅', stats);
+  //       this.loadingStats = false;
+  //     },
+  //     error: (err) => {
+  //       console.error('Erreur chargement stats ❌', err);
+  //       this.loadingStats = false;
+  //       // Garder les valeurs à 0 en cas d'erreur
+  //     }
+  //   });
+  // }
 
   // ================================
   // �🔍 FILTRAGE RECHERCHE
@@ -258,5 +258,20 @@ export class PlanAbonnementComponent implements OnInit {
       });
   }
 
+  // ================================
+  // 👁️ VISUALISATION (MODAL)
+  // ================================
+  showViewModal = false;
+  selectedPlanForView: PlanAbonnement | null = null;
+
+  openViewModal(plan: PlanAbonnement) {
+    this.selectedPlanForView = plan;
+    this.showViewModal = true;
+  }
+
+  closeViewModal() {
+    this.showViewModal = false;
+    this.selectedPlanForView = null;
+  }
 
 }

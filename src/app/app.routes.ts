@@ -45,66 +45,54 @@ export const routes: Routes = [
       },
 
       // 🟧 UTILISATEURS
-{
-  path: 'utilisateurs',
-  children: [
-    {
-      path: '',
-      loadComponent: () =>
-        import('./pages/utilisateur/utilisateur/utilisateur.component')
-          .then((m) => m.UtilisateurComponent),
-      data: { title: 'Utilisateurs' },
-    },
+      {
+        path: 'utilisateurs',
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./pages/utilisateur/utilisateur/utilisateur.component')
+                .then((m) => m.UtilisateurComponent),
+            data: { title: 'Utilisateurs' },
+          },
 
-    // 🔹 DÉTAIL UTILISATEUR (ADMIN / GÉNÉRAL)
-    {
-      path: 'detail/:id',
-      loadComponent: () =>
-        import('./pages/utilisateur/detail/detail.component')
-          .then((m) => m.DetailComponent),
-      data: { title: 'Détails utilisateur' },
-    },
+          // 🔹 DÉTAIL UTILISATEUR (ADMIN / GÉNÉRAL)
+          {
+            path: 'detail/:id',
+            loadComponent: () =>
+              import('./pages/utilisateur/detail/detail.component')
+                .then((m) => m.DetailComponent),
+            data: { title: 'Détails utilisateur' },
+          },
 
-    // 🔹 DÉTAIL CLIENT
-    {
-      path: 'detail-client/:id',
-      loadComponent: () =>
-        import('./pages/utilisateur/detail-client/detail-client.component')
-          .then((m) => m.DetailClientComponent),
-      data: { title: 'Détails client' },
-    },
+          // 🔹 DÉTAIL CLIENT
+          {
+            path: 'detail-client/:id',
+            loadComponent: () =>
+              import('./pages/utilisateur/detail-client/detail-client.component')
+                .then((m) => m.DetailClientComponent),
+            data: { title: 'Détails client' },
+          },
 
-    // 🔹 DÉTAIL ARTISAN ✅
-    {
-      path: 'detail-artisan/:id',
-      loadComponent: () =>
-        import('./pages/utilisateur/detail/detail.component')
-          .then((m) => m.DetailComponent),
-      data: { title: 'Détails artisan' },
-    },
-  ],
-},
+          // 🔹 DÉTAIL ARTISAN ✅
+          {
+            path: 'detail-artisan/:id',
+            loadComponent: () =>
+              import('./pages/utilisateur/detail/detail.component')
+                .then((m) => m.DetailComponent),
+            data: { title: 'Détails artisan' },
+          },
+        ],
+      },
 
 
       // 🟩 PLANS D’ABONNEMENT
       {
         path: 'plans-abonnement',
-        children: [
-          {
-            path: '',
-            loadComponent: () =>
-              import('./pages/plan-abonnement/plan-abonnement/plan-abonnement.component')
-                .then((m) => m.PlanAbonnementComponent),
-            data: { title: 'Plans d’abonnement' },
-          },
-          {
-            path: 'detail/:id',
-            loadComponent: () =>
-              import('./pages/plan-abonnement/detail/detail/detail.component')
-                .then((m) => m.DetailComponent),
-            data: { title: 'Détail abonnement' },
-          }
-        ]
+        loadComponent: () =>
+          import('./pages/plan-abonnement/plan-abonnement/plan-abonnement.component')
+            .then((m) => m.PlanAbonnementComponent),
+        data: { title: 'Plans d\'abonnement' },
       },
 
       // Mon compte
@@ -147,23 +135,23 @@ export const routes: Routes = [
   },
 
   // 🚪 Routes publiques
-{
-  path: 'auth',
-  children: [
-    {
-      path: 'login',
-      loadComponent: () =>
-        import('./auth/login/login/login.component')
-          .then((m) => m.LoginComponent),
-    },
+  {
+    path: 'auth',
+    children: [
+      {
+        path: 'login',
+        loadComponent: () =>
+          import('./auth/login/login/login.component')
+            .then((m) => m.LoginComponent),
+      },
 
-    {
-      path: 'password-reset',
-      loadComponent: () =>
-        import('./auth/password-reset/password-reset/password-reset.component')
-          .then((m) => m.PasswordResetComponent),
-    }
-  ]
-}
+      {
+        path: 'password-reset',
+        loadComponent: () =>
+          import('./auth/password-reset/password-reset/password-reset.component')
+            .then((m) => m.PasswordResetComponent),
+      }
+    ]
+  }
 
 ];
