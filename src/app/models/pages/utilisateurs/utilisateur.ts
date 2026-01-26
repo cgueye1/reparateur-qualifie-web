@@ -98,3 +98,62 @@ export interface UserStatsCounter {
 
   evolutionPercentage: number;
 }
+
+
+/**
+ * � Utilisateur sponsorisé (artisan ajouté)
+ * Utilisé pour l'onglet "Artisans ajoutés"
+ */
+export interface SponsoredUser {
+  id: number;
+  reference: string | null;
+  nom: string;
+  prenom: string;
+  email: string;
+  telephone: string;
+  adress: string | null;
+  lat: number;
+  lon: number;
+  profil: 'ADMIN' | 'ARTISAN' | 'CLIENT';
+  sponsor: {
+    id: number;
+    nom: string;
+    prenom: string;
+  } | null;
+  activeBadge: any | null;
+  averageRating: number;
+  ratingCount: number;
+  sponsoredUsersCount: number;
+  shareCount: number;
+  photo: string | null;
+}
+
+/** * 🔗 Profil partagé
+ * Utilisé pour l'onglet "Profils partagés"
+ */
+export interface SharedProfile {
+  id: number;
+  sharedBy: User;
+  sharedUser: User;
+  sharedAt: string;
+}
+
+/** * �📊 Réponse API pour la répartition des notes
+ * L'API ne retourne que les notes de 2 à 5 étoiles
+ */
+export interface RatingDistributionResponse {
+  totalRatings: number;
+  percent2: number;
+  percent3: number;
+  percent4: number;
+  percent5: number;
+}
+
+/**
+ * 📊 Format transformé pour l'affichage
+ * Utilisé pour afficher le graphique donut
+ */
+export interface RatingDistribution {
+  score: number;
+  percentage: number;
+}
