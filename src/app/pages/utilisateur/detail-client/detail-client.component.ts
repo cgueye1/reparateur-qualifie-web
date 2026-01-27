@@ -100,20 +100,26 @@ export class DetailClientComponent implements OnInit {
   loadRatingDistribution(userId: number): void {
     this.userService.getRatingDistribution(userId).subscribe({
       next: (res: RatingDistributionResponse) => {
-        // Transformer la réponse API en tableau pour l'affichage (ordre décroissant: 5 -> 2 étoiles)
+        // ✅ TOUJOURS afficher les 4 notes (2-5 étoiles), même à 0%
+        // Ordre décroissant : 5 → 4 → 3 → 2
         this.ratingDistribution = [
           { score: 5, percentage: res.percent5 },
           { score: 4, percentage: res.percent4 },
           { score: 3, percentage: res.percent3 },
           { score: 2, percentage: res.percent2 }
-        ].filter(r => r.percentage > 0); // Ne garder que les notes qui ont un pourcentage > 0
+        ];
 
         this.totalRatings = res.totalRatings;
         this.initDonutChart();
       },
       error: () => {
-        // En cas d'erreur, on initialise avec des données vides
-        this.ratingDistribution = [];
+        // En cas d'erreur, initialiser avec 0%
+        this.ratingDistribution = [
+          { score: 5, percentage: 0 },
+          { score: 4, percentage: 0 },
+          { score: 3, percentage: 0 },
+          { score: 2, percentage: 0 }
+        ];
         this.totalRatings = 0;
         this.initDonutChart();
       }
@@ -370,49 +376,42 @@ export class DetailClientComponent implements OnInit {
   donutOptions: any;
 
   initDonutChart(): void {
-    // Si pas de données, on affiche un graphique vide
-    if (this.ratingDistribution.length === 0) {
-      this.donutData = {
-        labels: [],
-        datasets: [{
-          data: [],
-          backgroundColor: [],
-          borderWidth: 0
-        }]
-      };
-    } else {
-      // Couleurs par score (5 étoiles = vert, 4 = orange, 3 = bleu, 2 = rouge, 1 = gris)
-      const colorMap: { [key: number]: string } = {
-        5: '#22C55F',  // Vert
-        4: '#F59E0C',  // Orange
-        3: '#3B83F6',  // Bleu
-        2: '#EF4444',  // Rouge
-        1: '#9CA3AF'   // Gris
-      };
+    // ✅ Formatage des pourcentages : 1 décimale max (33.333333 → 33.3%)
+    const labels = this.ratingDistribution.map(r => {
+      const formattedPercent = r.percentage % 1 === 0
+        ? r.percentage.toFixed(0)  // Entier : "50"
+        : r.percentage.toFixed(1);  // Décimale : "33.3"
+      return `${r.score} étoile${r.score > 1 ? 's' : ''} (${formattedPercent}%)`;
+    });
 
-      // Trier par score décroissant (5 -> 1)
-      const sortedData = [...this.ratingDistribution].sort((a, b) => b.score - a.score);
+    const data = this.ratingDistribution.map(r => r.percentage);
 
-      const labels = sortedData.map(r =>
-        `${r.score} étoile${r.score > 1 ? 's' : ''} (${r.percentage.toFixed(0)}%)`
-      );
-      const data = sortedData.map(r => r.percentage);
-      const colors = sortedData.map(r => colorMap[r.score] || '#9CA3AF');
+    // Couleurs : 5⭐ vert, 4⭐ orange, 3⭐ bleu, 2⭐ rouge
+    const colors = ['#22C55F', '#F59E0C', '#3B83F6', '#EF4444'];
 
-      this.donutData = {
-        labels,
-        datasets: [{
-          data,
-          backgroundColor: colors,
-          borderWidth: 0
-        }]
-      };
-    }
+    this.donutData = {
+      labels,
+      datasets: [{
+        data,
+        backgroundColor: colors,
+        borderWidth: 0
+      }]
+    };
 
     this.donutOptions = {
       cutout: '70%',
       plugins: { legend: { display: false } }
     };
+  }
+
+  // =====================================================
+  // 🎨 FORMATAGE POURCENTAGE (max 1 décimale)
+  // =====================================================
+  formatPercent(value: number | undefined): string {
+    if (value === undefined || value === null) return '0';
+    return value % 1 === 0
+      ? value.toFixed(0)  // Entier : 50 → "50"
+      : value.toFixed(1);  // Décimal : 33.333 → "33.3"
   }
 
   // =====================================================

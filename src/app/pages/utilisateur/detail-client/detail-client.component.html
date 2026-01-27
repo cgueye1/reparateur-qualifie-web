@@ -100,7 +100,7 @@
       <!-- Nom + prenom -->
       <div class="mt-14 text-center">
         <h2 class="text-xl font-semibold text-[#111]">{{ user?.prenom }} {{ user?.nom }}</h2>
-        <p class="text-[#333333]">{{ user?.trade?.name }}</p>
+        <p class="text-[#333333]">{{ user?.profil || 'Client' }}</p>
       </div>
 
       <!-- Séparateur -->
@@ -304,14 +304,35 @@
 
             </div>
 
-            <!-- ✔ LÉGENDES CENTRÉES + PETITES -->
+            <!-- ✔ LÉGENDES : TOUJOURS afficher les 4 notes (même à 0%) -->
             <div class="grid grid-cols-2 gap-y-4 mt-4 text-xs text-[#777777] justify-items-center">
 
-              <div *ngFor="let rating of ratingDistribution" class="flex items-center gap-1">
-                <span class="w-2 h-2 rounded-full"
-                  [style.background]="rating.score === 5 ? '#22C55F' : rating.score === 4 ? '#F59E0C' : rating.score === 3 ? '#3B83F6' : rating.score === 2 ? '#EF4444' : '#9CA3AF'">
-                </span>
-                {{ rating.score }} étoile{{ rating.score > 1 ? 's' : '' }} ({{ rating.percentage.toFixed(0) }}%)
+              <!-- 5 étoiles -->
+              <div class="flex items-center gap-1">
+                <span class="w-2 h-2 rounded-full" style="background:#22C55F;"></span>
+                {{ ratingDistribution[0]?.score || 5 }} étoiles ({{ formatPercent(ratingDistribution[0]?.percentage)
+                }}%)
+              </div>
+
+              <!-- 4 étoiles -->
+              <div class="flex items-center gap-1">
+                <span class="w-2 h-2 rounded-full" style="background:#F59E0C;"></span>
+                {{ ratingDistribution[1]?.score || 4 }} étoiles ({{ formatPercent(ratingDistribution[1]?.percentage)
+                }}%)
+              </div>
+
+              <!-- 3 étoiles -->
+              <div class="flex items-center gap-1">
+                <span class="w-2 h-2 rounded-full" style="background:#3B83F6;"></span>
+                {{ ratingDistribution[2]?.score || 3 }} étoiles ({{ formatPercent(ratingDistribution[2]?.percentage)
+                }}%)
+              </div>
+
+              <!-- 2 étoiles -->
+              <div class="flex items-center gap-1">
+                <span class="w-2 h-2 rounded-full" style="background:#EF4444;"></span>
+                {{ ratingDistribution[3]?.score || 2 }} étoiles ({{ formatPercent(ratingDistribution[3]?.percentage)
+                }}%)
               </div>
 
             </div>

@@ -101,7 +101,7 @@ export class UtilisateurService {
    */
   getRatingDistribution(userId: number): Observable<RatingDistributionResponse> {
     return this.http.get<RatingDistributionResponse>(
-      `${this.endpoint}/${userId}/repartition-by-score`
+      `${this.baseUrl}/api/ratings/user/${userId}/repartition-by-score`
     );
   }
 

@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { VerificationService } from '../../../core/service/pages/verification/verification.service';
 import { SwettAlerteService } from '../../../core/service/alerte/swett-alerte.service';
 import { Verification, UserDocument } from '../../../models/pages/verification/verification';
+import { environment } from '../../../../environments/environments';
 
 @Component({
   selector: 'app-detail-verification',
@@ -97,6 +98,7 @@ export class DetailVerificationComponent implements OnInit {
     this.user = {
       id: v.user.id,
       nom: `${v.user.prenom} ${v.user.nom}`,
+      prenom: v.user.prenom,
       photo: v.user.photo,
       initials: this.getInitials(`${v.user.prenom} ${v.user.nom}`),
       metier: v.user.trade?.name || 'Non spécifié',
@@ -112,7 +114,7 @@ export class DetailVerificationComponent implements OnInit {
   }
 
   /* ============================================================
-   * 📄 CHARGEMENT DES DOCUMENTS UTILISATEUR (PARTIE 2)
+   *  CHARGEMENT DES DOCUMENTS UTILISATEUR (PARTIE 2)
    * ============================================================ */
   private loadUserDocuments(userId: number): void {
     this.loadingDocuments = true;
@@ -178,6 +180,22 @@ export class DetailVerificationComponent implements OnInit {
       .slice(0, 2)
       .join('')
       .toUpperCase();
+  }
+
+  /* ============================================================
+   * 🖼️ URL PHOTO UTILISATEUR
+   * ============================================================ */
+  getUserPhotoUrl(): string | null {
+    if (!this.user.photo) return null;
+    return `${environment.imageUrl}/${this.user.photo}`;
+  }
+
+  /* ============================================================
+   * 🔤 INITIALES UTILISATEUR (pour placeholder)
+   * ============================================================ */
+  getUserInitials(): string {
+    if (!this.user) return 'U';
+    return this.getInitials(this.user.nom) || 'U';
   }
 
   // classes pour les statuts

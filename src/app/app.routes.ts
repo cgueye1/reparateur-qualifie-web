@@ -113,14 +113,14 @@ export const routes: Routes = [
         data: { title: 'Gestion des métiers' },
       },
 
-      // Modération des avis
-      {
-        path: 'moderation-avis',
-        loadComponent: () =>
-          import('./pages/moderation-avis/moderation-avis/moderation-avis.component')
-            .then((m) => m.ModerationAvisComponent),
-        data: { title: 'Modération des avis' },
-      },
+      // COMMENTED - En attente endpoints backend (GET /api/ratings)
+      // {
+      //   path: 'moderation-avis',
+      //   loadComponent: () =>
+      //     import('./pages/moderation-avis/moderation-avis/moderation-avis.component')
+      //       .then((m) => m.ModerationAvisComponent),
+      //   data: { title: 'Modération des avis' },
+      // },
 
 
       // Publicités
