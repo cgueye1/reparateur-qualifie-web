@@ -61,14 +61,14 @@
   <!-- ================================================================================= -->
   <!-- 🟧 SECTION 2 — CONTENU PRINCIPAL (2 colonnes : Profil + Vue d'ensemble)           -->
   <!-- ================================================================================= -->
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 auto-rows-fr">
+  <div class="grid grid-cols-1 lg:grid-cols-[minmax(320px,_1fr)_2fr] gap-5">
 
 
     <!-- ================================================================================= -->
-    <!-- 🟦 COLONNE 1 — CARTE PROFIL                                                      -->
+    <!-- 🟪 COLONNE 1 — CARTE PROFIL                                                      -->
     <!-- ================================================================================= -->
 
-    <div class="bg-white rounded-2xl shadow-sm p-6 h-full">
+    <div class="bg-white rounded-2xl shadow-sm p-6 lg:self-start lg:sticky lg:top-5">
 
       <!-- Bandeau -->
       <div
@@ -171,16 +171,16 @@
           <span class="text-gray-400 text-sm">Référence</span>
         </div>
 
-        <!-- Note moyenne (si disponible) -->
+        <!-- Note moyenne (si disponible) 
         <div class="flex items-start justify-between" *ngIf="user?.averageRating">
-          <div class="flex items-center gap-3">
+          <div class="flex items-center">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M8 0L10.2 5.2L16 6L12 9.8L13 15.6L8 13L3 15.6L4 9.8L0 6L5.8 5.2L8 0Z" fill="#F59E0C" />
             </svg>
 
           </div><span class="text-[#333333]">{{ user?.averageRating?.toFixed(1) }} / 5</span>
           <span class="text-gray-400 text-sm">Note moyenne</span>
-        </div>
+        </div> -->
 
         <!-- Statuts (badges) -->
         <div class="flex flex-wrap gap-2 mt-2">
@@ -231,11 +231,11 @@
 
 
     <!-- ================================================================================= -->
-    <!-- 🟧 COLONNE 2 & 3 — SECTION VUE D’ENSEMBLE + ONGLET                               -->
+    <!-- 🟧 COLONNE 2 — SECTION VUE D'ENSEMBLE + ONGLET                                   -->
     <!-- ================================================================================= -->
 
     <!-- BLOC PRINCIPAL -->
-    <div class="lg:col-span-2 bg-white rounded-2xl p-6 h-full">
+    <div class="bg-white rounded-2xl p-6">
       <div class="bg-white rounded-2xl shadow-sm">
 
         <!-- ===== TITRE ===== -->
@@ -272,7 +272,7 @@
             <button (click)="changeTab('evaluations')" class="pb-3 pt-3 font-medium transition text-sm" [ngClass]="tab === 'evaluations'
             ? 'text-[#E95F32] border-b-[2.5px] border-[#E95F32]'
             : 'text-[#333333] hover:text-[#E95F32]'">
-              Évaluations (2)
+              Évaluations ({{ totalRatings || 0 }})
             </button>
 
           </div>
@@ -468,10 +468,11 @@
                 <tr *ngFor="let share of sharedProfiles" class="border-b">
 
                   <td class="py-4 px-4 text-[#1E293B] flex items-center gap-3">
-                    <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
-                      <img *ngIf="share.sharedUser.photo" [src]="share.sharedUser.photo"
+                    <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center overflow-hidden">
+                      <img *ngIf="getPhotoUrl(share.sharedUser.photo)" [src]="getPhotoUrl(share.sharedUser.photo)!"
                         alt="{{ share.sharedUser.nom }}" class="w-full h-full rounded-full object-cover" />
-                      <span *ngIf="!share.sharedUser.photo">{{ share.sharedUser.nom.charAt(0) }}{{
+                      <span *ngIf="!getPhotoUrl(share.sharedUser.photo)" class="text-sm font-medium text-gray-600">{{
+                        share.sharedUser.nom.charAt(0) }}{{
                         share.sharedUser.prenom.charAt(0) }}</span>
                     </div>
                     <div>
@@ -524,7 +525,6 @@
         <!-- ========================================================= -->
         <!-- ====================== ONGLET : EVALUATIONS ============= -->
         <!-- ========================================================= -->
-        <!-- Ton bloc Evaluations est déjà parfait donc je ne le touche pas -->
         <div *ngIf="tab === 'evaluations'" class="pt-4">
           <!-- ======== BLOC HAUT : Statistiques étoiles ========= -->
           <div class="bg-[#F8F8F8] border rounded-2xl p-5 shadow-sm mb-6">
@@ -548,8 +548,12 @@
                   </span>
 
                   <div class="w-[150px]">
-                    <div class="h-2 bg-[#006D60] rounded-full" style="width: 90%;"></div>
+                    <div class="h-2 bg-[#006D60] rounded-full"
+                      [style.width.%]="formatPercent(ratingDistribution[0]?.percentage || 0)"></div>
                   </div>
+
+                  <span class="text-xs text-gray-600">{{ formatPercent(ratingDistribution[0]?.percentage || 0)
+                    }}%</span>
 
                 </div>
 
@@ -566,8 +570,11 @@
 
                   </span>
                   <div class="w-[150px]">
-                    <div class="h-2 bg-[#006D60] rounded-full" style="width: 70%;"></div>
+                    <div class="h-2 bg-[#006D60] rounded-full"
+                      [style.width.%]="formatPercent(ratingDistribution[1]?.percentage || 0)"></div>
                   </div>
+                  <span class="text-xs text-gray-600">{{ formatPercent(ratingDistribution[1]?.percentage || 0)
+                    }}%</span>
                 </div>
 
                 <!-- Ligne 3 étoiles -->
@@ -582,8 +589,11 @@
 
                   </span>
                   <div class="w-[150px]">
-                    <div class="h-2 bg-[#006D60] rounded-full" style="width: 40%;"></div>
+                    <div class="h-2 bg-[#006D60] rounded-full"
+                      [style.width.%]="formatPercent(ratingDistribution[2]?.percentage || 0)"></div>
                   </div>
+                  <span class="text-xs text-gray-600">{{ formatPercent(ratingDistribution[2]?.percentage || 0)
+                    }}%</span>
                 </div>
 
                 <!-- Ligne 2 étoiles -->
@@ -598,8 +608,11 @@
 
                   </span>
                   <div class="w-[150px]">
-                    <div class="h-2 bg-[#006D60] rounded-full" style="width: 15%;"></div>
+                    <div class="h-2 bg-[#006D60] rounded-full"
+                      [style.width.%]="formatPercent(ratingDistribution[3]?.percentage || 0)"></div>
                   </div>
+                  <span class="text-xs text-gray-600">{{ formatPercent(ratingDistribution[3]?.percentage || 0)
+                    }}%</span>
                 </div>
 
                 <!-- Ligne 1 étoile -->
@@ -614,8 +627,9 @@
 
                   </span>
                   <div class="w-[150px]">
-                    <div class="h-2 bg-[#006D60] rounded-full" style="width: 5%;"></div>
+                    <div class="h-2 bg-[#006D60] rounded-full" [style.width.%]="0"></div>
                   </div>
+                  <span class="text-xs text-gray-600">0%</span>
                 </div>
 
               </div>
@@ -628,14 +642,27 @@
               <!-- ⭐ Note globale -->
               <div class="flex flex-col items-end justify-center text-right mb-12">
 
-                <h1 class="text-4xl font-semibold text-[#333333] leading-none">4.7</h1>
+                <h1 class="text-4xl font-semibold text-[#333333] leading-none">{{ getRoundedRating(user?.averageRating)
+                  }}</h1>
 
                 <!-- étoiles -->
                 <div class="flex items-center text-[#EAB308] text-sm mt-2">
-                  ★ ★ ★ ★ ☆
+                  <ng-container *ngFor="let star of getStars((user?.averageRating || 0) * 2)">
+                    <!-- Étoile pleine -->
+                    <span *ngIf="star.type === 'full'">★</span>
+
+                    <!-- Étoile partielle -->
+                    <span *ngIf="star.type === 'partial'" class="relative inline-block">
+                      <span class="text-gray-300">★</span>
+                      <span class="absolute top-0 left-0 overflow-hidden" [style.width.%]="star.fillPercentage">★</span>
+                    </span>
+
+                    <!-- Étoile vide -->
+                    <span *ngIf="star.type === 'empty'" class="text-gray-300">★</span>
+                  </ng-container>
                 </div>
 
-                <span class="text-xs text-[#333333] mt-1">52 avis</span>
+                <span class="text-xs text-[#333333] mt-1">{{ totalRatings }} avis</span>
 
               </div>
 
@@ -648,49 +675,117 @@
           <!-- ======== TABLEAU DES ÉVALUATIONS ========= -->
           <div class="bg-white  rounded-2xl p-5 shadow-sm w-full">
 
-            <table class="w-full table-fixed">
+            <!-- Loading state -->
+            <div *ngIf="ratingsLoading" class="flex items-center justify-center py-8">
+              <div class="text-center">
+                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500 mx-auto mb-2"></div>
+                <p class="text-gray-500 text-sm">Chargement des évaluations...</p>
+              </div>
+            </div>
 
-              <!-- HEADER -->
-              <thead class="text-[#64748B] font-medium text-xs bg-[#FCFCFD]">
-                <tr class="text-left ">
-                  <th class="pb-3">Référence</th>
-                  <th class="pb-3">Date</th>
-                  <th class="pb-3">Utilisateur</th>
-                  <th class="pb-3">Note</th>
-                  <th class="pb-3">Commentaire</th>
-                </tr>
-              </thead>
+            <!-- Tableau -->
+            <div *ngIf="!ratingsLoading && receivedRatings.length > 0">
+              <table class="w-full table-fixed">
 
-              <!-- ROWS -->
-              <tbody class="text-[#1E293B] font-light">
+                <!-- HEADER -->
+                <thead class="text-[#64748B] font-medium text-xs bg-[#FCFCFD]">
+                  <tr class="text-left ">
+                    <th class="pb-3">Référence</th>
+                    <th class="pb-3">Date</th>
+                    <th class="pb-3">Utilisateur</th>
+                    <th class="pb-3">Note</th>
+                    <th class="pb-3">Commentaire</th>
+                  </tr>
+                </thead>
 
-                <tr class="border-b border-gray-200">
-                  <td class="py-4">INV-2025002</td>
-                  <td>2025-02-15</td>
-                  <td>Alissatou Diop</td>
+                <!-- ROWS -->
+                <tbody class="text-[#1E293B] font-light">
 
-                  <!-- étoiles (tu remplaces par tes icônes plus tard) -->
-                  <td class="text-[#EAB308] text-sm">★ ★ ★ ★ ★</td>
+                  <tr *ngFor="let rating of receivedRatings; let last = last" [class.border-b]="!last"
+                    [class.border-gray-200]="!last">
+                    <td class="py-4 text-xs">{{ rating.author.reference || '-' }}</td>
+                    <td class="text-xs">{{ formatDate(rating.createdAt) }}</td>
+                    <td class="text-xs">{{ rating.author.prenom }} {{ rating.author.nom }}</td>
 
-                  <td class="text-xs text-gray-600">
-                    Excellent travail, très professionnel et ponctuel. Je recommande vivement !
-                  </td>
-                </tr>
+                    <!-- étoiles dynamiques -->
+                    <td class="text-[#EAB308] text-xs">
+                      <ng-container *ngFor="let star of getStars(rating.score)">
+                        <!-- Étoile pleine -->
+                        <span *ngIf="star.type === 'full'">★</span>
 
-                <tr>
-                  <td class="py-4">INV-2025001</td>
-                  <td>2025-02-15</td>
-                  <td>Issa Ndiaye</td>
+                        <!-- Étoile partielle -->
+                        <span *ngIf="star.type === 'partial'" class="relative inline-block">
+                          <span class="text-gray-300">★</span>
+                          <span class="absolute top-0 left-0 overflow-hidden"
+                            [style.width.%]="star.fillPercentage">★</span>
+                        </span>
 
-                  <td class="text-[#EAB308] text-sm">★ ★ ★ ★ ☆</td>
+                        <!-- Étoile vide -->
+                        <span *ngIf="star.type === 'empty'" class="text-gray-300">★</span>
+                      </ng-container>
+                    </td>
 
-                  <td class="text-xs text-gray-600">
-                    Bon service, travail de qualité
-                  </td>
-                </tr>
+                    <td class="text-xs text-gray-600">
+                      {{ rating.comment || 'Aucun commentaire' }}
+                    </td>
+                  </tr>
 
-              </tbody>
-            </table>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Empty state -->
+            <div *ngIf="!ratingsLoading && receivedRatings.length === 0" class="text-center py-8">
+              <svg class="w-16 h-16 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+              </svg>
+              <p class="text-gray-600 font-medium">Aucune évaluation</p>
+              <p class="text-gray-400 text-sm mt-1">Cet utilisateur n'a pas encore reçu d'évaluations</p>
+            </div>
+
+            <!-- Pagination -->
+            <div *ngIf="!ratingsLoading && receivedRatings.length > 0" 
+                 class="flex items-center justify-between mt-6 pt-4 border-t">
+              
+              <!-- Sélecteur nombre d'éléments -->
+              <div class="flex items-center gap-3 text-sm text-gray-600">
+                <span>éléments par page :</span>
+                <select 
+                  [(ngModel)]="ratingsPageSize"
+                  (change)="onRatingsPageSizeChange()"
+                  class="border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500">
+                  <option [value]="10">10</option>
+                  <option [value]="20">20</option>
+                  <option [value]="25">25</option>
+                </select>
+              </div>
+
+              <!-- Info et navigation -->
+              <div class="flex items-center gap-4">
+                <!-- Plage affichée -->
+                <span class="text-sm text-gray-600">
+                  {{ ratingsStartIndex }} – {{ ratingsEndIndex }} sur {{ totalRatingsElements }}
+                </span>
+
+                <!-- Boutons de navigation -->
+                <div class="flex items-center gap-2">
+                  <button 
+                    (click)="prevRatingsPage()"
+                    [disabled]="currentRatingsPage === 0"
+                    class="text-gray-400 hover:text-gray-600 p-1 disabled:opacity-30">
+                    ‹
+                  </button>
+                  
+                  <button 
+                    (click)="nextRatingsPage()"
+                    [disabled]="currentRatingsPage + 1 >= totalRatingsPages"
+                    class="text-gray-400 hover:text-gray-600 p-1 disabled:opacity-30">
+                    ›
+                  </button>
+                </div>
+              </div>
+            </div>
 
           </div>
         </div>

@@ -252,19 +252,42 @@
       <div class="flex items-center justify-between mb-4">
 
         <!-- TITRE -->
-        <h2 class="text-base font-semibold text-[#343A40]">Croissance des utilisateurs</h2>
+        <div>
+          <h2 class="text-base font-semibold text-[#2C3E50]">Croissance des utilisateurs</h2>
+          <p class="text-xs text-[#6B7280] mt-0.5">{{ getPeriodSubtitle() }}</p>
+        </div>
 
         <!-- SELECT -->
-        <div class="flex items-center h-1">
-          <div
-            class="flex items-center justify-between bg-white border border-gray-300 rounded-sm px-4 h-8 cursor-pointer text-lg">
-            <span class="text-sm font-medium text-[#343A40]">Ce semestre</span>
+        <div class="relative flex items-center h-1">
+          <div (click)="togglePeriodDropdown()"
+            class="flex items-center justify-between bg-white border border-gray-300 rounded-md px-3 h-8 cursor-pointer text-lg">
+            <span class="text-sm font-medium text-[#6B7280]">{{ getPeriodLabel() }}</span>
             <span class="text-gray-500">
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M10 12.8333L5 7.83329L6.16667 6.66663L10 10.5L13.8333 6.66663L15 7.83329L10 12.8333Z"
                   fill="#808080" />
               </svg>
             </span>
+          </div>
+
+          <!-- Dropdown menu -->
+          <div *ngIf="isPeriodDropdownOpen"
+            class="absolute top-10 right-0 z-10 bg-white border border-gray-300 rounded-md shadow-lg w-40">
+            <div (click)="changePeriodType('HEBDO')"
+              class="px-4 py-2 text-sm text-[#6B7280] hover:bg-gray-100 cursor-pointer"
+              [class.bg-gray-100]="selectedPeriodType === 'HEBDO'">
+              Cette semaine
+            </div>
+            <div (click)="changePeriodType('MENSUEL')"
+              class="px-4 py-2 text-sm text-[#6B7280] hover:bg-gray-100 cursor-pointer"
+              [class.bg-gray-100]="selectedPeriodType === 'MENSUEL'">
+              Ce mois
+            </div>
+            <div (click)="changePeriodType('ANNUEL')"
+              class="px-4 py-2 text-sm text-[#6B7280] hover:bg-gray-100 cursor-pointer"
+              [class.bg-gray-100]="selectedPeriodType === 'ANNUEL'">
+              Cette année
+            </div>
           </div>
         </div>
 
@@ -295,7 +318,7 @@
       </div>
 
       <!-- GRAPH -->
-      <div *ngIf="!usersChartLoading && usersChartReady" class="h-[280px] w-full">
+      <div *ngIf="!usersChartLoading && usersChartReady" class="h-[260px] w-full">
         <canvas baseChart [data]="userChartData" [options]="userChartOptions" [type]="'line'">
         </canvas>
       </div>
@@ -312,8 +335,10 @@
       <div class="flex items-center justify-between mb-4">
 
         <!-- TITRE -->
-        <h2 class="text-base font-semibold text-[#343A40]">Revenus mensuels</h2>
-
+        <div>
+          <h2 class="text-base font-semibold text-[#2C3E50]">Revenus mensuels</h2>
+          <p class="text-xs text-[#6B7280] mt-0.5">Tendance des revenus </p>
+        </div>
         <!-- POUR ALIGNEMENT → même DIV que la carte 1 (même largeur, même padding) -->
         <div class="flex items-center gap-3">
           <div class="w-32"></div> <!-- Div vide pour aligner parfaitement -->
@@ -346,7 +371,7 @@
       </div>
 
       <!-- GRAPH -->
-      <div *ngIf="!revenueChartLoading && revenueChartReady" class="h-[280px] w-full">
+      <div *ngIf="!revenueChartLoading && revenueChartReady" class="h-[260px] w-full">
         <canvas baseChart [data]="revenueChartData" [options]="revenueChartOptions" [type]="'line'">
         </canvas>
       </div>

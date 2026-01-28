@@ -92,7 +92,7 @@
 
       <h2 class="text-xl font-bold text-[#111111]">{{ stats.actives }}</h2>
 
-      <!-- À revoir: Evolution mensuelle (endpoint manquant)
+      <!-- À revoir: Evolution mensuelle (endpoint manquant)-->
       <div class="flex items-center gap-2 mt-2">
         <span class="text-green-600 font-bold text-sm">
           <svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -105,7 +105,7 @@
         <span class="text-xs font-light text-green-600 ml-1">+12%</span>
         <span class="text-xs text-[#64748B] font-light ml-2">ce mois</span>
       </div>
-      -->
+
     </div>
 
     <!-- 🟥 CARD 3 : Publicités inactives -->
@@ -130,7 +130,7 @@
 
       <h2 class="text-xl font-bold text-[#111111]">{{ stats.inactives }}</h2>
 
-      <!-- À revoir: Evolution mensuelle (endpoint manquant)
+      <!-- À revoir: Evolution mensuelle (endpoint manquant)-->
       <div class="flex items-center gap-2 mt-2">
         <span class="text-green-600 font-bold text-sm">
           <svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -142,7 +142,7 @@
         <span class="text-xs font-light text-green-600 ml-1">+12%</span>
         <span class="text-xs text-[#64748B] font-light ml-2">ce mois</span>
       </div>
-      -->
+
     </div>
 
   </div>
@@ -165,7 +165,7 @@
             fill="#777777" />
         </svg>
         <input type="text" [(ngModel)]="searchText" placeholder="Rechercher une publicité"
-          class="w-full outline-none text-sm" />
+          class="w-full outline-none text-xs text-[#777777]" />
       </div>
 
       <!-- Filtres -->
@@ -489,24 +489,26 @@
       <!-- DATES -->
       <div>
         <label class="text-sm font-medium text-gray-700">
-          Période d'affichage
-          <span *ngIf="!pubForm.permanent" class="text-red-500">*</span>
-          <span *ngIf="pubForm.permanent" class="text-xs text-gray-500">(optionnel si permanent)</span>
+          Période d'affichage <span class="text-red-500">*</span>
         </label>
 
         <div class="flex gap-3 mt-1">
-          <input type="date" name="startDate" [(ngModel)]="pubForm.dateDebut" [required]="!pubForm.permanent"
-            #startDate="ngModel" class="w-full border rounded-md px-3 h-11 text-sm
+          <input type="date" name="startDate" [(ngModel)]="pubForm.dateDebut" required [min]="minStartDate"
+            (change)="onStartDateChange()" #startDate="ngModel" class="w-full border rounded-md px-3 h-11 text-sm
                    focus:outline-none focus:ring-2 focus:ring-[#FF5C02]" placeholder="Date début" />
 
-          <input type="date" name="endDate" [(ngModel)]="pubForm.dateFin" [required]="!pubForm.permanent"
-            #endDate="ngModel" class="w-full border rounded-md px-3 h-11 text-sm
+          <input type="date" name="endDate" [(ngModel)]="pubForm.dateFin" required [min]="minEndDate" #endDate="ngModel"
+            class="w-full border rounded-md px-3 h-11 text-sm
                    focus:outline-none focus:ring-2 focus:ring-[#FF5C02]" placeholder="Date fin" />
         </div>
 
         <p *ngIf="(startDate.touched || endDate.touched) &&
-                  (startDate.invalid || endDate.invalid) && !pubForm.permanent" class="text-xs text-red-500 mt-1">
+                  (startDate.invalid || endDate.invalid)" class="text-xs text-red-500 mt-1">
           Dates de début et de fin obligatoires.
+        </p>
+        <p *ngIf="pubForm.dateDebut && pubForm.dateFin && pubForm.dateFin < pubForm.dateDebut"
+          class="text-xs text-red-500 mt-1">
+          La date de fin doit être supérieure ou égale à la date de début.
         </p>
       </div>
 
@@ -520,7 +522,7 @@
 
       <!-- ACTIONS -->
       <div class="flex gap-3 pt-3">
-        <button type="button" (click)="submitPub()" [disabled]="f.invalid" class="flex-1 h-11 bg-[#FF5C02] text-white rounded-md
+        <button type="button" (click)="submitPub()" [disabled]="!isCreateFormValid()" class="flex-1 h-11 bg-[#FF5C02] text-white rounded-md
                  text-sm font-medium disabled:opacity-50">
           Enregistrer
         </button>
@@ -648,15 +650,15 @@
           </label>
         </div>
 
-        <!-- DATES (si non permanent) -->
-        <div *ngIf="!editPub.permanent" class="grid grid-cols-2 gap-4">
+        <!-- DATES -->
+        <div class="grid grid-cols-2 gap-4">
           <!-- Date de début -->
           <div>
             <label class="text-sm font-medium text-gray-700 mb-2 block">
               Date de début <span class="text-red-500">*</span>
             </label>
-            <input type="date" name="startDate" [(ngModel)]="editPub.startDateInput" [required]="!editPub.permanent"
-              #startDateEdit="ngModel" class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
+            <input type="date" name="startDate" [(ngModel)]="editPub.startDateInput" required [min]="editMinStartDate"
+              (change)="onEditStartDateChange()" #startDateEdit="ngModel" class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
                      focus:outline-none focus:ring-2 focus:ring-orange-500">
 
             <p *ngIf="startDateEdit.touched && startDateEdit.invalid" class="text-xs text-red-500 mt-1">
@@ -669,12 +671,16 @@
             <label class="text-sm font-medium text-gray-700 mb-2 block">
               Date de fin <span class="text-red-500">*</span>
             </label>
-            <input type="date" name="endDate" [(ngModel)]="editPub.endDateInput" [required]="!editPub.permanent"
+            <input type="date" name="endDate" [(ngModel)]="editPub.endDateInput" required [min]="editMinEndDate"
               #endDateEdit="ngModel" class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
                      focus:outline-none focus:ring-2 focus:ring-orange-500">
 
             <p *ngIf="endDateEdit.touched && endDateEdit.invalid" class="text-xs text-red-500 mt-1">
               Date de fin obligatoire.
+            </p>
+            <p *ngIf="editPub.startDateInput && editPub.endDateInput && editPub.endDateInput < editPub.startDateInput"
+              class="text-xs text-red-500 mt-1">
+              La date de fin doit être supérieure ou égale à la date de début.
             </p>
           </div>
         </div>
@@ -727,7 +733,7 @@
 
       <!-- ACTIONS -->
       <div class="flex justify-start mt-8 gap-4">
-        <button type="button" (click)="saveEditPub()" [disabled]="fEdit.invalid" class="px-8 py-2.5 rounded-lg bg-[#E95F32] text-white font-medium
+        <button type="button" (click)="saveEditPub()" [disabled]="!isEditFormValid()" class="px-8 py-2.5 rounded-lg bg-[#E95F32] text-white font-medium
                  hover:bg-[#d15528] transition-colors disabled:opacity-50">
           Mettre à jour
         </button>

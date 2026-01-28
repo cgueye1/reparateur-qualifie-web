@@ -3,16 +3,25 @@ import { CommonModule, NgIf } from '@angular/common';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { NgChartsModule } from 'ng2-charts';
+import { FormsModule } from '@angular/forms';
 
 import { UtilisateurService } from '../../../core/service/pages/utilisateurs/utilisateur.service';
 import { SwettAlerteService } from '../../../core/service/alerte/swett-alerte.service';
-import { User, RatingDistribution, RatingDistributionResponse, SponsoredUser, SharedProfile } from '../../../models/pages/utilisateurs/utilisateur';
+import { User, RatingDistribution, RatingDistributionResponse, SponsoredUser, SharedProfile, ReceivedRating, Page } from '../../../models/pages/utilisateurs/utilisateur';
 import { environment } from '../../../../environments/environments';
+
+/**
+ * Structure pour représenter une étoile
+ */
+interface Star {
+  type: 'full' | 'partial' | 'empty';
+  fillPercentage?: number;
+}
 
 @Component({
   selector: 'app-detail-client',
   standalone: true,
-  imports: [CommonModule, NgIf, NgChartsModule],
+  imports: [CommonModule, NgIf, NgChartsModule, FormsModule],
   templateUrl: './detail-client.component.html',
   styleUrl: './detail-client.component.css'
 })
@@ -31,6 +40,19 @@ export class DetailClientComponent implements OnInit {
   sharedProfiles: SharedProfile[] = [];
   sharedProfilesLoading = false;
   totalSharedProfiles = 0;
+
+  // =====================================================
+  // ⭐ ÉVALUATIONS REÇUES
+  // =====================================================
+  receivedRatings: ReceivedRating[] = [];
+  averageRating = 0;
+  ratingsLoading = false;
+  
+  // Pagination des évaluations
+  currentRatingsPage = 0;
+  ratingsPageSize = 10;
+  totalRatingsPages = 0;
+  totalRatingsElements = 0;
 
   // =====================================================
   // 🧭 ONGLET
@@ -60,6 +82,7 @@ export class DetailClientComponent implements OnInit {
   // =====================================================
   ngOnInit(): void {
     this.loadClientDetail();
+    this.loadReceivedRatings();
   }
 
   // =====================================================
@@ -415,7 +438,151 @@ export class DetailClientComponent implements OnInit {
   }
 
   // =====================================================
-  // 📈 LINE CHART (VUES PROFIL)
+  // 🖼️ CONSTRUCTION URL PHOTO (POUR PROFILS PARTAGÉS)
+  // =====================================================
+  getPhotoUrl(photoFileName: string | null): string | null {
+    if (!photoFileName) return null;
+    if (photoFileName.startsWith('http')) return photoFileName;
+    return `${environment.imageUrl}/${photoFileName}`;
+  }
+
+  // =====================================================
+  // � API — ÉVALUATIONS REÇUES
+  // =====================================================
+  loadReceivedRatings(page: number = 0): void {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    if (!id) return;
+
+    this.ratingsLoading = true;
+
+    this.userService.getReceivedRatings(id, page, this.ratingsPageSize).subscribe({
+      next: (res: Page<ReceivedRating>) => {
+        this.receivedRatings = res.content;
+        this.currentRatingsPage = res.number;
+        this.totalRatingsPages = res.totalPages;
+        this.totalRatingsElements = res.totalElements;
+        this.ratingsLoading = false;
+      },
+      error: () => {
+        this.receivedRatings = [];
+        this.ratingsLoading = false;
+        this.alertService.error(
+          'Erreur lors du chargement des évaluations',
+          'light'
+        );
+      }
+    });
+  }
+
+  /**
+   * Change de page dans la pagination des évaluations
+   */
+  onRatingsPageChange(page: number): void {
+    this.loadReceivedRatings(page);
+  }
+
+  /**
+   * Change le nombre d'éléments par page
+   */
+  onRatingsPageSizeChange(): void {
+    this.currentRatingsPage = 0; // Retour à la première page
+    this.loadReceivedRatings(0);
+  }
+
+  /**
+   * Page suivante
+   */
+  nextRatingsPage(): void {
+    if (this.currentRatingsPage + 1 < this.totalRatingsPages) {
+      this.currentRatingsPage++;
+      this.loadReceivedRatings(this.currentRatingsPage);
+    }
+  }
+
+  /**
+   * Page précédente
+   */
+  prevRatingsPage(): void {
+    if (this.currentRatingsPage > 0) {
+      this.currentRatingsPage--;
+      this.loadReceivedRatings(this.currentRatingsPage);
+    }
+  }
+
+  /**
+   * Index de départ pour l'affichage de pagination
+   */
+  get ratingsStartIndex(): number {
+    if (this.totalRatingsElements === 0) return 0;
+    return this.currentRatingsPage * this.ratingsPageSize + 1;
+  }
+
+  /**
+   * Index de fin pour l'affichage de pagination
+   */
+  get ratingsEndIndex(): number {
+    return Math.min((this.currentRatingsPage + 1) * this.ratingsPageSize, this.totalRatingsElements);
+  }
+
+  /**
+   * Génère un tableau d'étoiles pour l'affichage avec support des étoiles partielles
+   * @param score Note de 0 à 10 (API)
+   * @returns Tableau de 5 étoiles avec leur type et pourcentage de remplissage
+   */
+  getStars(score: number): Star[] {
+    const scoreOn5 = score / 2; // Convertir de 10 à 5
+    const fullStars = Math.floor(scoreOn5);
+    const partialFill = scoreOn5 - fullStars;
+
+    const stars: Star[] = [];
+
+    // Étoiles pleines
+    for (let i = 0; i < fullStars; i++) {
+      stars.push({ type: 'full' });
+    }
+
+    // Étoile partielle (si le reste est > 0)
+    if (partialFill > 0 && fullStars < 5) {
+      stars.push({
+        type: 'partial',
+        fillPercentage: partialFill * 100
+      });
+    }
+
+    // Étoiles vides
+    while (stars.length < 5) {
+      stars.push({ type: 'empty' });
+    }
+
+    return stars;
+  }
+
+  /**
+   * Arrondit la note moyenne à 1 décimale
+   * @param rating Note moyenne
+   * @returns Note arrondie
+   */
+  getRoundedRating(rating: number | undefined): string {
+    if (!rating) return '0';
+    return rating.toFixed(1);
+  }
+
+  /**
+   * Formate une date ISO en format lisible
+   * @param isoDate Date au format "2026-01-27T14:47:00.112678"
+   * @returns Date au format "27-01-2026"
+   */
+  formatDate(isoDate: string): string {
+    if (!isoDate) return '-';
+    const date = new Date(isoDate);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  }
+
+  // =====================================================
+  // �📈 LINE CHART (VUES PROFIL)
   // =====================================================
   viewsData: any;
   viewsOptions: any;

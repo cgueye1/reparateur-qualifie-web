@@ -157,3 +157,48 @@ export interface RatingDistribution {
   score: number;
   percentage: number;
 }
+
+/**
+ * 📄 Document utilisateur
+ * Utilisé pour l'onglet "Documents" dans le détail utilisateur
+ */
+export interface Document {
+  id: number;
+  name: string;
+  fileUrl: string | null;
+  status: 'VALIDATED' | 'PENDING' | 'REJECTED';
+  comment: string | null;
+  user: {
+    id: number;
+    nom: string;
+    prenom: string;
+  };
+}
+
+/**
+ * ⭐ Évaluation reçue
+ * Utilisé pour l'onglet "Évaluations" dans le détail utilisateur
+ */
+export interface ReceivedRating {
+  id: number;
+  score: number;  // 0 à 10
+  comment: string | null;
+  author: {
+    id: number;
+    reference: string | null;
+    nom: string;
+    prenom: string;
+    email: string;
+    telephone: string;
+    photo: string | null;
+    profil: string;
+  };
+  ratedUser: {
+    id: number;
+    reference: string | null;
+    nom: string;
+    prenom: string;
+  };
+  createdAt: string;  // Format: "2026-01-27T14:47:00.112678"
+  status: string;
+}

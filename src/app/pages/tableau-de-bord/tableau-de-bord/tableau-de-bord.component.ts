@@ -23,30 +23,30 @@ import { TableauDeBordService } from '../../../core/service/pages/tableau-de-bor
 })
 export class TableauDeBordComponent implements OnInit {
 
-// =====================================================
-// 🍩 GRAPH — RÉPARTITION UTILISATEURS (DONUT)
-// =====================================================
+  // =====================================================
+  // 🍩 GRAPH — RÉPARTITION UTILISATEURS (DONUT)
+  // =====================================================
 
-// États UI
-donutChartLoading = false;
-donutChartReady = false;
-donutChartError = false;
+  // États UI
+  donutChartLoading = false;
+  donutChartReady = false;
+  donutChartError = false;
 
-// Données brutes venant de l’API
-usersProfilesDistribution: UserProfileDistribution[] = [];
+  // Données brutes venant de l’API
+  usersProfilesDistribution: UserProfileDistribution[] = [];
 
 
 
   // =====================================================
-// 📊 GRAPH — MÉTIERS LES PLUS DEMANDÉS
-// =====================================================
+  // 📊 GRAPH — MÉTIERS LES PLUS DEMANDÉS
+  // =====================================================
 
-jobsChartLoading = false;
-jobsChartError = false;
-jobsChartReady = false;
+  jobsChartLoading = false;
+  jobsChartError = false;
+  jobsChartReady = false;
 
-// Données brutes API
-topTrades: TopTrade[] = [];
+  // Données brutes API
+  topTrades: TopTrade[] = [];
 
 
 
@@ -68,8 +68,8 @@ topTrades: TopTrade[] = [];
   usersChartLoading = false;
   usersChartReady = false;
   usersChartError = false;
-  usersGrowth: UsersGrowth[] = [];
-
+  usersGrowth: UsersGrowth[] = []; selectedPeriodType: 'ANNUEL' | 'HEBDO' | 'MENSUEL' = 'ANNUEL';
+  isPeriodDropdownOpen = false;
   userChartData: ChartConfiguration<'line'>['data'] = {
     labels: [],
     datasets: [{
@@ -197,98 +197,98 @@ topTrades: TopTrade[] = [];
   };
 
   // =====================================================
-// 📊 GRAPH — MÉTIERS LES PLUS DEMANDÉS (DYNAMIQUE)
-// =====================================================
+  // 📊 GRAPH — MÉTIERS LES PLUS DEMANDÉS (DYNAMIQUE)
+  // =====================================================
 
 
 
-// Données du graphique Métiers
-jobsChartData: {
-  labels: string[];
-  datasets: {
-    data: number[];
-    backgroundColor: string;
-    borderColor: string;
-    borderWidth: number;
-    barPercentage: number;
-  }[];
-} = {
-  labels: [],
-  datasets: [
-    {
-      data: [],
-      backgroundColor: '#EFBD8E',
-      borderColor: '#EFBD8E',
-      borderWidth: 1,
-      barPercentage: 0.6,
+  // Données du graphique Métiers
+  jobsChartData: {
+    labels: string[];
+    datasets: {
+      data: number[];
+      backgroundColor: string;
+      borderColor: string;
+      borderWidth: number;
+      barPercentage: number;
+    }[];
+  } = {
+      labels: [],
+      datasets: [
+        {
+          data: [],
+          backgroundColor: '#EFBD8E',
+          borderColor: '#EFBD8E',
+          borderWidth: 1,
+          barPercentage: 0.6,
+        }
+      ]
+    };
+
+  jobsChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: {
+        ticks: { maxRotation: 45, minRotation: 45 },
+        grid: { display: false }
+      },
+      y: {
+        grid: { color: '#E5E7EB' },
+        ticks: { stepSize: 1 } // logique pour userCount
+      }
     }
-  ]
-};
-
-jobsChartOptions = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: { legend: { display: false } },
-  scales: {
-    x: {
-      ticks: { maxRotation: 45, minRotation: 45 },
-      grid: { display: false }
-    },
-    y: {
-      grid: { color: '#E5E7EB' },
-      ticks: { stepSize: 1 } // logique pour userCount
-    }
-  }
-};
+  };
 
 
   // =====================================================
-// 🍩 GRAPH — DONUT (RÉPARTITION UTILISATEURS)
-// =====================================================
+  // 🍩 GRAPH — DONUT (RÉPARTITION UTILISATEURS)
+  // =====================================================
 
-donutChartData: {
-  labels: string[];
-  datasets: {
-    data: number[];
-    backgroundColor: string[];
-    hoverOffset: number;
-    borderWidth: number;
-  }[];
-} = {
-  labels: [],
-  datasets: [
-    {
-      data: [],
-      backgroundColor: ['#EC6A3B', '#262626'],
-      hoverOffset: 4,
-      borderWidth: 0
-    }
-  ]
-};
+  donutChartData: {
+    labels: string[];
+    datasets: {
+      data: number[];
+      backgroundColor: string[];
+      hoverOffset: number;
+      borderWidth: number;
+    }[];
+  } = {
+      labels: [],
+      datasets: [
+        {
+          data: [],
+          backgroundColor: ['#EC6A3B', '#262626'],
+          hoverOffset: 4,
+          borderWidth: 0
+        }
+      ]
+    };
 
 
-donutChartOptions = {
-  responsive: true,
-  cutout: '68%',
-  maintainAspectRatio: false,
-  plugins: {
-    legend: { display: false },
-    tooltip: {
-      callbacks: {
-        label: (context: any) => {
-          const label = context.label ?? '';
-          const value = context.parsed ?? 0;
-          return `${label} : ${value}`;
+  donutChartOptions = {
+    responsive: true,
+    cutout: '68%',
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: (context: any) => {
+            const label = context.label ?? '';
+            const value = context.parsed ?? 0;
+            return `${label} : ${value}`;
+          }
         }
       }
     }
-  }
-};
+  };
 
   // =====================================================
   // 🔌 CONSTRUCTEUR
   // =====================================================
-  constructor(private tableauDeBordService: TableauDeBordService) {}
+  constructor(private tableauDeBordService: TableauDeBordService) { }
 
   // =====================================================
   // 🚀 INIT
@@ -333,12 +333,12 @@ donutChartOptions = {
   // =====================================================
   // 📈 CHARGEMENT GRAPHIQUE UTILISATEURS
   // =====================================================
-  loadUsersGrowthChart(): void {
+  loadUsersGrowthChart(type: 'ANNUEL' | 'HEBDO' | 'MENSUEL' = this.selectedPeriodType): void {
     this.usersChartLoading = true;
     this.usersChartError = false;
     this.usersChartReady = false;
 
-    this.tableauDeBordService.getUsersGrowth('ANNUEL').subscribe({
+    this.tableauDeBordService.getUsersGrowth(type).subscribe({
       next: (res) => {
         if (!res || res.length === 0) {
           this.usersChartError = true;
@@ -347,17 +347,23 @@ donutChartOptions = {
 
         this.usersGrowth = res;
 
-        // 🔁 Conversion mois anglais → français (abrégés)
-        const monthMap: Record<string, string> = {
-          January: 'Janv', February: 'Févr', March: 'Mars',
-          April: 'Avr', May: 'Mai', June: 'Juin',
-          July: 'Juil', August: 'Août', September: 'Sept',
-          October: 'Oct', November: 'Nov', December: 'Déc'
-        };
+        // 🔁 Conversion mois anglais → français (abrégés) - uniquement pour ANNUEL et MENSUEL
+        if (type === 'ANNUEL' || type === 'MENSUEL') {
+          const monthMap: Record<string, string> = {
+            January: 'Janv', February: 'Févr', March: 'Mars',
+            April: 'Avr', May: 'Mai', June: 'Juin',
+            July: 'Juil', August: 'Août', September: 'Sept',
+            October: 'Oct', November: 'Nov', December: 'Déc'
+          };
 
-        this.userChartData.labels = res.map(
-          item => monthMap[item.label] ?? item.label
-        );
+          this.userChartData.labels = res.map(
+            item => monthMap[item.label] ?? item.label
+          );
+        } else {
+          // Pour HEBDO, utiliser directement les labels de l'API
+          this.userChartData.labels = res.map(item => item.label);
+        }
+
         this.userChartData.datasets[0].data = res.map(i => i.count);
         this.usersChartReady = true;
       },
@@ -369,6 +375,45 @@ donutChartOptions = {
         this.usersChartLoading = false;
       }
     });
+  }
+
+  // =====================================================
+  // 🔄 CHANGEMENT DE PÉRIODE POUR GRAPHIQUE UTILISATEURS
+  // =====================================================
+  changePeriodType(type: 'ANNUEL' | 'HEBDO' | 'MENSUEL'): void {
+    this.selectedPeriodType = type;
+    this.isPeriodDropdownOpen = false;
+    this.loadUsersGrowthChart(type);
+  }
+
+  togglePeriodDropdown(): void {
+    this.isPeriodDropdownOpen = !this.isPeriodDropdownOpen;
+  }
+
+  getPeriodLabel(): string {
+    switch (this.selectedPeriodType) {
+      case 'HEBDO':
+        return 'Cette semaine';
+      case 'MENSUEL':
+        return 'Ce mois';
+      case 'ANNUEL':
+        return 'Cette année';
+      default:
+        return 'Cette année';
+    }
+  }
+
+  getPeriodSubtitle(): string {
+    switch (this.selectedPeriodType) {
+      case 'HEBDO':
+        return 'Evolution hebdomadaire';
+      case 'MENSUEL':
+        return 'Evolution sur 6 mois';
+      case 'ANNUEL':
+        return 'Evolution sur 12 mois';
+      default:
+        return 'Evolution sur 12 mois';
+    }
   }
 
   // =====================================================
@@ -426,130 +471,130 @@ donutChartOptions = {
 
 
 
-// =====================================================
-// 📊 CHARGEMENT TOP DES MÉTIERS
-// =====================================================
-loadTopTrades(): void {
-  this.jobsChartLoading = true;
-  this.jobsChartError = false;
-  this.jobsChartReady = false;
+  // =====================================================
+  // 📊 CHARGEMENT TOP DES MÉTIERS
+  // =====================================================
+  loadTopTrades(): void {
+    this.jobsChartLoading = true;
+    this.jobsChartError = false;
+    this.jobsChartReady = false;
 
-  this.tableauDeBordService.getTopTrades().subscribe({
-    next: (res) => {
-      if (!res || res.length === 0) {
+    this.tableauDeBordService.getTopTrades().subscribe({
+      next: (res) => {
+        if (!res || res.length === 0) {
+          this.jobsChartError = true;
+          return;
+        }
+
+        this.topTrades = res;
+
+        // Labels = noms des métiers
+        this.jobsChartData.labels = res.map(
+          trade => trade.tradeName
+        );
+
+        // Données = nombre d'utilisateurs / demandes
+        this.jobsChartData.datasets[0].data = res.map(
+          trade => trade.userCount
+        );
+
+        this.jobsChartReady = true;
+      },
+      error: (err) => {
+        console.error('❌ Erreur chargement top métiers:', err);
         this.jobsChartError = true;
-        return;
+      },
+      complete: () => {
+        this.jobsChartLoading = false;
       }
-
-      this.topTrades = res;
-
-      // Labels = noms des métiers
-      this.jobsChartData.labels = res.map(
-        trade => trade.tradeName
-      );
-
-      // Données = nombre d'utilisateurs / demandes
-      this.jobsChartData.datasets[0].data = res.map(
-        trade => trade.userCount
-      );
-
-      this.jobsChartReady = true;
-    },
-    error: (err) => {
-      console.error('❌ Erreur chargement top métiers:', err);
-      this.jobsChartError = true;
-    },
-    complete: () => {
-      this.jobsChartLoading = false;
-    }
-  });
-}
+    });
+  }
 
 
-// =====================================================
-// 🔄 RECHARGEMENT GRAPH MÉTIERS
-// =====================================================
-retryJobsChart(): void {
-  this.loadTopTrades();
-}
+  // =====================================================
+  // 🔄 RECHARGEMENT GRAPH MÉTIERS
+  // =====================================================
+  retryJobsChart(): void {
+    this.loadTopTrades();
+  }
 
 
-// =====================================================
-// 🍩 GRAPH — RÉPARTITION UTILISATEURS (DONUT)
-// =====================================================
+  // =====================================================
+  // 🍩 GRAPH — RÉPARTITION UTILISATEURS (DONUT)
+  // =====================================================
 
-// Valeurs affichées dans le donut
-totalUsers = 0;
-clientPercentage = 0;
-artisanPercentage = 0;
+  // Valeurs affichées dans le donut
+  totalUsers = 0;
+  clientPercentage = 0;
+  artisanPercentage = 0;
 
-// =====================================================
-// 🍩 CHARGEMENT RÉPARTITION UTILISATEURS
-// =====================================================
-loadUsersProfilesDonut(): void {
-  this.donutChartLoading = true;
-  this.donutChartError = false;
-  this.donutChartReady = false;
+  // =====================================================
+  // 🍩 CHARGEMENT RÉPARTITION UTILISATEURS
+  // =====================================================
+  loadUsersProfilesDonut(): void {
+    this.donutChartLoading = true;
+    this.donutChartError = false;
+    this.donutChartReady = false;
 
-  this.tableauDeBordService.getUsersProfilesDistribution().subscribe({
-    next: (res) => {
-      if (!res || res.length === 0) {
+    this.tableauDeBordService.getUsersProfilesDistribution().subscribe({
+      next: (res) => {
+        if (!res || res.length === 0) {
+          this.donutChartError = true;
+          return;
+        }
+
+        this.usersProfilesDistribution = res;
+
+        // -----------------------------
+        // 📊 Données du graphique
+        // -----------------------------
+
+        // Labels (CLIENT / ARTISAN)
+        this.donutChartData.labels = res.map(
+          item => item.profile === 'CLIENT' ? 'Clients' : 'Artisans'
+        );
+
+        // Valeurs (counts)
+        this.donutChartData.datasets[0].data = res.map(
+          item => item.count
+        );
+
+        // -----------------------------
+        // 🔢 Données affichées (texte)
+        // -----------------------------
+
+        // Total utilisateurs
+        this.totalUsers = res.reduce(
+          (sum, item) => sum + item.count, 0
+        );
+
+        // Pourcentages
+        this.clientPercentage = Math.round(
+          res.find(i => i.profile === 'CLIENT')?.percentage ?? 0
+        );
+
+        this.artisanPercentage = Math.round(
+          res.find(i => i.profile === 'ARTISAN')?.percentage ?? 0
+        );
+
+        this.donutChartReady = true;
+      },
+      error: (err) => {
+        console.error('❌ Erreur chargement donut utilisateurs:', err);
         this.donutChartError = true;
-        return;
+      },
+      complete: () => {
+        this.donutChartLoading = false;
       }
+    });
+  }
 
-      this.usersProfilesDistribution = res;
-
-      // -----------------------------
-      // 📊 Données du graphique
-      // -----------------------------
-
-      // Labels (CLIENT / ARTISAN)
-      this.donutChartData.labels = res.map(
-        item => item.profile === 'CLIENT' ? 'Clients' : 'Artisans'
-      );
-
-      // Valeurs (counts)
-      this.donutChartData.datasets[0].data = res.map(
-        item => item.count
-      );
-
-      // -----------------------------
-      // 🔢 Données affichées (texte)
-      // -----------------------------
-
-      // Total utilisateurs
-      this.totalUsers = res.reduce(
-        (sum, item) => sum + item.count, 0
-      );
-
-      // Pourcentages
-      this.clientPercentage = Math.round(
-        res.find(i => i.profile === 'CLIENT')?.percentage ?? 0
-      );
-
-      this.artisanPercentage = Math.round(
-        res.find(i => i.profile === 'ARTISAN')?.percentage ?? 0
-      );
-
-      this.donutChartReady = true;
-    },
-    error: (err) => {
-      console.error('❌ Erreur chargement donut utilisateurs:', err);
-      this.donutChartError = true;
-    },
-    complete: () => {
-      this.donutChartLoading = false;
-    }
-  });
-}
-
-// =====================================================
-// 🔄 RECHARGEMENT DONUT UTILISATEURS
-// =====================================================
-retryDonutChart(): void {
-  this.loadUsersProfilesDonut();
-}
+  // =====================================================
+  // 🔄 RECHARGEMENT DONUT UTILISATEURS
+  // =====================================================
+  retryDonutChart(): void {
+    this.loadUsersProfilesDonut();
+  }
 
 
 }

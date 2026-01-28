@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../../../environments/environments';
-import { Page, User, UserProfileDistribution, UserStatsCounter, RatingDistribution, RatingDistributionResponse, SponsoredUser, SharedProfile } from '../../../../models/pages/utilisateurs/utilisateur';
+import { Page, User, UserProfileDistribution, UserStatsCounter, RatingDistribution, RatingDistributionResponse, SponsoredUser, SharedProfile, Document, ReceivedRating } from '../../../../models/pages/utilisateurs/utilisateur';
 
 
 @Injectable({
@@ -173,6 +173,62 @@ export class UtilisateurService {
 
     return this.http.get<Page<SharedProfile>>(
       `${this.endpoint}/user-share/${userId}`,
+      { params }
+    );
+  }
+
+  // ============================
+  // 📄 DOCUMENTS UTILISATEUR
+  // ============================
+  /**
+   * Cette API permet de récupérer la liste des documents
+   * d'un utilisateur (artisan).
+   *
+   * 👉 Utilisée pour l'onglet "Documents"
+   * dans la page détail utilisateur.
+   *
+   * @param userId - ID de l'utilisateur
+   */
+  getUserDocuments(userId: number): Observable<Document[]> {
+    return this.http.get<Document[]>(
+      `${this.baseUrl}/api/user/documents/${userId}`
+    );
+  }
+
+  /**
+   * Ouvre un document utilisateur dans un nouvel onglet.
+   * Construit l'URL complète à partir du nom du fichier.
+   * Fonctionne pour tous types de fichiers (PDF, images, etc.)
+   *
+   * @param fileUrl - Nom du fichier (ex: "c675deea-2ddd-4344-918f-918f1d30621b.png" ou "document.pdf")
+   */
+  downloadDocument(fileUrl: string): void {
+    const fileBaseUrl = environment.imageUrl;
+    const fullUrl = `${fileBaseUrl}/${fileUrl}`;
+    window.open(fullUrl, '_blank');
+  }
+
+  // ============================
+  // ⭐ ÉVALUATIONS REÇUES
+  // ============================
+  /**
+   * Cette API permet de récupérer la liste paginnée
+   * des évaluations reçues par un utilisateur.
+   *
+   * 👉 Utilisée pour l'onglet "Évaluations"
+   * dans la page détail utilisateur.
+   *
+   * @param userId - ID de l'utilisateur
+   * @param page - Numéro de page (défaut: 0)
+   * @param size - Taille de page (défaut: 10)
+   */
+  getReceivedRatings(userId: number, page = 0, size = 10): Observable<Page<ReceivedRating>> {
+    const params = new HttpParams()
+      .set('page', page)
+      .set('size', size);
+
+    return this.http.get<Page<ReceivedRating>>(
+      `${this.baseUrl}/api/ratings/received/${userId}`,
       { params }
     );
   }

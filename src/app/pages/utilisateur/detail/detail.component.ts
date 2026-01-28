@@ -6,8 +6,16 @@ import { NgChartsModule } from 'ng2-charts';
 
 import { UtilisateurService } from '../../../core/service/pages/utilisateurs/utilisateur.service';
 import { SwettAlerteService } from '../../../core/service/alerte/swett-alerte.service';
-import { User, RatingDistribution, RatingDistributionResponse } from '../../../models/pages/utilisateurs/utilisateur';
+import { User, RatingDistribution, RatingDistributionResponse, Document, ReceivedRating, Page } from '../../../models/pages/utilisateurs/utilisateur';
 import { FormsModule } from '@angular/forms';
+
+/**
+ * Structure pour représenter une étoile
+ */
+interface Star {
+  type: 'full' | 'partial' | 'empty';
+  fillPercentage?: number;
+}
 
 @Component({
   selector: 'app-detail',
@@ -29,6 +37,24 @@ export class DetailComponent implements OnInit {
   // =====================================================
   ratingDistribution: RatingDistribution[] = [];
   totalRatings = 0;
+
+  // =====================================================
+  // 📄 DOCUMENTS
+  // =====================================================
+  documents: Document[] = [];
+
+  // =====================================================
+  // ⭐ ÉVALUATIONS REÇUES
+  // =====================================================
+  receivedRatings: ReceivedRating[] = [];
+  averageRating = 0;
+  ratingsLoading = false;
+  
+  // Pagination des évaluations
+  currentRatingsPage = 0;
+  ratingsPageSize = 10;
+  totalRatingsPages = 0;
+  totalRatingsElements = 0;
 
   // =====================================================
   // 🧭 ONGLET
@@ -54,7 +80,8 @@ export class DetailComponent implements OnInit {
   ngOnInit(): void {
     this.loadUserDetail();
     this.initDonutChart();
-    this.initLineChart();
+    this.loadDocuments();
+    this.loadReceivedRatings();
   }
 
   // =====================================================
@@ -71,6 +98,7 @@ export class DetailComponent implements OnInit {
         this.user = res;
         this.loading = false;
         this.loadRatingDistribution(id);
+        this.loadMonthlyProfileViews(id);
       },
       error: () => {
         this.loading = false;
@@ -112,6 +140,177 @@ export class DetailComponent implements OnInit {
         this.initDonutChart();
       }
     });
+  }
+
+  // =====================================================
+  // 📡 API — DOCUMENTS
+  // =====================================================
+  loadDocuments(): void {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    if (!id) return;
+
+    this.userService.getUserDocuments(id).subscribe({
+      next: (res: Document[]) => {
+        this.documents = res;
+      },
+      error: () => {
+        this.documents = [];
+        this.alertService.error(
+          'Erreur lors du chargement des documents',
+          'light'
+        );
+      }
+    });
+  }
+
+  /**
+   * Télécharge un document
+   */
+  downloadDocument(fileUrl: string | null): void {
+    if (!fileUrl) {
+      this.alertService.error(
+        'Aucun fichier disponible pour ce document',
+        'light'
+      );
+      return;
+    }
+
+    this.userService.downloadDocument(fileUrl);
+  }
+
+  // =====================================================
+  // 📊 API — ÉVALUATIONS REÇUES
+  // =====================================================
+  loadReceivedRatings(page: number = 0): void {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    if (!id) return;
+
+    this.ratingsLoading = true;
+
+    this.userService.getReceivedRatings(id, page, this.ratingsPageSize).subscribe({
+      next: (res: Page<ReceivedRating>) => {
+        this.receivedRatings = res.content;
+        this.currentRatingsPage = res.number;
+        this.totalRatingsPages = res.totalPages;
+        this.totalRatingsElements = res.totalElements;
+        this.ratingsLoading = false;
+      },
+      error: () => {
+        this.receivedRatings = [];
+        this.ratingsLoading = false;
+        this.alertService.error(
+          'Erreur lors du chargement des évaluations',
+          'light'
+        );
+      }
+    });
+  }
+
+  /**
+   * Change de page dans la pagination des évaluations
+   */
+  onRatingsPageChange(page: number): void {
+    this.loadReceivedRatings(page);
+  }
+
+  /**
+   * Change le nombre d'éléments par page
+   */
+  onRatingsPageSizeChange(): void {
+    this.currentRatingsPage = 0; // Retour à la première page
+    this.loadReceivedRatings(0);
+  }
+
+  /**
+   * Page suivante
+   */
+  nextRatingsPage(): void {
+    if (this.currentRatingsPage + 1 < this.totalRatingsPages) {
+      this.currentRatingsPage++;
+      this.loadReceivedRatings(this.currentRatingsPage);
+    }
+  }
+
+  /**
+   * Page précédente
+   */
+  prevRatingsPage(): void {
+    if (this.currentRatingsPage > 0) {
+      this.currentRatingsPage--;
+      this.loadReceivedRatings(this.currentRatingsPage);
+    }
+  }
+
+  /**
+   * Index de départ pour l'affichage de pagination
+   */
+  get ratingsStartIndex(): number {
+    if (this.totalRatingsElements === 0) return 0;
+    return this.currentRatingsPage * this.ratingsPageSize + 1;
+  }
+
+  /**
+   * Index de fin pour l'affichage de pagination
+   */
+  get ratingsEndIndex(): number {
+    return Math.min((this.currentRatingsPage + 1) * this.ratingsPageSize, this.totalRatingsElements);
+  }
+
+  /**
+   * Génère un tableau d'étoiles pour l'affichage avec support des étoiles partielles
+   * @param score Note de 0 à 10 (API)
+   * @returns Tableau de 5 étoiles avec leur type et pourcentage de remplissage
+   */
+  getStars(score: number): Star[] {
+    const scoreOn5 = score / 2; // Convertir de 10 à 5
+    const fullStars = Math.floor(scoreOn5);
+    const partialFill = scoreOn5 - fullStars;
+
+    const stars: Star[] = [];
+
+    // Étoiles pleines
+    for (let i = 0; i < fullStars; i++) {
+      stars.push({ type: 'full' });
+    }
+
+    // Étoile partielle (si le reste est > 0)
+    if (partialFill > 0 && fullStars < 5) {
+      stars.push({
+        type: 'partial',
+        fillPercentage: partialFill * 100
+      });
+    }
+
+    // Étoiles vides
+    while (stars.length < 5) {
+      stars.push({ type: 'empty' });
+    }
+
+    return stars;
+  }
+
+  /**
+   * Arrondit la note moyenne à 1 décimale
+   * @param rating Note moyenne
+   * @returns Note arrondie
+   */
+  getRoundedRating(rating: number | undefined): string {
+    if (!rating) return '0';
+    return rating.toFixed(1);
+  }
+
+  /**
+   * Formate une date ISO en format lisible
+   * @param isoDate Date au format "2026-01-27T14:47:00.112678"
+   * @returns Date au format "27-01-2026"
+   */
+  formatDate(isoDate: string): string {
+    if (!isoDate) return '-';
+    const date = new Date(isoDate);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
   }
 
   // =====================================================
@@ -259,29 +458,96 @@ export class DetailComponent implements OnInit {
   viewsData: any;
   viewsOptions: any;
 
-  initLineChart(): void {
-    this.viewsData = {
-      labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai'],
-      datasets: [{
-        label: 'Vues',
-        data: [15, 12, 20, 10, 14],
-        borderColor: '#E95F32',
-        backgroundColor: 'transparent',
-        borderWidth: 2,
-        pointRadius: 3,
-        pointBackgroundColor: '#fff',
-        pointBorderColor: '#E95F32'
-      }]
-    };
+  // =====================================================
+  // 📡 API — VUES MENSUELLES DU PROFIL
+  // =====================================================
+  loadMonthlyProfileViews(userId: number): void {
+    const currentYear = new Date().getFullYear(); // Année courante (2026)
 
-    this.viewsOptions = {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        x: { grid: { display: false } },
-        y: { grid: { color: '#F1F1F1' } }
+    this.userService.getMonthlyProfileViews(userId, currentYear).subscribe({
+      next: (res: { [key: string]: number }) => {
+        // Mapping des numéros de mois vers les labels français
+        const monthLabels: { [key: string]: string } = {
+          '1': 'Jan', '2': 'Fév', '3': 'Mar', '4': 'Avr',
+          '5': 'Mai', '6': 'Juin', '7': 'Juil', '8': 'Août',
+          '9': 'Sep', '10': 'Oct', '11': 'Nov', '12': 'Déc'
+        };
+
+        const labels: string[] = [];
+        const data: number[] = [];
+
+        // Parcourir tous les mois (1-12) dans l'ordre
+        for (let i = 1; i <= 12; i++) {
+          const monthKey = i.toString();
+          labels.push(monthLabels[monthKey]);
+          data.push(res[monthKey] || 0);
+        }
+
+        // Mettre à jour le graphique avec les vraies données
+        this.viewsData = {
+          labels,
+          datasets: [{
+            label: 'Vues',
+            data,
+            borderColor: '#E95F32',
+            backgroundColor: 'transparent',
+            borderWidth: 2,
+            pointRadius: 3,
+            pointBackgroundColor: '#fff',
+            pointBorderColor: '#E95F32'
+          }]
+        };
+
+        this.viewsOptions = {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { grid: { display: false } },
+            y: {
+              grid: { color: '#F1F1F1' },
+              beginAtZero: true,
+              ticks: {
+                stepSize: 1,
+                precision: 0
+              }
+            }
+          }
+        };
+      },
+      error: () => {
+        // En cas d'erreur, initialiser avec un graphique vide
+        this.viewsData = {
+          labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'],
+          datasets: [{
+            label: 'Vues',
+            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            borderColor: '#E95F32',
+            backgroundColor: 'transparent',
+            borderWidth: 2,
+            pointRadius: 3,
+            pointBackgroundColor: '#fff',
+            pointBorderColor: '#E95F32'
+          }]
+        };
+
+        this.viewsOptions = {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { grid: { display: false } },
+            y: {
+              grid: { color: '#F1F1F1' },
+              beginAtZero: true,
+              ticks: {
+                stepSize: 1,
+                precision: 0
+              }
+            }
+          }
+        };
       }
-    };
+    });
   }
 }

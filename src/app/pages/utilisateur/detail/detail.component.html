@@ -20,10 +20,9 @@
 
       </button>
 
-      <!-- Nom + ID -->
+      <!-- Nom -->
       <div>
         <h1 class="text-2xl font-semibold text-[#111]">{{ user?.prenom }} {{ user?.nom }}</h1>
-        <p class="text-sm text-[#343A40]">ID : {{ user?.id }}</p>
       </div>
 
     </div>
@@ -70,14 +69,14 @@
   <!-- ================================================================================= -->
   <!-- 🟧 SECTION 2 — CONTENU PRINCIPAL (2 colonnes : Profil + Vue d'ensemble)           -->
   <!-- ================================================================================= -->
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 auto-rows-fr">
+  <div class="grid grid-cols-1 lg:grid-cols-[minmax(320px,_1fr)_2fr] gap-5">
 
 
     <!-- ================================================================================= -->
-    <!-- 🟦 COLONNE 1 — CARTE PROFIL                                                      -->
+    <!-- 🟪 COLONNE 1 — CARTE PROFIL                                                      -->
     <!-- ================================================================================= -->
 
-    <div class="bg-white rounded-2xl shadow-sm p-6 h-full">
+    <div class="bg-white rounded-2xl shadow-sm p-6 lg:self-start lg:sticky lg:top-5">
 
       <!-- Bandeau -->
       <div
@@ -179,7 +178,7 @@
           <span class="text-gray-400 text-sm">Référence</span>
         </div>
 
-        <!-- Note moyenne (si disponible) -->
+        <!-- Note moyenne (si disponible) 
         <div class="flex items-start justify-between" *ngIf="user?.averageRating">
           <div class="flex items-center gap-3">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -188,7 +187,7 @@
 
           </div><span class="text-[#333333]">{{ user?.averageRating?.toFixed(1) }} / 5</span>
           <span class="text-gray-400 text-sm">Note moyenne</span>
-        </div>
+        </div> -->
 
         <!-- Statuts (badges) -->
         <div class="flex flex-wrap gap-2 mt-2">
@@ -235,10 +234,10 @@
 
 
     <!-- ================================================================================= -->
-    <!-- 🟧 COLONNE 2 & 3 — SECTION VUE D’ENSEMBLE + ONGLET                               -->
+    <!-- 🟧 COLONNE 2 — SECTION VUE D'ENSEMBLE + ONGLET                               -->
     <!-- ================================================================================= -->
 
-    <div class="lg:col-span-2 bg-white rounded-2xl  p-6 h-full">
+    <div class="bg-white rounded-2xl p-6">
 
 
       <!-- Grande carte blanche -->
@@ -279,7 +278,7 @@
               ? 'text-[#E95F32] border-b-[2.5px] border-[#E95F32]'
               : 'text-[#333333] hover:text-[#E95F32]'
           ">
-              Documents
+              Documents ({{ documents.length }})
             </button>
 
             <!-- Onglet : Évaluations -->
@@ -288,7 +287,7 @@
               ? 'text-[#E95F32] border-b-[2.5px] border-[#E95F32]'
               : 'text-[#333333] hover:text-[#E95F32]'
           ">
-              Évaluations
+              Évaluations ({{ totalRatings || 0 }})
             </button>
 
           </div>
@@ -389,13 +388,11 @@
 
 
         <!-- 🟦 ONGLET : PAIEMENT -->
-        <div *ngIf="tab === 'paiements'" class="pt-4">
+        <!-- <div *ngIf="tab === 'paiements'" class="pt-4">
 
-          <!-- TABLEAU -->
           <div class="overflow-x-auto mt-4">
             <table class="w-full text-sm">
 
-              <!-- En-têtes -->
               <thead>
                 <tr class="text-[#64748B] text-xs border-b bg-[#FCFCFD]">
                   <th class="text-left py-3 px-4">Référence</th>
@@ -405,7 +402,6 @@
                 </tr>
               </thead>
 
-              <!-- Lignes -->
               <tbody>
 
                 <tr class="border-b">
@@ -442,7 +438,7 @@
             </table>
           </div>
 
-        </div>
+        </div> -->
 
 
 
@@ -453,10 +449,17 @@
 
         <div *ngIf="tab === 'documents'" class="pt-4">
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <!-- Message si aucun document -->
+          <div *ngIf="documents.length === 0" class="text-center py-8 text-gray-500">
+            Aucun document disponible
+          </div>
 
-            <!-- 📄 Document 1 -->
-            <div class="bg-white border rounded-xl p-4 flex items-center justify-between shadow-sm">
+          <div *ngIf="documents.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+
+            <!-- 📄 Document (dynamique) -->
+            <div *ngFor="let doc of documents"
+              class="bg-white border rounded-xl p-4 flex items-center justify-between shadow-sm">
 
               <!-- Left -->
               <div class="flex items-center gap-3">
@@ -468,59 +471,28 @@
                       d="M9 7H14.5L9 1.5V7ZM2 0H10L16 6V18C16 18.5304 15.7893 19.0391 15.4142 19.4142C15.0391 19.7893 14.5304 20 14 20H2C1.46957 20 0.960859 19.7893 0.585786 19.4142C0.210714 19.0391 0 18.5304 0 18V2C0 1.46957 0.210714 0.960859 0.585786 0.585786C0.960859 0.210714 1.46957 0 2 0ZM6.93 10.44C7.34 11.34 7.86 12.08 8.46 12.59L8.87 12.91C8 13.07 6.8 13.35 5.53 13.84L5.42 13.88L5.92 12.84C6.37 11.97 6.7 11.18 6.93 10.44ZM13.41 14.25C13.59 14.07 13.68 13.84 13.69 13.59C13.72 13.39 13.67 13.2 13.57 13.04C13.28 12.57 12.53 12.35 11.29 12.35L10 12.42L9.13 11.84C8.5 11.32 7.93 10.41 7.53 9.28L7.57 9.14C7.9 7.81 8.21 6.2 7.55 5.54C7.46927 5.46161 7.37378 5.40003 7.26907 5.35883C7.16435 5.31763 7.0525 5.29764 6.94 5.3H6.7C6.33 5.3 6 5.69 5.91 6.07C5.54 7.4 5.76 8.13 6.13 9.34V9.35C5.88 10.23 5.56 11.25 5.05 12.28L4.09 14.08L3.2 14.57C2 15.32 1.43 16.16 1.32 16.69C1.28 16.88 1.3 17.05 1.37 17.23L1.4 17.28L1.88 17.59L2.32 17.7C3.13 17.7 4.05 16.75 5.29 14.63L5.47 14.56C6.5 14.23 7.78 14 9.5 13.81C10.53 14.32 11.74 14.55 12.5 14.55C12.94 14.55 13.24 14.44 13.41 14.25ZM13 13.54L13.09 13.65C13.08 13.75 13.05 13.76 13 13.78H12.96L12.77 13.8C12.31 13.8 11.6 13.61 10.87 13.29C10.96 13.19 11 13.19 11.1 13.19C12.5 13.19 12.9 13.44 13 13.54ZM3.83 15C3.18 16.19 2.59 16.85 2.14 17C2.19 16.62 2.64 15.96 3.35 15.31L3.83 15ZM6.85 8.09C6.62 7.19 6.61 6.46 6.78 6.04L6.85 5.92L7 5.97C7.17 6.21 7.19 6.53 7.09 7.07L7.06 7.23L6.9 8.05L6.85 8.09Z"
                       fill="#EF5350" />
                   </svg>
-
                 </div>
 
                 <div>
-                  <h3 class="text-sm font-semibold text-[#2B3674]">Justificatif d’activité</h3>
-                  <p class="text-xs text-gray-500">902 ko</p>
+                  <h3 class="text-sm font-semibold text-[#2B3674]">{{ doc.name }}</h3>
+                  <p class="text-xs text-gray-500">
+                    <span *ngIf="doc.status === 'VALIDATED'" class="text-green-600">✓ Validé</span>
+                    <span *ngIf="doc.status === 'PENDING'" class="text-orange-500">En attente</span>
+                    <span *ngIf="doc.status === 'REJECTED'" class="text-red-600">Rejeté</span>
+                  </p>
                 </div>
 
               </div>
 
               <!-- Download icon -->
-              <button class="text-gray-500 hover:text-[#E95F32] transition">
+              <button (click)="downloadDocument(doc.fileUrl)" [disabled]="!doc.fileUrl"
+                [ngClass]="doc.fileUrl ? 'text-gray-500 hover:text-[#E95F32] transition cursor-pointer' : 'text-gray-300 cursor-not-allowed'"
+                class="transition">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
                     d="M7 10.577L3.461 7.039L4.169 6.319L6.5 8.65V0H7.5V8.65L9.83 6.32L10.539 7.039L7 10.577ZM1.616 14C1.15533 14 0.771 13.846 0.463 13.538C0.155 13.23 0.000666667 12.8453 0 12.384V9.961H1V12.384C1 12.538 1.064 12.6793 1.192 12.808C1.32 12.9367 1.461 13.0007 1.615 13H12.385C12.5383 13 12.6793 12.936 12.808 12.808C12.9367 12.68 13.0007 12.5387 13 12.384V9.961H14V12.384C14 12.8447 13.846 13.229 13.538 13.537C13.23 13.845 12.8453 13.9993 12.384 14H1.616Z"
-                    fill="#8F9BBA" />
+                    fill="currentColor" />
                 </svg>
-
-              </button>
-
-            </div>
-
-            <!-- 📄 Document 2 -->
-            <div class="bg-white border rounded-xl p-4 flex items-center justify-between shadow-sm">
-
-              <!-- Left -->
-              <div class="flex items-center gap-3">
-
-                <!-- Icon PDF -->
-                <div class="w-10 h-10 flex items-center justify-center rounded-lg bg-[#F4F7FE]">
-
-                  <svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M9 7H14.5L9 1.5V7ZM2 0H10L16 6V18C16 18.5304 15.7893 19.0391 15.4142 19.4142C15.0391 19.7893 14.5304 20 14 20H2C1.46957 20 0.960859 19.7893 0.585786 19.4142C0.210714 19.0391 0 18.5304 0 18V2C0 1.46957 0.210714 0.960859 0.585786 0.585786C0.960859 0.210714 1.46957 0 2 0ZM6.93 10.44C7.34 11.34 7.86 12.08 8.46 12.59L8.87 12.91C8 13.07 6.8 13.35 5.53 13.84L5.42 13.88L5.92 12.84C6.37 11.97 6.7 11.18 6.93 10.44ZM13.41 14.25C13.59 14.07 13.68 13.84 13.69 13.59C13.72 13.39 13.67 13.2 13.57 13.04C13.28 12.57 12.53 12.35 11.29 12.35L10 12.42L9.13 11.84C8.5 11.32 7.93 10.41 7.53 9.28L7.57 9.14C7.9 7.81 8.21 6.2 7.55 5.54C7.46927 5.46161 7.37378 5.40003 7.26907 5.35883C7.16435 5.31763 7.0525 5.29764 6.94 5.3H6.7C6.33 5.3 6 5.69 5.91 6.07C5.54 7.4 5.76 8.13 6.13 9.34V9.35C5.88 10.23 5.56 11.25 5.05 12.28L4.09 14.08L3.2 14.57C2 15.32 1.43 16.16 1.32 16.69C1.28 16.88 1.3 17.05 1.37 17.23L1.4 17.28L1.88 17.59L2.32 17.7C3.13 17.7 4.05 16.75 5.29 14.63L5.47 14.56C6.5 14.23 7.78 14 9.5 13.81C10.53 14.32 11.74 14.55 12.5 14.55C12.94 14.55 13.24 14.44 13.41 14.25ZM13 13.54L13.09 13.65C13.08 13.75 13.05 13.76 13 13.78H12.96L12.77 13.8C12.31 13.8 11.6 13.61 10.87 13.29C10.96 13.19 11 13.19 11.1 13.19C12.5 13.19 12.9 13.44 13 13.54ZM3.83 15C3.18 16.19 2.59 16.85 2.14 17C2.19 16.62 2.64 15.96 3.35 15.31L3.83 15ZM6.85 8.09C6.62 7.19 6.61 6.46 6.78 6.04L6.85 5.92L7 5.97C7.17 6.21 7.19 6.53 7.09 7.07L7.06 7.23L6.9 8.05L6.85 8.09Z"
-                      fill="#EF5350" />
-                  </svg>
-                </div>
-
-                <div>
-                  <h3 class="text-sm font-semibold text-[#2B3674]">Pièce d'identité</h3>
-                  <p class="text-xs text-gray-500">902 ko</p>
-                </div>
-
-              </div>
-
-              <!-- Download icon -->
-              <button class="text-gray-500 hover:text-[#E95F32] transition">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M7 10.577L3.461 7.039L4.169 6.319L6.5 8.65V0H7.5V8.65L9.83 6.32L10.539 7.039L7 10.577ZM1.616 14C1.15533 14 0.771 13.846 0.463 13.538C0.155 13.23 0.000666667 12.8453 0 12.384V9.961H1V12.384C1 12.538 1.064 12.6793 1.192 12.808C1.32 12.9367 1.461 13.0007 1.615 13H12.385C12.5383 13 12.6793 12.936 12.808 12.808C12.9367 12.68 13.0007 12.5387 13 12.384V9.961H14V12.384C14 12.8447 13.846 13.229 13.538 13.537C13.23 13.845 12.8453 13.9993 12.384 14H1.616Z"
-                    fill="#8F9BBA" />
-                </svg>
-
               </button>
 
             </div>
@@ -559,8 +531,12 @@
                   </span>
 
                   <div class="w-[150px]">
-                    <div class="h-2 bg-[#006D60] rounded-full" style="width: 90%;"></div>
+                    <div class="h-2 bg-[#006D60] rounded-full"
+                      [style.width.%]="formatPercent(ratingDistribution[0]?.percentage || 0)"></div>
                   </div>
+
+                  <span class="text-xs text-gray-600">{{ formatPercent(ratingDistribution[0]?.percentage || 0)
+                    }}%</span>
 
                 </div>
 
@@ -577,8 +553,11 @@
 
                   </span>
                   <div class="w-[150px]">
-                    <div class="h-2 bg-[#006D60] rounded-full" style="width: 70%;"></div>
+                    <div class="h-2 bg-[#006D60] rounded-full"
+                      [style.width.%]="formatPercent(ratingDistribution[1]?.percentage || 0)"></div>
                   </div>
+                  <span class="text-xs text-gray-600">{{ formatPercent(ratingDistribution[1]?.percentage || 0)
+                    }}%</span>
                 </div>
 
                 <!-- Ligne 3 étoiles -->
@@ -593,8 +572,11 @@
 
                   </span>
                   <div class="w-[150px]">
-                    <div class="h-2 bg-[#006D60] rounded-full" style="width: 40%;"></div>
+                    <div class="h-2 bg-[#006D60] rounded-full"
+                      [style.width.%]="formatPercent(ratingDistribution[2]?.percentage || 0)"></div>
                   </div>
+                  <span class="text-xs text-gray-600">{{ formatPercent(ratingDistribution[2]?.percentage || 0)
+                    }}%</span>
                 </div>
 
                 <!-- Ligne 2 étoiles -->
@@ -609,8 +591,11 @@
 
                   </span>
                   <div class="w-[150px]">
-                    <div class="h-2 bg-[#006D60] rounded-full" style="width: 15%;"></div>
+                    <div class="h-2 bg-[#006D60] rounded-full"
+                      [style.width.%]="formatPercent(ratingDistribution[3]?.percentage || 0)"></div>
                   </div>
+                  <span class="text-xs text-gray-600">{{ formatPercent(ratingDistribution[3]?.percentage || 0)
+                    }}%</span>
                 </div>
 
                 <!-- Ligne 1 étoile -->
@@ -625,8 +610,9 @@
 
                   </span>
                   <div class="w-[150px]">
-                    <div class="h-2 bg-[#006D60] rounded-full" style="width: 5%;"></div>
+                    <div class="h-2 bg-[#006D60] rounded-full" [style.width.%]="0"></div>
                   </div>
+                  <span class="text-xs text-gray-600">0%</span>
                 </div>
 
               </div>
@@ -639,14 +625,27 @@
               <!-- ⭐ Note globale -->
               <div class="flex flex-col items-end justify-center text-right mb-12">
 
-                <h1 class="text-4xl font-semibold text-[#333333] leading-none">4.7</h1>
+                <h1 class="text-4xl font-semibold text-[#333333] leading-none">{{ getRoundedRating(user?.averageRating)
+                  }}</h1>
 
                 <!-- étoiles -->
                 <div class="flex items-center text-[#EAB308] text-sm mt-2">
-                  ★ ★ ★ ★ ☆
+                  <ng-container *ngFor="let star of getStars((user?.averageRating || 0) * 2)">
+                    <!-- Étoile pleine -->
+                    <span *ngIf="star.type === 'full'">★</span>
+
+                    <!-- Étoile partielle -->
+                    <span *ngIf="star.type === 'partial'" class="relative inline-block">
+                      <span class="text-gray-300">★</span>
+                      <span class="absolute top-0 left-0 overflow-hidden" [style.width.%]="star.fillPercentage">★</span>
+                    </span>
+
+                    <!-- Étoile vide -->
+                    <span *ngIf="star.type === 'empty'" class="text-gray-300">★</span>
+                  </ng-container>
                 </div>
 
-                <span class="text-xs text-[#333333] mt-1">52 avis</span>
+                <span class="text-xs text-[#333333] mt-1">{{ totalRatings }} avis</span>
 
               </div>
 
@@ -659,49 +658,117 @@
           <!-- ======== TABLEAU DES ÉVALUATIONS ========= -->
           <div class="bg-white  rounded-2xl p-5 shadow-sm w-full">
 
-            <table class="w-full table-fixed">
+            <!-- Loading state -->
+            <div *ngIf="ratingsLoading" class="flex items-center justify-center py-8">
+              <div class="text-center">
+                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500 mx-auto mb-2"></div>
+                <p class="text-gray-500 text-sm">Chargement des évaluations...</p>
+              </div>
+            </div>
 
-              <!-- HEADER -->
-              <thead class="text-[#64748B] font-medium text-xs bg-[#FCFCFD]">
-                <tr class="text-left ">
-                  <th class="pb-3">Référence</th>
-                  <th class="pb-3">Date</th>
-                  <th class="pb-3">Utilisateur</th>
-                  <th class="pb-3">Note</th>
-                  <th class="pb-3">Commentaire</th>
-                </tr>
-              </thead>
+            <!-- Tableau -->
+            <div *ngIf="!ratingsLoading && receivedRatings.length > 0">
+              <table class="w-full table-fixed">
 
-              <!-- ROWS -->
-              <tbody class="text-[#1E293B] font-light">
+                <!-- HEADER -->
+                <thead class="text-[#64748B] font-medium text-xs bg-[#FCFCFD]">
+                  <tr class="text-left ">
+                    <th class="pb-3">Référence</th>
+                    <th class="pb-3">Date</th>
+                    <th class="pb-3">Utilisateur</th>
+                    <th class="pb-3">Note</th>
+                    <th class="pb-3">Commentaire</th>
+                  </tr>
+                </thead>
 
-                <tr class="border-b border-gray-200">
-                  <td class="py-4">INV-2025002</td>
-                  <td>2025-02-15</td>
-                  <td>Alissatou Diop</td>
+                <!-- ROWS -->
+                <tbody class="text-[#1E293B] font-light">
 
-                  <!-- étoiles (tu remplaces par tes icônes plus tard) -->
-                  <td class="text-[#EAB308] text-sm">★ ★ ★ ★ ★</td>
+                  <tr *ngFor="let rating of receivedRatings; let last = last" [class.border-b]="!last"
+                    [class.border-gray-200]="!last">
+                    <td class="py-4">{{ rating.author.reference || '-' }}</td>
+                    <td>{{ formatDate(rating.createdAt) }}</td>
+                    <td>{{ rating.author.prenom }} {{ rating.author.nom }}</td>
 
-                  <td class="text-xs text-gray-600">
-                    Excellent travail, très professionnel et ponctuel. Je recommande vivement !
-                  </td>
-                </tr>
+                    <!-- étoiles dynamiques -->
+                    <td class="text-[#EAB308] text-sm">
+                      <ng-container *ngFor="let star of getStars(rating.score)">
+                        <!-- Étoile pleine -->
+                        <span *ngIf="star.type === 'full'">★</span>
 
-                <tr>
-                  <td class="py-4">INV-2025001</td>
-                  <td>2025-02-15</td>
-                  <td>Issa Ndiaye</td>
+                        <!-- Étoile partielle -->
+                        <span *ngIf="star.type === 'partial'" class="relative inline-block">
+                          <span class="text-gray-300">★</span>
+                          <span class="absolute top-0 left-0 overflow-hidden"
+                            [style.width.%]="star.fillPercentage">★</span>
+                        </span>
 
-                  <td class="text-[#EAB308] text-sm">★ ★ ★ ★ ☆</td>
+                        <!-- Étoile vide -->
+                        <span *ngIf="star.type === 'empty'" class="text-gray-300">★</span>
+                      </ng-container>
+                    </td>
 
-                  <td class="text-xs text-gray-600">
-                    Bon service, travail de qualité
-                  </td>
-                </tr>
+                    <td class="text-xs text-gray-600">
+                      {{ rating.comment || 'Aucun commentaire' }}
+                    </td>
+                  </tr>
 
-              </tbody>
-            </table>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Empty state -->
+            <div *ngIf="!ratingsLoading && receivedRatings.length === 0" class="text-center py-8">
+              <svg class="w-16 h-16 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+              </svg>
+              <p class="text-gray-600 font-medium">Aucune évaluation</p>
+              <p class="text-gray-400 text-sm mt-1">Cet utilisateur n'a pas encore reçu d'évaluations</p>
+            </div>
+
+            <!-- Pagination -->
+            <div *ngIf="!ratingsLoading && receivedRatings.length > 0" 
+                 class="flex items-center justify-between mt-6 pt-4 border-t">
+              
+              <!-- Sélecteur nombre d'éléments -->
+              <div class="flex items-center gap-3 text-sm text-gray-600">
+                <span>éléments par page :</span>
+                <select 
+                  [(ngModel)]="ratingsPageSize"
+                  (change)="onRatingsPageSizeChange()"
+                  class="border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500">
+                  <option [value]="10">10</option>
+                  <option [value]="20">20</option>
+                  <option [value]="25">25</option>
+                </select>
+              </div>
+
+              <!-- Info et navigation -->
+              <div class="flex items-center gap-4">
+                <!-- Plage affichée -->
+                <span class="text-sm text-gray-600">
+                  {{ ratingsStartIndex }} – {{ ratingsEndIndex }} sur {{ totalRatingsElements }}
+                </span>
+
+                <!-- Boutons de navigation -->
+                <div class="flex items-center gap-2">
+                  <button 
+                    (click)="prevRatingsPage()"
+                    [disabled]="currentRatingsPage === 0"
+                    class="text-gray-400 hover:text-gray-600 p-1 disabled:opacity-30">
+                    ‹
+                  </button>
+                  
+                  <button 
+                    (click)="nextRatingsPage()"
+                    [disabled]="currentRatingsPage + 1 >= totalRatingsPages"
+                    class="text-gray-400 hover:text-gray-600 p-1 disabled:opacity-30">
+                    ›
+                  </button>
+                </div>
+              </div>
+            </div>
 
           </div>
 

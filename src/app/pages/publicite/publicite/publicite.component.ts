@@ -204,6 +204,102 @@ export class PubliciteComponent implements OnInit {
     mobileImageName: ''
   };
 
+  // Gestion des dates
+  get minStartDate(): string {
+    // En création, la date minimale est aujourd'hui
+    return this.getTodayDate();
+  }
+
+  get minEndDate(): string {
+    // La date de fin doit être >= à la date de début
+    return this.pubForm.dateDebut || this.getTodayDate();
+  }
+
+  get editMinStartDate(): string {
+    // En modification, permettre les dates déjà enregistrées
+    if (this.editPub?.startDateInput) {
+      const existingDate = this.editPub.startDateInput;
+      const today = this.getTodayDate();
+      // Retourner la date la plus ancienne entre celle existante et aujourd'hui
+      return existingDate < today ? existingDate : today;
+    }
+    return this.getTodayDate();
+  }
+
+  get editMinEndDate(): string {
+    // La date de fin doit être >= à la date de début
+    return this.editPub?.startDateInput || this.getTodayDate();
+  }
+
+  private getTodayDate(): string {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  onStartDateChange(): void {
+    // Si la date de fin est avant la date de début, réinitialiser la date de fin
+    if (this.pubForm.dateDebut && this.pubForm.dateFin) {
+      if (this.pubForm.dateFin < this.pubForm.dateDebut) {
+        this.pubForm.dateFin = '';
+      }
+    }
+  }
+
+  onEditStartDateChange(): void {
+    // Si la date de fin est avant la date de début, réinitialiser la date de fin
+    if (this.editPub?.startDateInput && this.editPub?.endDateInput) {
+      if (this.editPub.endDateInput < this.editPub.startDateInput) {
+        this.editPub.endDateInput = '';
+      }
+    }
+  }
+
+  isCreateFormValid(): boolean {
+    // Vérifier les champs obligatoires
+    if (!this.pubForm.titre || !this.pubForm.description) {
+      return false;
+    }
+
+    // Vérifier les images
+    if (!this.pubForm.image || !this.pubForm.mobileImage) {
+      return false;
+    }
+
+    // Vérifier les dates (toujours obligatoires)
+    if (!this.pubForm.dateDebut || !this.pubForm.dateFin) {
+      return false;
+    }
+
+    // Vérifier la cohérence des dates
+    if (this.pubForm.dateFin < this.pubForm.dateDebut) {
+      return false;
+    }
+
+    return true;
+  }
+
+  isEditFormValid(): boolean {
+    // Vérifier les champs obligatoires
+    if (!this.editPub?.title || !this.editPub?.description) {
+      return false;
+    }
+
+    // Vérifier les dates (toujours obligatoires)
+    if (!this.editPub.startDateInput || !this.editPub.endDateInput) {
+      return false;
+    }
+
+    // Vérifier la cohérence des dates
+    if (this.editPub.endDateInput < this.editPub.startDateInput) {
+      return false;
+    }
+
+    return true;
+  }
+
   openCreatePopup() {
     this.showCreatePopup = true;
   }
@@ -226,20 +322,22 @@ export class PubliciteComponent implements OnInit {
   }
 
   submitPub() {
+    // Validation de cohérence des dates
+    if (this.pubForm.dateDebut && this.pubForm.dateFin && this.pubForm.dateFin < this.pubForm.dateDebut) {
+      this.alertService.error(
+        "La date de fin doit être supérieure ou égale à la date de début",
+        'light'
+      );
+      return;
+    }
+
     const formData = new FormData();
 
     formData.append('title', this.pubForm.titre);
     formData.append('description', this.pubForm.description);
     formData.append('link', this.pubForm.lien);
-
-    // Convertir les dates au format dd-MM-yyyy attendu par le backend
-    if (this.pubForm.dateDebut) {
-      formData.append('startDate', this.formatDateForBackend(this.pubForm.dateDebut));
-    }
-    if (this.pubForm.dateFin) {
-      formData.append('endDate', this.formatDateForBackend(this.pubForm.dateFin));
-    }
-
+    formData.append('startDate', this.formatDateForBackend(this.pubForm.dateDebut));
+    formData.append('endDate', this.formatDateForBackend(this.pubForm.dateFin));
     formData.append('permanent', String(this.pubForm.permanent));
 
     // Images obligatoires (web et mobile)
@@ -372,29 +470,22 @@ export class PubliciteComponent implements OnInit {
   saveEditPub() {
     if (!this.editPub) return;
 
+    // Validation de cohérence des dates
+    if (this.editPub.startDateInput && this.editPub.endDateInput && this.editPub.endDateInput < this.editPub.startDateInput) {
+      this.alertService.error(
+        "La date de fin doit être supérieure ou égale à la date de début",
+        'light'
+      );
+      return;
+    }
+
     const formData = new FormData();
     formData.append('title', this.editPub.title);
     formData.append('description', this.editPub.description);
     formData.append('link', this.editPub.link || '');
     formData.append('permanent', this.editPub.permanent.toString());
-
-    // Dates - toujours envoyer si non permanent
-    if (!this.editPub.permanent) {
-      // Les dates sont obligatoires si non permanent
-      const startDate = this.editPub.startDateInput ? this.formatDateForBackend(this.editPub.startDateInput) : '';
-      const endDate = this.editPub.endDateInput ? this.formatDateForBackend(this.editPub.endDateInput) : '';
-
-      if (startDate) {
-        formData.append('startDate', startDate);
-      }
-      if (endDate) {
-        formData.append('endDate', endDate);
-      }
-    } else {
-      // Si permanent, envoyer des dates vides ou null
-      formData.append('startDate', '');
-      formData.append('endDate', '');
-    }
+    formData.append('startDate', this.formatDateForBackend(this.editPub.startDateInput));
+    formData.append('endDate', this.formatDateForBackend(this.editPub.endDateInput));
 
     // Images - Le backend exige les images même en modification
     // Si nouvelles images sélectionnées, les utiliser
