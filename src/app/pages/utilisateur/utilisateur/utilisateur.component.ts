@@ -10,11 +10,12 @@ import {
 } from '../../../models/pages/utilisateurs/utilisateur';
 import { UtilisateurService } from '../../../core/service/pages/utilisateurs/utilisateur.service';
 import { SwettAlerteService } from '../../../core/service/alerte/swett-alerte.service';
+import { SharedModule } from '../../../shared/shared.module';
 
 @Component({
   selector: 'app-utilisateur',
   standalone: true,
-  imports: [CommonModule, NgFor, NgIf, RouterModule, FormsModule],
+  imports: [CommonModule, NgFor, NgIf, RouterModule, FormsModule, SharedModule],
   templateUrl: './utilisateur.component.html',
   styleUrl: './utilisateur.component.css',
 })

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { SharedModule } from '../../../shared/shared.module';
 
 import { UserConnected, UpdateUserPayload } from '../../../models/user/userConnected';
 import { MonCompteService } from '../../../core/service/pages/mon-compte/mon-compte-service.service';
@@ -13,7 +14,7 @@ import { UserStateService } from '../../../core/service/user-state.service';
 @Component({
   selector: 'app-mon-compte',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, SharedModule],
   templateUrl: './mon-compte.component.html',
   styleUrl: './mon-compte.component.css',
 })

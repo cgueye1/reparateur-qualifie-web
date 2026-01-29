@@ -107,7 +107,7 @@
               fill="#008D36" />
           </svg>
         </span>
-        <span class="text-xs font-light text-green-600 ml-1">{{usersStats?.evolutionPercentage}}%</span>
+        <span class="text-xs font-light text-green-600 ml-1">{{formatPercent(usersStats?.evolutionPercentage)}}%</span>
         <span class="text-xs text-[#64748B] font-light ml-2">ce mois</span>
       </div>
     </div>
@@ -142,7 +142,7 @@
               fill="#008D36" />
           </svg>
         </span>
-        <span class="text-xs font-light text-green-600 ml-1">{{badgeStats?.evolutionPercent}}%</span>
+        <span class="text-xs font-light text-green-600 ml-1">{{formatPercent(badgeStats?.evolutionPercent)}}%</span>
         <span class="text-xs text-[#64748B] font-light ml-2">ce mois</span>
       </div>
     </div>

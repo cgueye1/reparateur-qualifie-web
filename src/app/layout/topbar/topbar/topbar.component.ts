@@ -7,11 +7,12 @@ import { CommonModule } from '@angular/common';
 import { UserStateService } from '../../../core/service/user-state.service';
 import { MonCompteService } from '../../../core/service/pages/mon-compte/mon-compte-service.service';
 import { UserConnected } from '../../../models/user/userConnected';
+import { SharedModule } from '../../../shared/shared.module';
 
 @Component({
   selector: 'app-topbar',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, SharedModule],
   templateUrl: './topbar.component.html',
   styleUrl: './topbar.component.css'
 })

@@ -86,11 +86,12 @@
         <div class="absolute -bottom-10">
           <!-- Photo utilisateur -->
           <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-md">
-            <img *ngIf="user?.photo" [src]="user?.photo" class="w-full h-full object-cover" alt="Photo de profil" />
+            <img *ngIf="getUserPhotoUrl()" [src]="getUserPhotoUrl()" class="w-full h-full object-cover"
+              alt="Photo de profil" />
 
-            <div *ngIf="!user?.photo"
+            <div *ngIf="!getUserPhotoUrl()"
               class="w-full h-full flex items-center justify-center bg-gray-300 text-[#555] font-bold text-2xl">
-              {{ user?.prenom }}{{ user?.nom }}
+              {{ getUserInitials() }}
             </div>
           </div>
 
@@ -107,7 +108,9 @@
       <!-- Nom + prenom -->
       <div class="mt-14 text-center">
         <h2 class="text-xl font-semibold text-[#111]">{{ user?.prenom }} {{ user?.nom }}</h2>
-        <p class="text-[#333333]">{{ user?.profil || user?.trade?.name || 'Artisan' }}</p>
+        <p class="text-[#333333]">
+          {{ user?.profil ? (user?.profil | capitalizeFirst) : (user?.trade?.name || 'Artisan') }}
+        </p>
       </div>
 
       <!-- Séparateur -->
@@ -191,11 +194,15 @@
 
         <!-- Statuts (badges) -->
         <div class="flex flex-wrap gap-2 mt-2">
-          <span *ngIf="user?.activated" class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
-            Activé
+          <span *ngIf="user?.activated"
+            class="px-2 py-1 rounded-full text-[10px] font-medium inline-flex items-center gap-1 whitespace-nowrap bg-[#008D3614] text-[#008D36]">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#008D36]"></span>
+            Active
           </span>
-          <span *ngIf="!user?.activated" class="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-medium">
-            Non activé
+          <span *ngIf="!user?.activated"
+            class="px-2 py-1 rounded-full text-[10px] font-medium inline-flex items-center gap-1 whitespace-nowrap bg-[#FF282814] text-[#FF2828]">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#FF2828]"></span>
+            Désactivé
           </span>
           <span *ngIf="user?.validated" class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
             Validé
@@ -532,7 +539,7 @@
 
                   <div class="w-[150px]">
                     <div class="h-2 bg-[#006D60] rounded-full"
-                      [style.width.%]="formatPercent(ratingDistribution[0]?.percentage || 0)"></div>
+                      [style.width.%]="getPercentValue(ratingDistribution[0]?.percentage || 0)"></div>
                   </div>
 
                   <span class="text-xs text-gray-600">{{ formatPercent(ratingDistribution[0]?.percentage || 0)
@@ -554,7 +561,7 @@
                   </span>
                   <div class="w-[150px]">
                     <div class="h-2 bg-[#006D60] rounded-full"
-                      [style.width.%]="formatPercent(ratingDistribution[1]?.percentage || 0)"></div>
+                      [style.width.%]="getPercentValue(ratingDistribution[1]?.percentage || 0)"></div>
                   </div>
                   <span class="text-xs text-gray-600">{{ formatPercent(ratingDistribution[1]?.percentage || 0)
                     }}%</span>
@@ -573,7 +580,7 @@
                   </span>
                   <div class="w-[150px]">
                     <div class="h-2 bg-[#006D60] rounded-full"
-                      [style.width.%]="formatPercent(ratingDistribution[2]?.percentage || 0)"></div>
+                      [style.width.%]="getPercentValue(ratingDistribution[2]?.percentage || 0)"></div>
                   </div>
                   <span class="text-xs text-gray-600">{{ formatPercent(ratingDistribution[2]?.percentage || 0)
                     }}%</span>
@@ -592,7 +599,7 @@
                   </span>
                   <div class="w-[150px]">
                     <div class="h-2 bg-[#006D60] rounded-full"
-                      [style.width.%]="formatPercent(ratingDistribution[3]?.percentage || 0)"></div>
+                      [style.width.%]="getPercentValue(ratingDistribution[3]?.percentage || 0)"></div>
                   </div>
                   <span class="text-xs text-gray-600">{{ formatPercent(ratingDistribution[3]?.percentage || 0)
                     }}%</span>
@@ -728,15 +735,13 @@
             </div>
 
             <!-- Pagination -->
-            <div *ngIf="!ratingsLoading && receivedRatings.length > 0" 
-                 class="flex items-center justify-between mt-6 pt-4 border-t">
-              
+            <div *ngIf="!ratingsLoading && receivedRatings.length > 0"
+              class="flex items-center justify-between mt-6 pt-4 border-t">
+
               <!-- Sélecteur nombre d'éléments -->
               <div class="flex items-center gap-3 text-sm text-gray-600">
                 <span>éléments par page :</span>
-                <select 
-                  [(ngModel)]="ratingsPageSize"
-                  (change)="onRatingsPageSizeChange()"
+                <select [(ngModel)]="ratingsPageSize" (change)="onRatingsPageSizeChange()"
                   class="border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500">
                   <option [value]="10">10</option>
                   <option [value]="20">20</option>
@@ -753,16 +758,12 @@
 
                 <!-- Boutons de navigation -->
                 <div class="flex items-center gap-2">
-                  <button 
-                    (click)="prevRatingsPage()"
-                    [disabled]="currentRatingsPage === 0"
+                  <button (click)="prevRatingsPage()" [disabled]="currentRatingsPage === 0"
                     class="text-gray-400 hover:text-gray-600 p-1 disabled:opacity-30">
                     ‹
                   </button>
-                  
-                  <button 
-                    (click)="nextRatingsPage()"
-                    [disabled]="currentRatingsPage + 1 >= totalRatingsPages"
+
+                  <button (click)="nextRatingsPage()" [disabled]="currentRatingsPage + 1 >= totalRatingsPages"
                     class="text-gray-400 hover:text-gray-600 p-1 disabled:opacity-30">
                     ›
                   </button>

@@ -9,6 +9,7 @@ import { UtilisateurService } from '../../../core/service/pages/utilisateurs/uti
 import { SwettAlerteService } from '../../../core/service/alerte/swett-alerte.service';
 import { User, RatingDistribution, RatingDistributionResponse, SponsoredUser, SharedProfile, ReceivedRating, Page } from '../../../models/pages/utilisateurs/utilisateur';
 import { environment } from '../../../../environments/environments';
+import { SharedModule } from '../../../shared/shared.module';
 
 /**
  * Structure pour représenter une étoile
@@ -21,7 +22,7 @@ interface Star {
 @Component({
   selector: 'app-detail-client',
   standalone: true,
-  imports: [CommonModule, NgIf, NgChartsModule, FormsModule],
+  imports: [CommonModule, NgIf, NgChartsModule, FormsModule, SharedModule],
   templateUrl: './detail-client.component.html',
   styleUrl: './detail-client.component.css'
 })
@@ -47,7 +48,7 @@ export class DetailClientComponent implements OnInit {
   receivedRatings: ReceivedRating[] = [];
   averageRating = 0;
   ratingsLoading = false;
-  
+
   // Pagination des évaluations
   currentRatingsPage = 0;
   ratingsPageSize = 10;
@@ -435,6 +436,16 @@ export class DetailClientComponent implements OnInit {
     return value % 1 === 0
       ? value.toFixed(0)  // Entier : 50 → "50"
       : value.toFixed(1);  // Décimal : 33.333 → "33.3"
+  }
+
+  /**
+   * Retourne la valeur numérique du pourcentage pour les bindings de style
+   * @param value Pourcentage (0-100)
+   * @returns Valeur numérique pour [style.width.%]
+   */
+  getPercentValue(value: number | undefined): number {
+    if (value === undefined || value === null) return 0;
+    return value;
   }
 
   // =====================================================

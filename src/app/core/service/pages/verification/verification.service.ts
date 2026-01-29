@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, map, forkJoin } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 import { environment } from '../../../../../environments/environments';
 import { Verification, UserDocument } from '../../../../models/pages/verification/verification';
@@ -78,34 +78,24 @@ export class VerificationService {
   }
 
   /* ============================================================
-   * 📊 RÉCUPÉRER LES STATISTIQUES DES BADGES
+   * 📊 RÉCUPÉRER LES STATISTIQUES GLOBALES (ADMIN KPIs)
    * ============================================================
-   * Compte le nombre de badges pour chaque statut
+   * Source de vérité : GET /api/badges/admin-kpis
    */
-  getBadgeStats(): Observable<{ total: number; pending: number; validated: number; rejected: number }> {
-    // Faire 4 appels en parallèle pour compter chaque statut
-    const total$ = this.http.get<Page<Verification>>(this.endpoint, {
-      params: new HttpParams().set('page', 0).set('size', 1)
-    });
+  getAdminKpis(): Observable<{ total: number; pending: number; validated: number; rejected: number }> {
+    const url = `${this.endpoint}/admin-kpis`;
 
-    const pending$ = this.http.get<Page<Verification>>(this.endpoint, {
-      params: new HttpParams().set('page', 0).set('size', 1).set('status', 'PENDING')
-    });
-
-    const validated$ = this.http.get<Page<Verification>>(this.endpoint, {
-      params: new HttpParams().set('page', 0).set('size', 1).set('status', 'VALIDATED')
-    });
-
-    const rejected$ = this.http.get<Page<Verification>>(this.endpoint, {
-      params: new HttpParams().set('page', 0).set('size', 1).set('status', 'REFUSED')
-    });
-
-    return forkJoin([total$, pending$, validated$, rejected$]).pipe(
-      map(([total, pending, validated, rejected]) => ({
-        total: total.totalElements,
-        pending: pending.totalElements,
-        validated: validated.totalElements,
-        rejected: rejected.totalElements
+    return this.http.get<{
+      total?: number;
+      validated?: number;
+      refused?: number;
+      pending?: number;
+    }>(url).pipe(
+      map((res) => ({
+        total: res.total ?? 0,
+        pending: res.pending ?? 0,
+        validated: res.validated ?? 0,
+        rejected: res.refused ?? 0, // mapping "refused" -> "rejected" pour le front
       }))
     );
   }

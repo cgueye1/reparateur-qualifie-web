@@ -34,7 +34,7 @@
     </div>
 
     <h2 class="mt-3 font-semibold text-lg text-gray-800">{{ user?.prenom }} {{ user?.nom }}</h2>
-    <p class="text-sm text-gray-500">{{ user?.profil }}</p>
+    <p class="text-sm text-gray-500">{{ user?.profil | capitalizeFirst }}</p>
   </div>
 
 

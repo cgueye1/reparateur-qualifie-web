@@ -80,14 +80,19 @@ export class VerificationComponent implements OnInit {
    * 📊 CHARGEMENT DES KPIs
    * ============================================================ */
   private loadBadgeKpis(): void {
-    this.verificationService.getBadgeStats().subscribe({
+    this.verificationService.getAdminKpis().subscribe({
       next: (stats) => {
-        console.log('Stats reçues:', stats);
         this.stats = stats;
       },
       error: (err) => {
         console.error('Erreur lors du chargement des statistiques:', err);
-        // Garder les valeurs par défaut à 0
+        // En cas d'erreur, on garde des valeurs sûres
+        this.stats = {
+          total: 0,
+          pending: 0,
+          validated: 0,
+          rejected: 0,
+        };
       }
     });
   }
@@ -293,6 +298,7 @@ export class VerificationComponent implements OnInit {
         this.closePopups();
         this.alertService.success('Vérification activée avec succès', 'light');
         this.loadVerifications(); // Recharger la liste
+        this.loadBadgeKpis();     // Recharger les KPIs à partir de l'API
       },
       error: () => {
         this.closePopups();
@@ -312,6 +318,7 @@ export class VerificationComponent implements OnInit {
         this.closePopups();
         this.alertService.success('Vérification désactivée avec succès', 'light');
         this.loadVerifications(); // Recharger la liste
+        this.loadBadgeKpis();     // Recharger les KPIs à partir de l'API
       },
       error: () => {
         this.closePopups();

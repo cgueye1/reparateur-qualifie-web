@@ -8,6 +8,8 @@ import { UtilisateurService } from '../../../core/service/pages/utilisateurs/uti
 import { SwettAlerteService } from '../../../core/service/alerte/swett-alerte.service';
 import { User, RatingDistribution, RatingDistributionResponse, Document, ReceivedRating, Page } from '../../../models/pages/utilisateurs/utilisateur';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../../environments/environments';
+import { SharedModule } from '../../../shared/shared.module';
 
 /**
  * Structure pour représenter une étoile
@@ -20,7 +22,7 @@ interface Star {
 @Component({
   selector: 'app-detail',
   standalone: true,
-  imports: [NgIf, CommonModule, NgChartsModule, FormsModule],
+  imports: [NgIf, CommonModule, NgChartsModule, FormsModule, SharedModule],
   templateUrl: './detail.component.html',
   styleUrls: ['./detail.component.css']
 })
@@ -49,7 +51,7 @@ export class DetailComponent implements OnInit {
   receivedRatings: ReceivedRating[] = [];
   averageRating = 0;
   ratingsLoading = false;
-  
+
   // Pagination des évaluations
   currentRatingsPage = 0;
   ratingsPageSize = 10;
@@ -455,6 +457,16 @@ export class DetailComponent implements OnInit {
       : value.toFixed(1);  // Décimal : 33.333 → "33.3"
   }
 
+  /**
+   * Retourne la valeur numérique du pourcentage pour les bindings de style
+   * @param value Pourcentage (0-100)
+   * @returns Valeur numérique pour [style.width.%]
+   */
+  getPercentValue(value: number | undefined): number {
+    if (value === undefined || value === null) return 0;
+    return value;
+  }
+
   viewsData: any;
   viewsOptions: any;
 
@@ -549,5 +561,25 @@ export class DetailComponent implements OnInit {
         };
       }
     });
+  }
+
+  // =====================================================
+  // 🖼️ HELPERS PHOTO & INITIALES (ALIGNÉS SUR DETAIL CLIENT)
+  // =====================================================
+  getUserPhotoUrl(): string | null {
+    if (!this.user?.photo) return null;
+    // Si l'URL est déjà complète (commence par http), la retourner telle quelle
+    if (this.user.photo.startsWith('http')) {
+      return this.user.photo;
+    }
+    // Sinon, construire l'URL complète avec le baseUrl de l'API
+    return `${environment.imageUrl}/${this.user.photo}`;
+  }
+
+  getUserInitials(): string {
+    if (!this.user) return '';
+    const firstInitial = this.user.prenom?.charAt(0)?.toUpperCase() || '';
+    const lastInitial = this.user.nom?.charAt(0)?.toUpperCase() || '';
+    return `${firstInitial}${lastInitial}`;
   }
 }

@@ -525,8 +525,23 @@ export class TableauDeBordComponent implements OnInit {
 
   // Valeurs affichées dans le donut
   totalUsers = 0;
-  clientPercentage = 0;
-  artisanPercentage = 0;
+  clientPercentage = '';
+  artisanPercentage = '';
+
+  // =====================================================
+  // 🎨 FORMATAGE POURCENTAGE (max 1 décimale)
+  // =====================================================
+  /**
+   * Formate un pourcentage pour l'affichage (max 1 décimale)
+   * @param value Pourcentage (0-100)
+   * @returns Pourcentage formaté sous forme de string
+   */
+  formatPercent(value: number | undefined): string {
+    if (value === undefined || value === null) return '0';
+    return value % 1 === 0
+      ? value.toFixed(0)  // Entier : 50 → "50"
+      : value.toFixed(1);  // Décimal : 33.333 → "33.3"
+  }
 
   // =====================================================
   // 🍩 CHARGEMENT RÉPARTITION UTILISATEURS
@@ -569,11 +584,11 @@ export class TableauDeBordComponent implements OnInit {
         );
 
         // Pourcentages
-        this.clientPercentage = Math.round(
+        this.clientPercentage = this.formatPercent(
           res.find(i => i.profile === 'CLIENT')?.percentage ?? 0
         );
 
-        this.artisanPercentage = Math.round(
+        this.artisanPercentage = this.formatPercent(
           res.find(i => i.profile === 'ARTISAN')?.percentage ?? 0
         );
 
