@@ -158,6 +158,7 @@ export const routes: Routes = [
   {
     path: 'portail',
     loadComponent: () =>
+
       import('./pages/portail/portail/portail.component')
         .then((m) => m.PortailComponent),
     data: { title: 'Portail' },
