@@ -152,6 +152,18 @@ export const routes: Routes = [
             .then((m) => m.PasswordResetComponent),
       }
     ]
-  }
+  },
+
+  // 🎨 Portail (Design)
+  {
+    path: 'portail',
+    loadComponent: () =>
+      import('./pages/portail/portail/portail.component')
+        .then((m) => m.PortailComponent),
+    data: { title: 'Portail' },
+  },
+
+  // 🔄 Redirection par défaut vers le portail (landing page)
+  { path: '**', redirectTo: 'portail', pathMatch: 'full' },
 
 ];

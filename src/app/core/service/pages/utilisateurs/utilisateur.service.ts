@@ -233,4 +233,28 @@ export class UtilisateurService {
     );
   }
 
+  // ============================
+  // 🔍 RECHERCHE D'ARTISANS
+  // ============================
+  /**
+   * Recherche des artisans avec pagination
+   * 
+   * 👉 Utilisée pour afficher les artisans
+   * dans la section "Nos artisans" du portail.
+   * 
+   * @param page - Numéro de page (défaut: 0)
+   * @param size - Taille de page (défaut: 10)
+   * @returns Page paginée d'artisans
+   */
+  searchArtisans(page = 0, size = 10): Observable<Page<User>> {
+    const params = new HttpParams()
+      .set('page', page)
+      .set('size', size);
+
+    return this.http.get<Page<User>>(
+      `${this.endpoint}/search/artisan`,
+      { params }
+    );
+  }
+
 }
