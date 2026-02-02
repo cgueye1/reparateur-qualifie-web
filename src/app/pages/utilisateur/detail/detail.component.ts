@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, DestroyRef, inject } from '@angular/core';
 import { CommonModule, NgIf } from '@angular/common';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -26,7 +26,9 @@ interface Star {
   templateUrl: './detail.component.html',
   styleUrls: ['./detail.component.css']
 })
-export class DetailComponent implements OnInit {
+export class DetailComponent implements OnInit, OnDestroy {
+  // DestroyRef for unsubscribe
+  private destroyRef = inject(DestroyRef);
 
   // =====================================================
   // 👤 UTILISATEUR (TYPÉ)
@@ -84,6 +86,10 @@ export class DetailComponent implements OnInit {
     this.initDonutChart();
     this.loadDocuments();
     this.loadReceivedRatings();
+  }
+
+  ngOnDestroy(): void {
+    // Cleanup handled by DestroyRef
   }
 
   // =====================================================

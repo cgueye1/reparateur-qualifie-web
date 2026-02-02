@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy, DestroyRef, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 
@@ -14,7 +14,9 @@ import { environment } from '../../../../environments/environments';
   templateUrl: './gestion-metiers.component.html',
   styleUrl: './gestion-metiers.component.css',
 })
-export class GestionMetiersComponent {
+export class GestionMetiersComponent implements OnInit, OnDestroy {
+  // DestroyRef for unsubscribe
+  private destroyRef = inject(DestroyRef);
   // ================================
   // PAGINATION
   // ================================
@@ -69,38 +71,42 @@ export class GestionMetiersComponent {
   loading = false;
 
   constructor(
-  private metierService: GestionMetierService,
-  private alertService: SwettAlerteService
-) {}
+    private metierService: GestionMetierService,
+    private alertService: SwettAlerteService
+  ) { }
 
 
   ngOnInit(): void {
     this.loadMetiers();
   }
 
- loadMetiers() {
-  this.loading = true;
+  ngOnDestroy(): void {
+    // Cleanup handled by DestroyRef
+  }
 
-  this.metierService.getTrades(this.page, this.size).subscribe({
-    next: (res) => {
-      this.metiers = res.content;
-      this.totalPages = res.totalPages;
-      this.totalElements = res.totalElements;
-      console.log('Métiers chargés ✅', res);
-      this.loading = false;
-    },
-    error: (err) => {
-      console.error('Erreur chargement métiers ❌', err);
-      this.loading = false;
+  loadMetiers() {
+    this.loading = true;
 
-      // 🔔 Alerte utilisateur
-      this.alertService.error(
-        "Erreur lors du chargement des métiers",
-        'light'
-      );
-    },
-  });
-}
+    this.metierService.getTrades(this.page, this.size).subscribe({
+      next: (res) => {
+        this.metiers = res.content;
+        this.totalPages = res.totalPages;
+        this.totalElements = res.totalElements;
+        console.log('Métiers chargés ✅', res);
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Erreur chargement métiers ❌', err);
+        this.loading = false;
+
+        // 🔔 Alerte utilisateur
+        this.alertService.error(
+          "Erreur lors du chargement des métiers",
+          'light'
+        );
+      },
+    });
+  }
 
 
   get filteredMetiers() {
@@ -109,51 +115,51 @@ export class GestionMetiersComponent {
     );
   }
 
- /* ============================================================
- * 🗑️ 2 — SUPPRESSION D’UN MÉTIER
- * ============================================================*/
+  /* ============================================================
+  * 🗑️ 2 — SUPPRESSION D’UN MÉTIER
+  * ============================================================*/
 
-showDeletePopup = false;
-selectedMetier: any = null;
+  showDeletePopup = false;
+  selectedMetier: Metiers | null = null;
 
-/** OUVRIR POPUP DE CONFIRMATION */
-openDeletePopup(metier: any) {
-  this.selectedMetier = metier;
-  this.showDeletePopup = true;
-}
-
-/** FERMER POPUP */
-closeDelete() {
-  this.showDeletePopup = false;
-  this.selectedMetier = null;
-}
-
-/** CONFIRMER SUPPRESSION */
-confirmDelete() {
-  if (!this.selectedMetier?.id) {
-    this.alertService.error('Métier invalide');
-    return;
+  /** OUVRIR POPUP DE CONFIRMATION */
+  openDeletePopup(metier: Metiers) {
+    this.selectedMetier = metier;
+    this.showDeletePopup = true;
   }
 
-  this.metierService.deleteTrade(this.selectedMetier.id).subscribe({
-    next: () => {
-      // ✅ Succès
-      this.alertService.success('Métier supprimé avec succès', 'light');
+  /** FERMER POPUP */
+  closeDelete() {
+    this.showDeletePopup = false;
+    this.selectedMetier = null;
+  }
 
-      // 🔄 Rafraîchir la liste
-      this.loadMetiers();
+  /** CONFIRMER SUPPRESSION */
+  confirmDelete() {
+    if (!this.selectedMetier?.id) {
+      this.alertService.error('Métier invalide');
+      return;
+    }
 
-      // 🧹 Reset
-      this.closeDelete();
-    },
-    error: (err) => {
-      console.error('Erreur suppression métier ❌', err);
-      this.alertService.error(
-        "Une erreur s'est produite lors de la suppression du métier"
-      );
-    },
-  });
-}
+    this.metierService.deleteTrade(this.selectedMetier.id).subscribe({
+      next: () => {
+        // ✅ Succès
+        this.alertService.success('Métier supprimé avec succès', 'light');
+
+        // 🔄 Rafraîchir la liste
+        this.loadMetiers();
+
+        // 🧹 Reset
+        this.closeDelete();
+      },
+      error: (err) => {
+        console.error('Erreur suppression métier ❌', err);
+        this.alertService.error(
+          "Une erreur s'est produite lors de la suppression du métier"
+        );
+      },
+    });
+  }
 
 
   /* ============================================================
@@ -195,162 +201,163 @@ confirmDelete() {
   }
 
   saveNewMetier() {
-  // ❌ ANCIEN CODE (désactivé)
-  /*
-  this.showCreatePopup = false;
-  this.showSuccessCreate = true;
-  setTimeout(() => (this.showSuccessCreate = false), 1500);
-  this.closeCreatePopup();
-  */
+    // ❌ ANCIEN CODE (désactivé)
+    /*
+    this.showCreatePopup = false;
+    this.showSuccessCreate = true;
+    setTimeout(() => (this.showSuccessCreate = false), 1500);
+    this.closeCreatePopup();
+    */
 
-  const payload = {
-    name: this.newMetier.nom,
-    description: this.newMetier.description,
-  };
+    const payload = {
+      name: this.newMetier.nom,
+      description: this.newMetier.description,
+    };
 
-  this.metierService.addTrade(payload, this.newFile || undefined).subscribe({
-    next: () => {
-      this.showCreatePopup = false;
+    this.metierService.addTrade(payload, this.newFile || undefined).subscribe({
+      next: () => {
+        this.showCreatePopup = false;
 
-      // ❌ popup succès interne désactivé
-      // this.showSuccessCreate = true;
+        // ❌ popup succès interne désactivé
+        // this.showSuccessCreate = true;
 
-      // ✅ SweetAlert succès
-      this.alertService.success('Métier créé avec succès','light');
+        // ✅ SweetAlert succès
+        this.alertService.success('Métier créé avec succès', 'light');
 
-      // 🔄 rafraîchir la liste
-      this.loadMetiers();
+        // 🔄 rafraîchir la liste
+        this.loadMetiers();
 
-      this.closeCreatePopup();
-    },
-    error: (err) => {
-      console.error('Erreur création métier ❌', err);
+        this.closeCreatePopup();
+      },
+      error: (err) => {
+        console.error('Erreur création métier ❌', err);
 
-      // ✅ SweetAlert erreur
-      this.alertService.error(
-        "Une erreur s'est produite lors de la création du métier" , 'light'
-      );
-    },
-  });
-}
+        // ✅ SweetAlert erreur
+        this.alertService.error(
+          "Une erreur s'est produite lors de la création du métier", 'light'
+        );
+      },
+    });
+  }
 
 
   /* ============================================================
  * ✏️ 4 — MODIFICATION D’UN MÉTIER
  * ============================================================*/
 
-showEditPopup = false;
-// showSuccessEdit = false; // ❌ désactivé (SweetAlert utilisé à la place)
+  showEditPopup = false;
+  // showSuccessEdit = false; // ❌ désactivé (SweetAlert utilisé à la place)
 
-editMetier: any = {};
-originalEditIndex: number = -1;
+  // editMetier uses dynamic properties (image blob) not in Metiers interface
+  editMetier: any = {};
+  originalEditIndex = -1;
 
-editSelectedFileName: string = '';
-editSelectedFileSize: string = '';
-editFile: File | null = null;
+  editSelectedFileName: string = '';
+  editSelectedFileSize: string = '';
+  editFile: File | null = null;
 
-/** Vérifie si c’est une URL */
-isUrl(text: string): boolean {
-  return /^https?:\/\//.test(text);
-}
-
-/** Extraire le nom du fichier depuis une URL */
-filenameFromUrl(url: string): string {
-  if (!url) return '';
-  return url.split('/').pop() || '';
-}
-
-/** Taille factice (image distante) */
-fileSizeFromUrl(url: string): string {
-  return '';
-}
-
-/** OUVERTURE POPUP */
-openEditPopup(metier: any) {
-  this.originalEditIndex = this.metiers.indexOf(metier);
-  this.editMetier = { ...metier };
-
-  this.editSelectedFileName = '';
-  this.editSelectedFileSize = '';
-  this.editFile = null;
-
-  this.showEditPopup = true;
-}
-
-/** FERMETURE POPUP */
-closeEditPopup() {
-  this.showEditPopup = false;
-  this.editMetier = {};
-  this.editSelectedFileName = '';
-  this.editSelectedFileSize = '';
-  this.editFile = null;
-  this.originalEditIndex = -1;
-}
-
-/** SÉLECTION D’UNE NOUVELLE IMAGE */
-onEditFileSelected(event: any) {
-  const file: File = event.target.files?.[0];
-  if (!file) return;
-
-  this.editFile = file;
-  this.editSelectedFileName = file.name;
-  this.editSelectedFileSize = Math.round(file.size / 1024) + ' ko';
-
-  this.editMetier.image = URL.createObjectURL(file);
-}
-
-/** SUPPRIMER ICÔNE */
-removeIcon() {
-  this.editMetier.icon = '';
-}
-
-/** SUPPRIMER IMAGE */
-removeImage() {
-  if (this.editFile && this.editMetier.image?.startsWith('blob:')) {
-    URL.revokeObjectURL(this.editMetier.image);
+  /** Vérifie si c’est une URL */
+  isUrl(text: string): boolean {
+    return /^https?:\/\//.test(text);
   }
 
-  this.editMetier.image = '';
-  this.editSelectedFileName = '';
-  this.editSelectedFileSize = '';
-  this.editFile = null;
-}
-
-/** SAUVEGARDE VIA API */
-saveEditMetier() {
-  const payload = {
-    name: this.editMetier.name,          // ✅ CORRECTION CLÉ
-    description: this.editMetier.description,
-  };
-
-  this.metierService
-    .updateTrade(this.editMetier.id, payload, this.editFile || undefined)
-    .subscribe({
-      next: () => {
-        this.alertService.success('Métier modifié avec succès');
-        this.loadMetiers();
-        this.closeEditPopup();
-      },
-      error: (err) => {
-        console.error('Erreur modification métier ❌', err);
-        this.alertService.error(
-          "Une erreur s'est produite lors de la modification du métier"
-        );
-      },
-    });
-}
-
-
-
-
-
-
-getImageUrl(img: string | null): string {
-  if (!img) {
-    return 'assets/no-image.png';
+  /** Extraire le nom du fichier depuis une URL */
+  filenameFromUrl(url: string): string {
+    if (!url) return '';
+    return url.split('/').pop() || '';
   }
 
-  // backend retourne juste le nom du fichier
-  return `${environment.imageUrl}/${img}`;
-}
+  /** Taille factice (image distante) */
+  fileSizeFromUrl(url: string): string {
+    return '';
+  }
+
+  /** OUVERTURE POPUP */
+  openEditPopup(metier: Metiers) {
+    this.originalEditIndex = this.metiers.indexOf(metier);
+    this.editMetier = { ...metier };
+
+    this.editSelectedFileName = '';
+    this.editSelectedFileSize = '';
+    this.editFile = null;
+
+    this.showEditPopup = true;
+  }
+
+  /** FERMETURE POPUP */
+  closeEditPopup() {
+    this.showEditPopup = false;
+    this.editMetier = {};
+    this.editSelectedFileName = '';
+    this.editSelectedFileSize = '';
+    this.editFile = null;
+    this.originalEditIndex = -1;
+  }
+
+  /** SÉLECTION D’UNE NOUVELLE IMAGE */
+  onEditFileSelected(event: any) {
+    const file: File = event.target.files?.[0];
+    if (!file) return;
+
+    this.editFile = file;
+    this.editSelectedFileName = file.name;
+    this.editSelectedFileSize = Math.round(file.size / 1024) + ' ko';
+
+    this.editMetier.image = URL.createObjectURL(file);
+  }
+
+  /** SUPPRIMER ICÔNE */
+  removeIcon() {
+    this.editMetier.icon = '';
+  }
+
+  /** SUPPRIMER IMAGE */
+  removeImage() {
+    if (this.editFile && this.editMetier.image?.startsWith('blob:')) {
+      URL.revokeObjectURL(this.editMetier.image);
+    }
+
+    this.editMetier.image = '';
+    this.editSelectedFileName = '';
+    this.editSelectedFileSize = '';
+    this.editFile = null;
+  }
+
+  /** SAUVEGARDE VIA API */
+  saveEditMetier() {
+    const payload = {
+      name: this.editMetier.name,          // ✅ CORRECTION CLÉ
+      description: this.editMetier.description,
+    };
+
+    this.metierService
+      .updateTrade(this.editMetier.id, payload, this.editFile || undefined)
+      .subscribe({
+        next: () => {
+          this.alertService.success('Métier modifié avec succès');
+          this.loadMetiers();
+          this.closeEditPopup();
+        },
+        error: (err) => {
+          console.error('Erreur modification métier ❌', err);
+          this.alertService.error(
+            "Une erreur s'est produite lors de la modification du métier"
+          );
+        },
+      });
+  }
+
+
+
+
+
+
+  getImageUrl(img: string | null): string {
+    if (!img) {
+      return 'assets/no-image.png';
+    }
+
+    // backend retourne juste le nom du fichier
+    return `${environment.imageUrl}/${img}`;
+  }
 }

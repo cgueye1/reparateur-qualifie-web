@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, DestroyRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { forkJoin, of } from 'rxjs';
@@ -17,7 +17,9 @@ import { RouterModule } from '@angular/router';
   templateUrl: './verification.component.html',
   styleUrl: './verification.component.css',
 })
-export class VerificationComponent implements OnInit {
+export class VerificationComponent implements OnInit, OnDestroy {
+  // DestroyRef for unsubscribe
+  private destroyRef = inject(DestroyRef);
 
   constructor(
     private verificationService: VerificationService,
@@ -74,6 +76,10 @@ export class VerificationComponent implements OnInit {
   ngOnInit(): void {
     this.loadBadgeKpis();
     this.loadVerifications();
+  }
+
+  ngOnDestroy(): void {
+    // Cleanup handled by DestroyRef
   }
 
   /* ============================================================

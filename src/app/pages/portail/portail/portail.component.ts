@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy, DestroyRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -16,6 +16,21 @@ interface Star {
   fillPercentage?: number;
 }
 
+// Interface pour le payload d'inscription
+interface SignupPayload {
+  nom: string;
+  prenom: string;
+  email: string;
+  telephone: string;
+  adress: string;
+  password: string;
+  profil: string;
+  lat: number;
+  lon: number;
+  description: string;
+  tradeId?: number;
+}
+
 @Component({
   selector: 'app-portail',
   standalone: true,
@@ -23,7 +38,7 @@ interface Star {
   templateUrl: './portail.component.html',
   styleUrl: './portail.component.css'
 })
-export class PortailComponent {
+export class PortailComponent implements OnInit, OnDestroy {
   mobileMenuOpen = false;
   showArtisansModal = false;
   searchQuery = '';
@@ -32,12 +47,11 @@ export class PortailComponent {
   // 📊 ARTISANS (DONNÉES RÉELLES API)
   // =====================================================
   topArtisans: User[] = [];      // Top 4 pour la section "Nos artisans"
-  allArtisans: User[] = [];      // Tous les artisans pour la recherche (modal)
   loadingArtisans = false;
   artisansError = false;
 
-  // Mock data supprimé, on utilise allArtisans maintenant
-  artisans: User[] = [];
+  // DestroyRef for unsubscribe
+  private destroyRef = inject(DestroyRef);
 
   // =====================================================
   // � MODAL ARTISANS STATE
@@ -65,14 +79,13 @@ export class PortailComponent {
     private gestionMetierService: GestionMetierService
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadTopArtisans();
-    this.loadAllArtisans(); // Charger les artisans pour la modal en background
     this.loadHeroStats();   // Charger les stats pour la section Hero
   }
 
-  ngOnDestroy() {
-    // Cleanup logic
+  ngOnDestroy(): void {
+    // Cleanup handled by DestroyRef
   }
 
   // =====================================================
@@ -112,21 +125,7 @@ export class PortailComponent {
     });
   }
 
-  /**
-   * Charge une liste plus large d'artisans pour la recherche dans la modal
-   */
-  loadAllArtisans(): void {
-    // On charge une centaine d'artisans pour la recherche client-side
-    // Idéalement, la recherche devrait être server-side si beaucoup de données
-    this.utilisateurService.searchArtisans(0, 100).subscribe({
-      next: (response) => {
-        this.allArtisans = response.content;
-      },
-      error: (err) => {
-        console.error('❌ Erreur chargement all artisans:', err);
-      }
-    });
-  }
+
 
   /**
    * Charge les statistiques pour la section Hero (nombre d'artisans et clients)
@@ -504,14 +503,12 @@ export class PortailComponent {
         console.warn('⚠️ API /trades requires auth - using fallback data');
         this.loadingTrades = false;
 
-        // Fallback: use static trades if API requires auth (403)
         this.trades = [
           { id: 1, name: 'Électriciens', img: '', description: '' },
           { id: 18, name: 'Plombiers', img: '', description: '' },
           { id: 19, name: 'Menuisiers', img: '', description: '' },
           { id: 20, name: 'Mécaniciens', img: '', description: '' }
         ];
-        console.log('⚠️ Fallback: trades statiques utilisés');
       }
     });
   }
@@ -538,12 +535,12 @@ export class PortailComponent {
     return this.registerForm.profil === 'ARTISAN';
   }
 
-  submitRegister() {
+  submitRegister(): void {
     if (!this.isRegisterFormValid() || this.isSubmitting) return;
 
     this.isSubmitting = true;
 
-    const payload: any = {
+    const payload: SignupPayload = {
       nom: this.registerForm.nom.trim(),
       prenom: this.registerForm.prenom.trim(),
       email: this.registerForm.email.trim().toLowerCase(),
@@ -551,7 +548,6 @@ export class PortailComponent {
       adress: this.registerForm.adress.trim(),
       password: this.registerForm.password,
       profil: this.registerForm.profil,
-      // Champs requis par l'API avec valeurs par défaut
       lat: 0,
       lon: 0,
       description: ''
@@ -562,7 +558,7 @@ export class PortailComponent {
       payload.tradeId = this.registerForm.tradeId;
     }
 
-    this.signupService.signup(payload as any).subscribe({
+    this.signupService.signup(payload).subscribe({
       next: (response) => {
         this.isSubmitting = false;
         this.closeRegisterModal();

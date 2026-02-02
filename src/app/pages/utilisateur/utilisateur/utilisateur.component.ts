@@ -1,5 +1,5 @@
 import { CommonModule, NgFor, NgIf } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, DestroyRef, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
@@ -19,12 +19,14 @@ import { SharedModule } from '../../../shared/shared.module';
   templateUrl: './utilisateur.component.html',
   styleUrl: './utilisateur.component.css',
 })
-export class UtilisateurComponent implements OnInit {
+export class UtilisateurComponent implements OnInit, OnDestroy {
+  // DestroyRef for unsubscribe
+  private destroyRef = inject(DestroyRef);
 
   // =====================================================
-// 📊 STATISTIQUES GLOBALES (CARTES)
-// =====================================================
-usersStatsCounter?: UserStatsCounter;
+  // 📊 STATISTIQUES GLOBALES (CARTES)
+  // =====================================================
+  usersStatsCounter?: UserStatsCounter;
 
 
 
@@ -85,7 +87,7 @@ usersStatsCounter?: UserStatsCounter;
   constructor(
     private utilisateurService: UtilisateurService,
     private alertService: SwettAlerteService
-  ) {}
+  ) { }
 
   // =====================================================
   // 🚀 INITIALISATION
@@ -93,7 +95,11 @@ usersStatsCounter?: UserStatsCounter;
   ngOnInit(): void {
     this.loadUsers();
     this.loadUsersProfilesDistribution(); // 📊 cartes statistiques
-     this.loadUsersStatsCounter();        // Total / Actifs / Évolution
+    this.loadUsersStatsCounter();        // Total / Actifs / Évolution
+  }
+
+  ngOnDestroy(): void {
+    // Cleanup handled by DestroyRef
   }
 
   // =====================================================
@@ -286,24 +292,24 @@ usersStatsCounter?: UserStatsCounter;
 
 
   // =====================================================
-// 📊 CHARGEMENT DES STATS GLOBALES UTILISATEURS
-// =====================================================
-loadUsersStatsCounter(): void {
+  // 📊 CHARGEMENT DES STATS GLOBALES UTILISATEURS
+  // =====================================================
+  loadUsersStatsCounter(): void {
 
-  this.utilisateurService.getUsersStatsCounter().subscribe({
-    next: (res) => {
-      this.usersStatsCounter = res;
-    },
-    error: (err) => {
-      console.error('Erreur stats globales utilisateurs ❌', err);
+    this.utilisateurService.getUsersStatsCounter().subscribe({
+      next: (res) => {
+        this.usersStatsCounter = res;
+      },
+      error: (err) => {
+        console.error('Erreur stats globales utilisateurs ❌', err);
 
-      this.alertService.error(
-        "Une erreur s'est produite lors du chargement des statistiques utilisateurs",
-        'light'
-      );
-    }
-  });
+        this.alertService.error(
+          "Une erreur s'est produite lors du chargement des statistiques utilisateurs",
+          'light'
+        );
+      }
+    });
 
-}
+  }
 
 }

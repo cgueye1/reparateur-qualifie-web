@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, DestroyRef, inject } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { ChartConfiguration } from 'chart.js/auto';
 import { NgChartsModule } from 'ng2-charts';
@@ -21,7 +21,9 @@ import { TableauDeBordService } from '../../../core/service/pages/tableau-de-bor
   templateUrl: './tableau-de-bord.component.html',
   styleUrl: './tableau-de-bord.component.css'
 })
-export class TableauDeBordComponent implements OnInit {
+export class TableauDeBordComponent implements OnInit, OnDestroy {
+  // DestroyRef for unsubscribe
+  private destroyRef = inject(DestroyRef);
 
   // =====================================================
   // 🍩 GRAPH — RÉPARTITION UTILISATEURS (DONUT)
@@ -295,6 +297,10 @@ export class TableauDeBordComponent implements OnInit {
   // =====================================================
   ngOnInit(): void {
     this.loadAllDashboardData();
+  }
+
+  ngOnDestroy(): void {
+    // Cleanup handled by DestroyRef
   }
 
   // =====================================================

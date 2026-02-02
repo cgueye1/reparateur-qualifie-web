@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, DestroyRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ModerationAvisService } from '../../../core/service/pages/moderation-avis/moderation-avis.service';
@@ -14,7 +14,9 @@ import { Rating, RatingStats } from '../../../models/pages/moderation-avis/moder
   templateUrl: './moderation-avis.component.html',
   styleUrl: './moderation-avis.component.css'
 })
-export class ModerationAvisComponent implements OnInit {
+export class ModerationAvisComponent implements OnInit, OnDestroy {
+  // DestroyRef for unsubscribe
+  private destroyRef = inject(DestroyRef);
 
   constructor(private moderationService: ModerationAvisService) { }
 
@@ -50,6 +52,10 @@ export class ModerationAvisComponent implements OnInit {
   ngOnInit(): void {
     this.loadStats();
     this.loadRatings();
+  }
+
+  ngOnDestroy(): void {
+    // Cleanup handled by DestroyRef
   }
 
   // ===============================
@@ -160,26 +166,26 @@ export class ModerationAvisComponent implements OnInit {
 
   showHistoryPopup = false;
 
-  // ELEMENT SELECTIONNÉ
-  selectedAvis: any = null;
+  // ELEMENT SÉLECTIONNÉ
+  selectedAvis: Rating | null = null;
 
   // === OPEN POPUPS ===
-  openApprovePopup(avis: any) {
+  openApprovePopup(avis: Rating) {
     this.selectedAvis = avis;
     this.showApprovePopup = true;
   }
 
-  openMaskPopup(avis: any) {
+  openMaskPopup(avis: Rating) {
     this.selectedAvis = avis;
     this.showMaskPopup = true;
   }
 
-  openDeletePopup(avis: any) {
+  openDeletePopup(avis: Rating) {
     this.selectedAvis = avis;
     this.showDeletePopup = true;
   }
 
-  openHistoryPopup(avis: any) {
+  openHistoryPopup(avis: Rating) {
     this.selectedAvis = avis;
     this.showHistoryPopup = true;
   }
